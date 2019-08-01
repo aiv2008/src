@@ -31,7 +31,7 @@ NODE* node_init(unsigned int data)
     node->parent = NULL;
     node->left = NULL;
     node->right = NULL;
-    node->count = ONE;
+    node->count = ZERO;
     return node;
 }
 
