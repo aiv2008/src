@@ -6,15 +6,17 @@ int main()
 {
     srand(time(NULL));
 
+//    size_t size = 24;
 //    int a[size];
-    int a[] = {3,4,2,6,9,0,1,6,7,2};
-
+    int a[] = {13,2,11,15,1,17,15,3,15,6,17,8,4,19,21,13,11,18,21,3,14,0,6,11};
     size_t size = sizeof(a)/sizeof(a[0]);
-//    for(int i=0;i<size;i++)
-//    {
+
+
+    for(int i=0;i<size;i++)
+    {
 //        a[i] = rand()%size;
-//        printf("%d,",a[i]);
-//    }
+        printf("%d,",a[i]);
+    }
 
 //    system("pause");
 
@@ -30,7 +32,7 @@ int main()
             root = balanced_tree_add(root,a[i]);
     }
 
-//    printf("\n");
+    printf("\n");
 
     tree_forward_all(root);
     printf("\n");

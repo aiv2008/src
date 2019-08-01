@@ -7,12 +7,13 @@
 
 typedef struct
 {
-    unsigned int data;
-    unsigned int depth;
-    struct NODE* left;
-    struct NODE* right;
-    struct NODE* parent;
-    signed balanced_factor;
+    unsigned int data;//the satellite data of the tree
+    unsigned int depth;//the node depth of the tree
+    struct NODE* left;//the left child node of this node
+    struct NODE* right;//the right child node of this node
+    struct NODE* parent;//the parent node of this node
+    signed balanced_factor;//the distance between the left child node and right child node
+    unsigned int count;//the count of the node that has appeared
 } NODE;
 
 /**
