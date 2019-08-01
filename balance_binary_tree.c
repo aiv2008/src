@@ -17,6 +17,9 @@ NODE* balanced_node_init(unsigned int data)
 NODE* balanced_tree_add(NODE* root, unsigned int data)
 {
     NODE* new_node = tree_add(root,data);
+    printf("new_node===%d",new_node->data);
+
+    printf("\n");
     new_node->balanced_factor = ZERO;
     NODE* p = new_node->parent;
     while(p)
@@ -53,6 +56,8 @@ NODE* balanced_tree_add(NODE* root, unsigned int data)
                 p = rotate_left(p);
         }
     }
+//    printf("data===%d",(p&&!p->parent)?(p->data):(root->data));
+//    printf("\n");
     return (p&&!p->parent)?p:root;
 }
 

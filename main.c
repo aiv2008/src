@@ -8,7 +8,8 @@ int main()
 
 //    size_t size = 24;
 //    int a[size];
-    int a[] = {13,2,11,15,1,17,15,3,15,6,17,8,4,19,21,13,11,18,21,3,14,0,6,11};
+//    int a[] = {13,2,11,15,1,17,15,3,15,6,17,8,4,19,21,13,11,18,21,3,14,0,6,11};
+int a[] = {13,2,11,15,1};
     size_t size = sizeof(a)/sizeof(a[0]);
 
 
@@ -32,6 +33,9 @@ int main()
             root = balanced_tree_add(root,a[i]);
     }
 
+    printf("\n");
+
+    printf("root data is :%d",root->data);
     printf("\n");
 
     tree_forward_all(root);

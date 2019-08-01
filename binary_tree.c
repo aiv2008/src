@@ -95,27 +95,28 @@ void tree_forward_all(NODE* node)
     if(node)
     {
         tree_forward_all(node->left);
-        printf("%d",node->data);
-        printf("(%d)",node->count);
-        printf(",");
+//        printf("%d",node->data);
+//        printf("(%d)",node->count);
+//        printf(",");
 
-//        NODE* left = node->left;
-//        NODE* right = node->right;
-//        NODE* parent = node->parent;
-//        printf("this===%d,",node->data);
-//        if(parent)
-//            printf("parent===%d,",parent->data);
-//        else
-//            printf("parent===null,");
-//        if(left)
-//            printf("left===%d,",left->data);
-//        else
-//            printf("left===null,");
-//        if(right)
-//            printf("right===%d,",right->data);
-//        else
-//            printf("right===null,");
-//        printf("\n");
+        NODE* left = node->left;
+        NODE* right = node->right;
+        NODE* parent = node->parent;
+        printf("this===%d",node->data);
+        printf("(%d),",node->count);
+        if(parent)
+            printf("parent===%d,",parent->data);
+        else
+            printf("parent===null,");
+        if(left)
+            printf("left===%d,",left->data);
+        else
+            printf("left===null,");
+        if(right)
+            printf("right===%d,",right->data);
+        else
+            printf("right===null,");
+        printf("\n");
         tree_forward_all(node->right);
     }
 }
@@ -125,7 +126,7 @@ void tree_backward_all(NODE* node)
     if(node)
     {
         tree_backward_all(node->right);
-        printf("%d,",node->data);
+        printf("%d",node->data);
         printf("(%d)",node->count);
         printf(",");
         tree_backward_all(node->left);
