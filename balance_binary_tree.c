@@ -17,16 +17,20 @@ NODE* balanced_node_init(unsigned int data)
 NODE* balanced_tree_add(NODE* root, unsigned int data)
 {
     NODE* new_node = tree_add(root,data);
-
-    printf("new_node===%d",new_node->data);
-
-    printf("\n");
-
+//    printf("new_node===%d",new_node->data);
+//    printf("\n");
     NODE* p = NULL;
+
+
 
     if(ZERO == new_node->count)//means the node is a new added node
     {
+        if(new_node->data == 5)
+            printf("balanced_factor====%d,",new_node->balanced_factor);
+
+
         new_node->balanced_factor = ZERO;
+        new_node->count++;
         p = new_node->parent;
         while(p)
         {
@@ -66,40 +70,24 @@ NODE* balanced_tree_add(NODE* root, unsigned int data)
     else
         p = new_node;
 
-//    printf("data===%d",(p&&!p->parent)?(p->data):(root->data));
-//    printf("\n");
-
-    if(!p)
-        printf("p is null\n");
-    else
-    {
-        NODE* left = p->left;
-        NODE* right = p->right;
-        NODE* parent = p->parent;
-        if(left)
-        {
-            printf("left===%d",left->data);
-            printf("(%d),",left->balanced_factor);
-        }
-        else
-            printf("left is null,");
-        if(right)
-            {
-            printf("right===%d",right->data);
-            printf("(%d),",right->balanced_factor);
-        }
-        else
-            printf("right is null,");
-        if(parent)
-            {
-            printf("parent===%d",parent->data);
-            printf("(%d),",parent->balanced_factor);
-        }
-        else
-            printf("parent is null,");
-    }
-
-
+//    if(p->data == 5)
+//    {
+//        NODE* p_parent = p->parent;
+//        NODE* p_left = p->left;
+//        NODE* p_right = p->right;
+//        if(p_parent)
+//            printf("parent====%d,",p_parent->data);
+//        else
+//            printf("parent is null");
+//        if(p_left)
+//            printf("left====%d,",p_left->data);
+//        else
+//            printf("left is null");
+//        if(p_right)
+//            printf("right====%d,",p_right->data);
+//        else
+//            printf("right is null");
+//    }
     return (p&&!p->parent)?p:root;
 }
 
@@ -111,7 +99,10 @@ NODE* rotate_left(NODE* root)
     root->right = right->left;
     right->parent = parent;
     right->left = root;
-    root->balanced_factor+=BALANCED_UPPER_BOUND;
+    //if the new root has right child node(RR type),then the depth of
+    //new left child node should plus two,
+    //otherwise, it should plus one
+    root->balanced_factor+= right->right?BALANCED_UPPER_BOUND:BALANCED_UPPER_BOUND_MID;
     right->balanced_factor++;
     if(parent)
     {
@@ -131,7 +122,10 @@ NODE* rotate_right(NODE* root)
     root->left = left->right;
     left->parent = parent;
     left->right = root;
-    root->balanced_factor+=BALANCED_LOWER_BOUND;
+    //if the new root has left child node(LL type),then the depth of
+    //new right child node should minus two,
+    //otherwise, it should minus one
+    root->balanced_factor+=left->left?BALANCED_LOWER_BOUND:BALANCED_LOWER_BOUND_MID;
     left->balanced_factor--;
     if(parent)
     {

@@ -2,14 +2,16 @@
 #include <stdlib.h>
 #include "balance_binary_tree.h"
 
+#define ONE 1
 int main()
 {
     srand(time(NULL));
 
-//    size_t size = 24;
+//    size_t size = 50;
 //    int a[size];
-//    int a[] = {13,2,11,15,1,17,15,3,15,6,17,8,4,19,21,13,11,18,21,3,14,0,6,11};
-int a[] = {13,2,11,15,1};
+
+//    int a[] = {37,27,14,20,20,17,35,20,1,22,26,42,39,23,15,23,14,37,37,5,5,6,20,28,41,25,9,10,15,23,46,25,35,44,13,31,25,1,37,17,33,40,18,38,29,46,23,46,6,36};
+    int a[] = {37,27,14,20,20,17,35,20,1,22,26,42,39,23,15,23,14,37,37,5};
     size_t size = sizeof(a)/sizeof(a[0]);
 
 
@@ -26,8 +28,10 @@ int a[] = {13,2,11,15,1};
     for( int i=0;i<size;i++ )
     {
         if( i == 0 )
-//            root = node_init(a[0]);
+        {
             root = balanced_node_init(a[0]);
+            root->count = ONE;
+        }
         else
 //            tree_add(root, a[i]);
             root = balanced_tree_add(root,a[i]);
