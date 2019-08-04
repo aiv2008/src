@@ -15,6 +15,23 @@ NODE* balanced_node_init(unsigned int data)
     return node;
 }
 
+NODE* balanced_tree_init(unsigned int* data)
+{
+    if(!data)
+        return NULL;
+    NODE* root = balanced_node_init(*data);
+    printf("root1 equals to :%d\n",root->data);
+    unsigned int* p = data;
+    p++;
+    while(p++)
+    {
+        printf("p equals to :%d\n",*p);
+        root = balanced_tree_add(root,*p);
+//        printf("root2 equals to :%d\n",root->data);
+    }
+    return root;
+}
+
 NODE* balanced_tree_add(NODE* root, unsigned int data)
 {
     NODE* new_node = tree_add(root,data);

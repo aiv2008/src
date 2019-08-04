@@ -10,8 +10,7 @@ int main()
     size_t size = 50;
     int a[size];
 
-//    int a[] = {37,27,14,20,20,17,35,20,1,22,26,42,39,23,15,23,14,37,37,5,5,6,20,28,41,25,9,10,15,23,46,25,35,44,13,31,25,1,37,17,33,40,18,38,29,46,23,46,6,36};
-//    int a[] = {37,27,14,20,20,17};
+//    int a[] = {16,2,16,17,5,17,11,10,41,18,28,36,20,24,38,6,14,4,15,38,37,7,19,9,10,45,20,17,20,42,18,45,20,13,17,4,27,9,3,45,17,40,38,34,12,25,33,11,29,45};
 //    size_t size = sizeof(a)/sizeof(a[0]);
 
 
@@ -21,32 +20,32 @@ int main()
         printf("%d,",a[i]);
     }
 
-//    system("pause");
-
-    NODE* root = NULL;
+//    NODE* root = NULL;
 //    int len = sizeof(a)/sizeof(a[0]);
-    for( int i=0;i<size;i++ )
-    {
-        if( i == 0 )
-        {
-            root = balanced_node_init(a[0]);
-            root->count = ONE;
-        }
-        else
-//            tree_add(root, a[i]);
-            root = balanced_tree_add(root,a[i]);
-    }
+
+    NODE* root = balanced_tree_init(a);
+
+//    for( int i=0;i<size;i++ )
+//    {
+//        if( i == 0 )
+//        {
+//            root = balanced_node_init(a[0]);
+//            root->count = ONE;
+//        }
+//        else
+//            root = balanced_tree_add(root,a[i]);
+//    }
 
     printf("\n");
-
     printf("root data is :%d",root->data);
     printf("\n");
-
     tree_forward_all(root);
     printf("\n");
     tree_backward_all(root);
     printf("\n");
+    unsigned int rand_variable = rand()%size;
+    printf("rand_variable===%d\n",rand_variable);
+    printf("the count of the input data is %d\n",tree_search(root,rand_variable));
 
-//    tree_search(root, 5);
     return 0;
 }

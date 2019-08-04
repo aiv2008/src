@@ -8,6 +8,8 @@
 **/
 NODE* balanced_node_init(unsigned int data);
 
+NODE* balanced_tree_init(unsigned int* data);
+
 /**
 ** add the data to the tree
 **/

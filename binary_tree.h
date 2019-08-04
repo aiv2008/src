@@ -8,7 +8,7 @@
 typedef struct
 {
     unsigned int data;//the satellite data of the tree
-    signed int depth;//the node depth of the tree
+    signed int depth;//the node depth which is used to calculate the balanced factor of the tree
     struct NODE* left;//the left child node of this node
     struct NODE* right;//the right child node of this node
     struct NODE* parent;//the parent node of this node
@@ -18,20 +18,16 @@ typedef struct
 
 /**
 ** search the node data of the tree that equals to the input data
+** return the count of the matched data
 **/
-void tree_search(NODE* node, unsigned int data);
-
-/**
-** fetch the depth of the first node that equals to the input data of the tree
-**/
-int first_node_depth(NODE* node, unsigned int data);
-
-int equal_data_count(NODE* node, unsigned int data);
+int tree_search(NODE* root, unsigned int data);
 
 /**
 ** initialize the node of the tree
 **/
 NODE* node_init(unsigned int data);
+
+NODE* tree_init(unsigned int* data);
 
 /**
 ** add the data to the tree

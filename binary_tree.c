@@ -10,17 +10,23 @@
 #define true 1
 #define false 0
 
-void tree_search(NODE* node, unsigned int data)
+int tree_search(NODE* node, unsigned int data)
 {
-    if(node)
+    signed int count = 0;
+    NODE* p = node;
+    while(p)
     {
-        if( node->data == data )
-            printf("data:%d has been found! the depth of the data is %d", node->data, node->depth);
-        else if(node->data > data)
-            tree_search(node->left, data);
+        if( p->data == data )
+        {
+            count = p->count;
+            break;
+        }
+        else if(p->data < data)
+            p = p->right;
         else
-            tree_search(node->right, data);
+            p = p->left;
     }
+    return count;
 }
 
 NODE* node_init(unsigned int data)
@@ -33,6 +39,21 @@ NODE* node_init(unsigned int data)
     node->right = NULL;
     node->count = ZERO;
     return node;
+}
+
+NODE* tree_init(unsigned int* data)
+{
+
+    if(!data)
+        return NULL;
+    NODE* root = node_init(*data);
+    unsigned int* p = data;
+    p++;
+    while(*p++)
+    {
+        root = balanced_tree_add(root,*p);
+    }
+    return root;
 }
 
 NODE* tree_add(NODE* root, unsigned int data)
