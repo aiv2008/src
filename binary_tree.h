@@ -8,7 +8,7 @@
 typedef struct
 {
     unsigned int data;//the satellite data of the tree
-    unsigned int depth;//the node depth of the tree
+    signed int depth;//the node depth of the tree
     struct NODE* left;//the left child node of this node
     struct NODE* right;//the right child node of this node
     struct NODE* parent;//the parent node of this node

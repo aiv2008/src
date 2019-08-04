@@ -64,13 +64,8 @@ NODE* tree_add(NODE* root, unsigned int data)
             this_node->right = new_node;
         else
             this_node->left = new_node;
-//        printf("new_node===%d(",new_node->data);
-//        printf("%d),",new_node->balanced_factor);
-//        printf("this_node===%d,",this_node->data);
-//        printf("%d),",this_node->balanced_factor);
-//        printf("\n");
         new_node->parent = this_node;
-        new_node->depth = ++this_node->depth;
+//        new_node->depth = ++this_node->depth;
         return new_node;
     }
 }
@@ -108,7 +103,7 @@ void tree_forward_all(NODE* node)
 //        NODE* right = node->right;
 //        NODE* parent = node->parent;
 //        printf("this===%d",node->data);
-//        printf("(%d),",node->count);
+//        printf("(%d),",node->balanced_factor);
 //        if(parent)
 //            printf("parent===%d,",parent->data);
 //        else

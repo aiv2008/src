@@ -6,6 +6,7 @@
 #define BALANCED_LOWER_BOUND_MID -1
 #define BALANCED_UPPER_BOUND 2
 #define BALANCED_LOWER_BOUND -2
+#define max(a,b)(a>b?a:b)
 
 NODE* balanced_node_init(unsigned int data)
 {
@@ -20,24 +21,29 @@ NODE* balanced_tree_add(NODE* root, unsigned int data)
 //    printf("new_node===%d",new_node->data);
 //    printf("\n");
     NODE* p = NULL;
-
-
-
     if(ZERO == new_node->count)//means the node is a new added node
     {
-        if(new_node->data == 5)
-            printf("balanced_factor====%d,",new_node->balanced_factor);
-
 
         new_node->balanced_factor = ZERO;
         new_node->count++;
         p = new_node->parent;
+//        printf("new_node===%d(",new_node->data);
+//        printf("%d),",new_node->depth);
         while(p)
         {
-            if( new_node->data < p->data )
-                p->balanced_factor++;
-            else
-                p->balanced_factor--;
+            NODE* left = p->left;
+            NODE* right = p->right;
+            p->depth =(!left&&!right)?0:( max(left?left->depth:0,right?right->depth:0)+1);
+//            printf("p===%d(",p->data);
+//            printf("%d)",p->depth);
+//            printf("\n");
+            p->balanced_factor = (left?left->depth:-1)-(right?right->depth:-1);
+//            printf("p->balanced_factor===%d",p->balanced_factor);
+//            printf("\n");
+//            if( new_node->data < p->data )
+//                p->balanced_factor++;
+//            else
+//                p->balanced_factor--;
             if( BALANCED_UPPER_BOUND == p->balanced_factor || BALANCED_LOWER_BOUND == p->balanced_factor)break;
             p = p->parent;
         }
@@ -47,11 +53,14 @@ NODE* balanced_tree_add(NODE* root, unsigned int data)
             {
                 NODE* left = p->left;
                 if( BALANCED_UPPER_BOUND_MID == left->balanced_factor )
-                    p = rotate_right(p);
+//                    p = rotate_right(p);
+                    p = rotate_right(left);
                 else
                 {
-                    p = rotate_left(p->left);
-                    p = rotate_right(p->parent);
+//                    p = rotate_left(p->left);
+//                    p = rotate_right(p->parent);
+                    p = rotate_left(left->right);
+                    p = rotate_right(p);
                 }
             }
             else if(BALANCED_LOWER_BOUND == p->balanced_factor)
@@ -59,80 +68,76 @@ NODE* balanced_tree_add(NODE* root, unsigned int data)
                 NODE* right = p->right;
                 if( BALANCED_UPPER_BOUND_MID == right->balanced_factor )
                 {
-                    p = rotate_right(p->right);
-                    p = rotate_left(p->parent);
+//                    p = rotate_right(p->right);
+//                    p = rotate_left(p->parent);
+                    p = rotate_right(right->left);
+                    p = rotate_left(p);
                 }
                 else
-                    p = rotate_left(p);
+//                    p = rotate_left(p);
+                    p = rotate_left(right);
             }
         }
     }
     else
         p = new_node;
-
-//    if(p->data == 5)
-//    {
-//        NODE* p_parent = p->parent;
-//        NODE* p_left = p->left;
-//        NODE* p_right = p->right;
-//        if(p_parent)
-//            printf("parent====%d,",p_parent->data);
-//        else
-//            printf("parent is null");
-//        if(p_left)
-//            printf("left====%d,",p_left->data);
-//        else
-//            printf("left is null");
-//        if(p_right)
-//            printf("right====%d,",p_right->data);
-//        else
-//            printf("right is null");
-//    }
     return (p&&!p->parent)?p:root;
 }
 
 NODE* rotate_left(NODE* root)
 {
-    NODE* parent = root->parent;
-    NODE* right = root->right;
-    root->parent = right;
-    root->right = right->left;
-    right->parent = parent;
-    right->left = root;
-    //if the new root has right child node(RR type),then the depth of
-    //new left child node should plus two,
-    //otherwise, it should plus one
-    root->balanced_factor+= right->right?BALANCED_UPPER_BOUND:BALANCED_UPPER_BOUND_MID;
-    right->balanced_factor++;
+    NODE* old_root = root->parent;
+    NODE* parent = old_root->parent;
+    root->parent = parent;
     if(parent)
     {
-        if(parent->data>right->data)
-            parent->left = right;
+        if(parent->data>root->data)
+            parent->left = root;
         else
-            parent->right = right;
+            parent->right = root;
     }
-    return right;
+    NODE* root_left = root->left;
+    old_root->right = root_left;
+    if(root_left)
+        root_left->parent = old_root;
+    NODE* old_root_left = old_root->left;
+    NODE* old_root_right = old_root->right;
+    old_root->depth = (!old_root_left&&!old_root_right)?0:( max(old_root_left?old_root_left->depth:0,old_root_right?old_root_right->depth:0)+1);
+    old_root->balanced_factor = (old_root_left?old_root_left->depth:-1) - (old_root_right?old_root_right->depth:-1);
+    old_root->parent = root;
+    root->left = old_root;
+    root_left = root->left;
+    NODE* root_right = root->right;
+    root->depth = (!root_left&&!root_right)?0:(max(root_left?root_left->depth:0,root_right?root_right->depth:0)+1);
+    root->balanced_factor = (root_left?root_left->depth:-1) - (root_right?root_right->depth:-1);
+    return root;
 }
 
 NODE* rotate_right(NODE* root)
 {
-    NODE* parent = root->parent;
-    NODE* left = root->left;
-    root->parent = left;
-    root->left = left->right;
-    left->parent = parent;
-    left->right = root;
-    //if the new root has left child node(LL type),then the depth of
-    //new right child node should minus two,
-    //otherwise, it should minus one
-    root->balanced_factor+=left->left?BALANCED_LOWER_BOUND:BALANCED_LOWER_BOUND_MID;
-    left->balanced_factor--;
+    NODE* old_root = root->parent;
+    NODE* parent = old_root->parent;
+    root->parent = parent;
     if(parent)
     {
-        if(parent->data>left->data)
-            parent->left = left;
+        if(parent->data>root->data)
+            parent->left = root;
         else
-            parent->right = left;
+            parent->right = root;
     }
-    return left;
+    NODE* root_right = root->right;
+    old_root->left = root_right;
+    if(root_right)
+        root_right->parent = old_root;
+    NODE* old_root_left = old_root->left;
+    NODE* old_root_right = old_root->right;
+    old_root->depth = (!old_root_left&&!old_root_right)?0:(max(old_root_left?old_root_left->depth:0,old_root_right?old_root_right->depth:0)+1);
+    old_root->balanced_factor = (old_root_left?old_root_left->depth:-1) - (old_root_right?old_root_right->depth:-1);
+    old_root->parent = root;
+    root->right = old_root;
+    root_right = root->right;
+    NODE* root_left = root->left;
+    root->depth = (!root_left&&!root_right)?0:( max(root_left?root_left->depth:0,root_right?root_right->depth:0)+1);
+    root->balanced_factor = (root_left?root_left->depth:-1) - (root_right?root_right->depth:-1);
+    return root;
 }
