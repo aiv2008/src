@@ -103,6 +103,21 @@ NODE* balanced_tree_add(NODE* root, unsigned int data)
     return (p&&!p->parent)?p:root;
 }
 
+
+NODE* delete_node(NODE* root, unsigned int data)
+{
+//    NODE* node = tree_search_return_node(root, data);
+//    if(node)
+//    {
+//        NODE* parent = node->parent;
+//        NODE* left = node->left;
+//        NODE* right = node->right;
+//        if(left)
+//    }
+    return NULL;
+}
+
+
 NODE* rotate_left(NODE* root)
 {
     NODE* old_root = root->parent;

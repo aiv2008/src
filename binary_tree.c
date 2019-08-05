@@ -29,6 +29,25 @@ int tree_search(NODE* node, unsigned int data)
     return count;
 }
 
+NODE* tree_search_return_node(NODE* node, unsigned int data)
+{
+    signed int count = 0;
+    NODE* p = node;
+    while(p)
+    {
+        if( p->data == data )
+        {
+            count = p->count;
+            break;
+        }
+        else if(p->data < data)
+            p = p->right;
+        else
+            p = p->left;
+    }
+    return p;
+}
+
 NODE* node_init(unsigned int data)
 {
     NODE* node = (NODE*)malloc(sizeof(NODE));
@@ -93,26 +112,6 @@ NODE* tree_add(NODE* root, unsigned int data)
 //        new_node->depth = ++this_node->depth;
         return new_node;
     }
-}
-
-NODE* tree_minimum(NODE* root)
-{
-    NODE* p = root;
-    if(!root)
-        return NULL;
-    while( p->left )
-        p = p->left;
-    return p;
-}
-
-NODE* tree_maximum(NODE* root)
-{
-    NODE* p = root;
-    if(!root)
-        return NULL;
-    while( p->right )
-        p = p->left;
-    return p;
 }
 
 void tree_forward_all(NODE* node)

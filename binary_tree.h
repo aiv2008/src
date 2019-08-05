@@ -22,6 +22,9 @@ typedef struct
 **/
 int tree_search(NODE* root, unsigned int data);
 
+
+NODE* tree_search_return_node(NODE* root, unsigned int data);
+
 /**
 ** initialize the node of the tree
 **/
