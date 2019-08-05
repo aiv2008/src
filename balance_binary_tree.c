@@ -15,19 +15,21 @@ NODE* balanced_node_init(unsigned int data)
     return node;
 }
 
-NODE* balanced_tree_init(unsigned int* data)
+NODE* balanced_tree_init(unsigned int* data,size_t size)
 {
-    if(!data)
+    if(!data || 0 == size)
         return NULL;
-    NODE* root = balanced_node_init(*data);
-    printf("root1 equals to :%d\n",root->data);
-    unsigned int* p = data;
-    p++;
-    while(p++)
+    int* p = data;
+    NODE* root = NULL;
+    for(int i=0;i<size;i++,p++)
     {
-        printf("p equals to :%d\n",*p);
-        root = balanced_tree_add(root,*p);
-//        printf("root2 equals to :%d\n",root->data);
+        if(i==0)
+        {
+            root = balanced_node_init(*p);
+            root->count++;
+        }
+        else
+            root = balanced_tree_add(root,*p);
     }
     return root;
 }

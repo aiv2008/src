@@ -41,17 +41,21 @@ NODE* node_init(unsigned int data)
     return node;
 }
 
-NODE* tree_init(unsigned int* data)
+NODE* tree_init(unsigned int* data,size_t size)
 {
-
-    if(!data)
+    if(!data || 0 == size)
         return NULL;
-    NODE* root = node_init(*data);
-    unsigned int* p = data;
-    p++;
-    while(*p++)
+    int* p = data;
+    NODE* root = NULL;
+    for(int i=0;i<size;i++,p++)
     {
-        root = balanced_tree_add(root,*p);
+        if(i==0)
+        {
+            root = node_init(*p);
+            root->count = ONE;
+        }
+        else
+            root = tree_add(root,*p);
     }
     return root;
 }

@@ -27,7 +27,7 @@ int tree_search(NODE* root, unsigned int data);
 **/
 NODE* node_init(unsigned int data);
 
-NODE* tree_init(unsigned int* data);
+NODE* tree_init(unsigned int* data, size_t size);
 
 /**
 ** add the data to the tree
