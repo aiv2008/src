@@ -10,6 +10,26 @@
 #define true 1
 #define false 0
 
+NODE* tree_minimum(NODE* root)
+{
+    NODE* p = root;
+    if(!root)
+        return NULL;
+    while( p->left )
+        p = p->left;
+    return p;
+}
+
+NODE* tree_maximum(NODE* root)
+{
+    NODE* p = root;
+    if(!root)
+        return NULL;
+    while( p->right )
+        p = p->left;
+    return p;
+}
+
 int tree_search(NODE* node, unsigned int data)
 {
     signed int count = 0;
@@ -109,7 +129,6 @@ NODE* tree_add(NODE* root, unsigned int data)
         else
             this_node->left = new_node;
         new_node->parent = this_node;
-//        new_node->depth = ++this_node->depth;
         return new_node;
     }
 }
@@ -122,25 +141,6 @@ void tree_forward_all(NODE* node)
         printf("%d",node->data);
         printf("(%d)",node->count);
         printf(",");
-
-//        NODE* left = node->left;
-//        NODE* right = node->right;
-//        NODE* parent = node->parent;
-//        printf("this===%d",node->data);
-//        printf("(%d),",node->balanced_factor);
-//        if(parent)
-//            printf("parent===%d,",parent->data);
-//        else
-//            printf("parent===null,");
-//        if(left)
-//            printf("left===%d,",left->data);
-//        else
-//            printf("left===null,");
-//        if(right)
-//            printf("right===%d,",right->data);
-//        else
-//            printf("right===null,");
-//        printf("\n");
         tree_forward_all(node->right);
     }
 }

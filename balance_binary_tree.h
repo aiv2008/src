@@ -34,4 +34,6 @@ NODE* rotate_left(NODE* root);
 **/
 NODE* rotate_right(NODE* root);
 
+NODE* tree_balanced(NODE* node);
+
 #endif // BALANCE_BINARY_TREE_H_INCLUDED

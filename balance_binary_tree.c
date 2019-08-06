@@ -34,11 +34,49 @@ NODE* balanced_tree_init(unsigned int* data,size_t size)
     return root;
 }
 
+NODE* tree_balanced(NODE* node)
+{
+    NODE* p = node;
+    while(p)
+    {
+        NODE* left = p->left;
+        NODE* right = p->right;
+        p->depth =(!left&&!right)?0:( max(left?left->depth:0,right?right->depth:0)+1);
+        p->balanced_factor = (left?left->depth:-1)-(right?right->depth:-1);
+        if( BALANCED_UPPER_BOUND == p->balanced_factor || BALANCED_LOWER_BOUND == p->balanced_factor)break;
+        p = p->parent;
+    }
+    if(p)
+    {
+        if(BALANCED_UPPER_BOUND == p->balanced_factor)
+        {
+            NODE* left = p->left;
+            if( BALANCED_UPPER_BOUND_MID == left->balanced_factor )
+                p = rotate_right(left);
+            else
+            {
+                p = rotate_left(left->right);
+                p = rotate_right(p);
+            }
+        }
+        else if(BALANCED_LOWER_BOUND == p->balanced_factor)
+        {
+            NODE* right = p->right;
+            if( BALANCED_UPPER_BOUND_MID == right->balanced_factor )
+            {
+                p = rotate_right(right->left);
+                p = rotate_left(p);
+            }
+            else
+                p = rotate_left(right);
+        }
+    }
+    return p;
+}
+
 NODE* balanced_tree_add(NODE* root, unsigned int data)
 {
     NODE* new_node = tree_add(root,data);
-//    printf("new_node===%d",new_node->data);
-//    printf("\n");
     NODE* p = NULL;
     if(ZERO == new_node->count)//means the node is a new added node
     {
@@ -46,57 +84,41 @@ NODE* balanced_tree_add(NODE* root, unsigned int data)
         new_node->balanced_factor = ZERO;
         new_node->count++;
         p = new_node->parent;
-//        printf("new_node===%d(",new_node->data);
-//        printf("%d),",new_node->depth);
-        while(p)
-        {
-            NODE* left = p->left;
-            NODE* right = p->right;
-            p->depth =(!left&&!right)?0:( max(left?left->depth:0,right?right->depth:0)+1);
-//            printf("p===%d(",p->data);
-//            printf("%d)",p->depth);
-//            printf("\n");
-            p->balanced_factor = (left?left->depth:-1)-(right?right->depth:-1);
-//            printf("p->balanced_factor===%d",p->balanced_factor);
-//            printf("\n");
-//            if( new_node->data < p->data )
-//                p->balanced_factor++;
-//            else
-//                p->balanced_factor--;
-            if( BALANCED_UPPER_BOUND == p->balanced_factor || BALANCED_LOWER_BOUND == p->balanced_factor)break;
-            p = p->parent;
-        }
-        if(p)
-        {
-            if(BALANCED_UPPER_BOUND == p->balanced_factor)
-            {
-                NODE* left = p->left;
-                if( BALANCED_UPPER_BOUND_MID == left->balanced_factor )
+//        while(p)
+//        {
+//            NODE* left = p->left;
+//            NODE* right = p->right;
+//            p->depth =(!left&&!right)?0:( max(left?left->depth:0,right?right->depth:0)+1);
+//            p->balanced_factor = (left?left->depth:-1)-(right?right->depth:-1);
+//            if( BALANCED_UPPER_BOUND == p->balanced_factor || BALANCED_LOWER_BOUND == p->balanced_factor)break;
+//            p = p->parent;
+//        }
+//        if(p)
+//        {
+//            if(BALANCED_UPPER_BOUND == p->balanced_factor)
+//            {
+//                NODE* left = p->left;
+//                if( BALANCED_UPPER_BOUND_MID == left->balanced_factor )
+//                    p = rotate_right(left);
+//                else
+//                {
+//                    p = rotate_left(left->right);
 //                    p = rotate_right(p);
-                    p = rotate_right(left);
-                else
-                {
-//                    p = rotate_left(p->left);
-//                    p = rotate_right(p->parent);
-                    p = rotate_left(left->right);
-                    p = rotate_right(p);
-                }
-            }
-            else if(BALANCED_LOWER_BOUND == p->balanced_factor)
-            {
-                NODE* right = p->right;
-                if( BALANCED_UPPER_BOUND_MID == right->balanced_factor )
-                {
-//                    p = rotate_right(p->right);
-//                    p = rotate_left(p->parent);
-                    p = rotate_right(right->left);
-                    p = rotate_left(p);
-                }
-                else
+//                }
+//            }
+//            else if(BALANCED_LOWER_BOUND == p->balanced_factor)
+//            {
+//                NODE* right = p->right;
+//                if( BALANCED_UPPER_BOUND_MID == right->balanced_factor )
+//                {
+//                    p = rotate_right(right->left);
 //                    p = rotate_left(p);
-                    p = rotate_left(right);
-            }
-        }
+//                }
+//                else
+//                    p = rotate_left(right);
+//            }
+//        }
+        p = tree_balanced(p);
     }
     else
         p = new_node;
@@ -109,11 +131,13 @@ NODE* delete_node(NODE* root, unsigned int data)
     NODE* node = tree_search_return_node(root, data);
     if(node)//has found
     {
-        if(node->left&&node->right)//left node, delete directly, but must be sure the tree is balanced
+        NODE* p = NULL;
+        if(!node->left&&!node->right)//leave node, delete directly, but must be sure the tree is balanced
         {
             NODE* parent = node->parent;
-            if(parent){
-                node->parent = null;
+            if(parent)
+            {
+                node->parent = NULL;
                 if(node->data<parent->data)
                 {
                     parent->left = NULL;
@@ -126,6 +150,7 @@ NODE* delete_node(NODE* root, unsigned int data)
                         parent->balanced_factor--;
                 }
                 else
+                {
                     parent->right = NULL;
                     if(!parent->left)
                     {
@@ -134,10 +159,63 @@ NODE* delete_node(NODE* root, unsigned int data)
                     }
                     else
                         parent->balanced_factor++;
+                }
+                p = tree_balanced(parent);//p is the latest node that isn`t balanced
+            }
+            else//only one node,all the node has been deleted
+            {
+                p = NULL;
+            }
+        }
+        else if(!node->right)//have not right child node,but must be sure the tree is balanced
+        {
+            NODE* parent = node->parent;
+            NODE* left = node->left;
+            node->parent = NULL;
+            node->left = NULL;
+            left->parent = parent;
+            if(parent)
+            {
+                if(parent->data<left->data)
+                    parent->right = left;
+                else
+                    parent->left = left;
+                p = tree_balanced(parent);
+            }
+            else//remain one node after deleted
+            {
+                p = left;
+            }
+        }
+        else if(!node->left)//have not left child node,but must be sure the tree is balanced
+        {
+            NODE* parent = node->parent;
+            NODE* right = node->right;
+            node->parent = NULL;
+            node->right = NULL;
+            right->parent = parent;
+            if(parent)
+            {
+                if(parent->data<right->data)
+                    parent->right = right;
+                else
+                    parent->left = right;
+                p = tree_balanced(parent);
+            }
+            else//remain one node after deleted
+            {
+                p = right;
+            }
+        }
+        else //left and right child node both exists
+        {
+            if(node->balanced_factor > 0) // left child node is higher than the right
+            {
+
             }
         }
     }
-    return NULL;
+    return root;
 }
 
 
