@@ -106,14 +106,37 @@ NODE* balanced_tree_add(NODE* root, unsigned int data)
 
 NODE* delete_node(NODE* root, unsigned int data)
 {
-//    NODE* node = tree_search_return_node(root, data);
-//    if(node)
-//    {
-//        NODE* parent = node->parent;
-//        NODE* left = node->left;
-//        NODE* right = node->right;
-//        if(left)
-//    }
+    NODE* node = tree_search_return_node(root, data);
+    if(node)//has found
+    {
+        if(node->left&&node->right)//left node, delete directly, but must be sure the tree is balanced
+        {
+            NODE* parent = node->parent;
+            if(parent){
+                node->parent = null;
+                if(node->data<parent->data)
+                {
+                    parent->left = NULL;
+                    if(!parent->right)
+                    {
+                        parent->depth--;
+                        parent->balanced_factor = 0;
+                    }
+                    else
+                        parent->balanced_factor--;
+                }
+                else
+                    parent->right = NULL;
+                    if(!parent->left)
+                    {
+                        parent->depth--;
+                        parent->balanced_factor = 0;
+                    }
+                    else
+                        parent->balanced_factor++;
+            }
+        }
+    }
     return NULL;
 }
 
