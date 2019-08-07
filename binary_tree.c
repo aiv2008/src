@@ -157,3 +157,19 @@ void tree_backward_all(NODE* node)
     }
 }
 
+void release(NODE* node)
+{
+    NODE* parent = node->parent;
+    if(parent)
+    {
+        if(parent->data<=node->data)
+            parent->right = NULL;
+        else
+            parent->left = NULL;
+        node->parent = NULL;
+    }
+    node->left = NULL;
+    node->right = NULL;
+    free(node);
+}
+
