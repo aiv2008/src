@@ -151,38 +151,34 @@ NODE* delete_node(NODE* root, unsigned int data)
         {
             if(right)
             {//right replace to the deleted node
-                right->parent = parent;
-                if(parent)
-                {
-                    if(parent->data<=right->data)
-                        parent->right = right;
-                    else
-                        parent->left = left;
-                    //code edit here
-
-
-                }
-                release(node);
-
-//                node->right = NULL;
-//                root = right;
+                NODE* node_left = node->left;
+                NODE* node_right = node->right;
+                unsigned int pre_balanced_factor = (node_left?node_left->depth:-1)-(node_right?node_right->depth:-1);
+                node->data = right->data;
+                node->count = right->count;
+                release(right);
+                node_left = node->left;
+                node_right = node->right;
+                unsigned int after_balanced_factor = (node_left?node_left->depth:-1)-(node_right?node_right->depth:-1);
+                if(pre_balanced_factor != after_balanced_factor)
+                    tree_balanced(node);
             }
-//            else
-//                root = NULL;
         }
         else if(!right)
         {
             if(left)
-            {//right replace to the deleted node
-                left->parent = parent;
-                if(parent)
-                {
-                    if(parent->data<=right->data)
-                        parent->right = right;
-                    else
-                        parent->left = left;
-                }
-                release(node);
+            {//left replace to the deleted node
+                NODE* node_left = node->left;
+                NODE* node_right = node->right;
+                unsigned int pre_balanced_factor = (node_left?node_left->depth:-1)-(node_right?node_right->depth:-1);
+                node->data = left->data;
+                node->count = left->count;
+                release(left);
+                node_left = node->left;
+                node_right = node->right;
+                unsigned int after_balanced_factor = (node_left?node_left->depth:-1)-(node_right?node_right->depth:-1);
+                if(pre_balanced_factor != after_balanced_factor)
+                    tree_balanced(node);
             }
         }
         else
@@ -192,39 +188,46 @@ NODE* delete_node(NODE* root, unsigned int data)
             //fetch the max node of the left child node to replace of the deleted node
                 NODE* max_left_node = tree_maximum(left);
                 NODE* max_left_node_parent = max_left_node->parent;
-                signed int pre_parent_depth = max_left_node_parent->depth;
+//                signed int pre_parent_depth = max_left_node_parent->depth;
+                NODE* max_left_node_parent_left = max_left_node_parent->left;
+                NODE* max_left_node_parent_right = max_left_node_parent->right;
+                unsigned int pre_balanced_factor = (max_left_node_parent_left?max_left_node_parent_left->depth:-1)-(max_left_node_parent_right?max_left_node_parent_right->depth:-1);
+
                 node->data = max_left_node->data;
                 node->count = max_left_node->count;
                 //use the data of the max node to replace the deleted node,
                 //and then release the max node
                 release(max_left_node);
-                NODE* max_left_node_parent_left = max_left_node_parent->left;
-                NODE* max_left_node_parent_right = max_left_node_parent->right;
-                signed int after_parent_depth = (!max_left_node_parent_left&&!max_left_node_parent_right)?0:( max(max_left_node_parent_left?max_left_node_parent_left->depth:0,max_left_node_parent_right?max_left_node_parent_right->depth:0)+1);
-                //compare the depth of the parent node, if they do not equals to each other,
+                max_left_node_parent_left = max_left_node_parent->left;
+                max_left_node_parent_right = max_left_node_parent->right;
+//                signed int after_parent_depth = (!max_left_node_parent_left&&!max_left_node_parent_right)?0:( max(max_left_node_parent_left?max_left_node_parent_left->depth:0,max_left_node_parent_right?max_left_node_parent_right->depth:0)+1);
+                unsigned int after_balanced_factor = (max_left_node_parent_left?max_left_node_parent_left->depth:-1)-(max_left_node_parent_right?max_left_node_parent_right->depth:-1);
+                //compare the balanced factor of the parent node, if they do not equals to each other,
                 //balance the tree
-                if(pre_parent_depth != after_parent_depth)
+                if(pre_balanced_factor != after_balanced_factor)
                     tree_balanced(max_left_node_parent);
-                root = node;
+//                root = node;
             }
             else
             {
                 NODE* max_right_node = tree_minimum(left);
                 NODE* max_right_node_parent = max_right_node->parent;
-                signed int pre_parent_depth = max_right_node_parent->depth;
+                NODE* max_right_node_parent_left = max_right_node_parent->left;
+                NODE* max_right_node_parent_right = max_right_node_parent->right;
+                unsigned int pre_balanced_factor = (max_right_node_parent_left?max_right_node_parent_left->depth:-1)-(max_right_node_parent_right?max_right_node_parent_right->depth:-1);
                 node->data = max_right_node->data;
                 node->count = max_right_node->count;
                 //use the data of the max node to replace the deleted node,
                 //and then release the max node
                 release(max_right_node);
-                NODE* max_right_node_parent_left = max_right_node_parent->left;
-                NODE* max_right_node_parent_right = max_right_node_parent->right;
-                signed int after_parent_depth = (!max_right_node_parent_left&&!max_right_node_parent_right)?0:( max(max_right_node_parent_left?max_right_node_parent_left->depth:0,max_right_node_parent_right?max_right_node_parent_right->depth:0)+1);
+                max_right_node_parent_left = max_right_node_parent->left;
+                max_right_node_parent_right = max_right_node_parent->right;
+                unsigned int after_balanced_factor = (max_right_node_parent_left?max_right_node_parent_left->depth:-1)-(max_right_node_parent_right?max_right_node_parent_right->depth:-1);
                 //compare the depth of the parent node, if they do not equals to each other,
                 //balance the tree
-                if(pre_parent_depth != after_parent_depth)
+                if(pre_balanced_factor != after_balanced_factor)
                     tree_balanced(max_right_node_parent);
-                root = node;
+//                root = node;
             }
         }
     }
