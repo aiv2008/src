@@ -55,5 +55,5 @@ void tree_backward_all(NODE* node);
 /**
 ** release the node
 **/
-void release(NODE* node);
+NODE* release(NODE* node);
 #endif // BINARY_TREE_H_INCLUDED

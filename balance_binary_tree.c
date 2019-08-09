@@ -163,6 +163,8 @@ NODE* delete_node(NODE* root, unsigned int data)
                 if(pre_balanced_factor != after_balanced_factor)
                     tree_balanced(node);
             }
+            else
+                node = release(node);
         }
         else if(!right)
         {
@@ -180,6 +182,8 @@ NODE* delete_node(NODE* root, unsigned int data)
                 if(pre_balanced_factor != after_balanced_factor)
                     tree_balanced(node);
             }
+            else
+                node = release(node);
         }
         else
         {
@@ -192,12 +196,15 @@ NODE* delete_node(NODE* root, unsigned int data)
                 NODE* max_left_node_parent_left = max_left_node_parent->left;
                 NODE* max_left_node_parent_right = max_left_node_parent->right;
                 unsigned int pre_balanced_factor = (max_left_node_parent_left?max_left_node_parent_left->depth:-1)-(max_left_node_parent_right?max_left_node_parent_right->depth:-1);
-
-                node->data = max_left_node->data;
-                node->count = max_left_node->count;
+                unsigned int data = max_left_node->data;
+                unsigned int count = max_left_node->count;
+//                node->data = max_left_node->data;
+//                node->count = max_left_node->count;
                 //use the data of the max node to replace the deleted node,
                 //and then release the max node
-                release(max_left_node);
+                max_left_node = release(max_left_node);
+                node->data = data;
+                node->count = count;
                 max_left_node_parent_left = max_left_node_parent->left;
                 max_left_node_parent_right = max_left_node_parent->right;
 //                signed int after_parent_depth = (!max_left_node_parent_left&&!max_left_node_parent_right)?0:( max(max_left_node_parent_left?max_left_node_parent_left->depth:0,max_left_node_parent_right?max_left_node_parent_right->depth:0)+1);
@@ -215,11 +222,13 @@ NODE* delete_node(NODE* root, unsigned int data)
                 NODE* max_right_node_parent_left = max_right_node_parent->left;
                 NODE* max_right_node_parent_right = max_right_node_parent->right;
                 unsigned int pre_balanced_factor = (max_right_node_parent_left?max_right_node_parent_left->depth:-1)-(max_right_node_parent_right?max_right_node_parent_right->depth:-1);
-                node->data = max_right_node->data;
-                node->count = max_right_node->count;
+                unsigned int data = max_right_node->data;
+                unsigned int count = max_right_node->count;
                 //use the data of the max node to replace the deleted node,
                 //and then release the max node
-                release(max_right_node);
+                max_right_node = release(max_right_node);
+                node->data = data;
+                node->count = count;
                 max_right_node_parent_left = max_right_node_parent->left;
                 max_right_node_parent_right = max_right_node_parent->right;
                 unsigned int after_balanced_factor = (max_right_node_parent_left?max_right_node_parent_left->depth:-1)-(max_right_node_parent_right?max_right_node_parent_right->depth:-1);

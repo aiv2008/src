@@ -26,7 +26,7 @@ NODE* tree_maximum(NODE* root)
     if(!root)
         return NULL;
     while( p->right )
-        p = p->left;
+        p = p->right;
     return p;
 }
 
@@ -157,7 +157,7 @@ void tree_backward_all(NODE* node)
     }
 }
 
-void release(NODE* node)
+NODE* release(NODE* node)
 {
     NODE* parent = node->parent;
     if(parent)
@@ -171,5 +171,6 @@ void release(NODE* node)
     node->left = NULL;
     node->right = NULL;
     free(node);
+    return node = NULL;
 }
 
