@@ -12,7 +12,7 @@ typedef struct
     struct NODE* left;//the left child node of this node
     struct NODE* right;//the right child node of this node
     struct NODE* parent;//the parent node of this node
-    signed balanced_factor;//the distance between the left child node and right child node
+//    signed balanced_factor;//the distance between the left child node and right child node
     unsigned int count;//the count of the node that has appeared
 } NODE;
 
@@ -52,4 +52,8 @@ void tree_forward_all(NODE* node);
 
 void tree_backward_all(NODE* node);
 
+/**
+** release the node
+**/
+NODE* release(NODE* node);
 #endif // BINARY_TREE_H_INCLUDED

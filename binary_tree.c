@@ -26,7 +26,7 @@ NODE* maximum_node(NODE* root)
     if(!root)
         return NULL;
     while( p->right )
-        p = p->left;
+        p = p->right;
     return p;
 }
 
@@ -155,5 +155,22 @@ void tree_backward_all(NODE* node)
         printf(",");
         tree_backward_all(node->left);
     }
+}
+
+NODE* release(NODE* node)
+{
+    NODE* parent = node->parent;
+    if(parent)
+    {
+        if(parent->data<=node->data)
+            parent->right = NULL;
+        else
+            parent->left = NULL;
+        node->parent = NULL;
+    }
+    node->left = NULL;
+    node->right = NULL;
+    free(node);
+    return node = NULL;
 }
 
