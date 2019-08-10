@@ -10,7 +10,7 @@
 #define true 1
 #define false 0
 
-NODE* tree_minimum(NODE* root)
+NODE* minimum_node(NODE* root)
 {
     NODE* p = root;
     if(!root)
@@ -20,7 +20,7 @@ NODE* tree_minimum(NODE* root)
     return p;
 }
 
-NODE* tree_maximum(NODE* root)
+NODE* maximum_node(NODE* root)
 {
     NODE* p = root;
     if(!root)

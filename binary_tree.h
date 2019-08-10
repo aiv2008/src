@@ -41,12 +41,12 @@ NODE* tree_add(NODE* root, unsigned int data);
 /**
 ** fetch the minimum node data of the tree
 **/
-NODE* tree_minimum(NODE* root);
+NODE* minimum_node(NODE* root);
 
 /**
 ** fetch the maximum node data of the tree
 **/
-NODE* tree_maximum(NODE* root);
+NODE* maximum_node(NODE* root);
 
 void tree_forward_all(NODE* node);
 
