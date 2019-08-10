@@ -25,6 +25,15 @@ NODE* tree_init()
     return root;
 }
 
+void recolor(NODE* root)
+{
+    NODE* p = root;
+    while(p->data != UINT_MAX)
+        p->color = !p->color;
+    recolor(p->left);
+    recolor(p->right);
+}
+
 NODE* tree_insert(NODE* root, unsigned int data)
 {
     NODE* node = node_init(data);
@@ -54,18 +63,33 @@ NODE* tree_insert(NODE* root, unsigned int data)
                 parent->right = node;
             else
                 parent->left = node;
-            if(parent->color=='R')
+
+            p = node;
+            while(parent && parent->color == 'R' && p->color == 'R')
             {
-                //cz parent is RED,so it is impossible that the parent of parent is nil
                 NODE* parent_parent = parent->parent;
+                NODE* uncle_node = NULL;
+                if(parent_parent->data < parent->data)
+                    uncle_node = parent_parent->left;
+                else
+                    uncle_node = parent_parent->right;
+                //if the color of parent is equals to the uncle`s,
+                //then recolor its uncle and all of successor`s color of its uncle
+                if(uncle_node->color == parent->color)
+                    recolor(uncle_node);
+                else
+                {
 
-
+                }
+                node = parent_parent;
+                parent = node->parent;
             }
         }
         else
         {
             root = node;
         }
+
 
     }
     return root;

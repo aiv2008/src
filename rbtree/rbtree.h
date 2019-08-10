@@ -35,4 +35,6 @@ NODE* tree_init();
 
 NODE* tree_balanced(NODE* node);
 
+void recolor(NODE* root);
+
 #endif // RBTREE_H_INCLUDED
