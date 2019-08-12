@@ -57,40 +57,50 @@ NODE* tree_insert(NODE* root, unsigned int data)
         node->left = p;
         node->right = p;
         p->parent = node;
-        if(parent)
+        p = node;
+        while(parent)
         {
-            if(parent->data < node->data)
-                parent->right = node;
-            else
-                parent->left = node;
-
-            p = node;
-            while(parent && parent->color == 'R' && p->color == 'R')
+            if('R' == p->color && parent->color == p->color)
             {
                 NODE* parent_parent = parent->parent;
-                NODE* uncle_node = NULL;
-                if(parent_parent->data < parent->data)
-                    uncle_node = parent_parent->left;
+                NODE* uncle = NULL;
+                if(parent == parent_parent->left)
+                    uncle = parent_parent->right;
                 else
-                    uncle_node = parent_parent->right;
-                //if the color of parent is equals to the uncle`s,
-                //then recolor its uncle and all of successor`s color of its uncle
-                if(uncle_node->color == parent->color)
-                    recolor(uncle_node);
+                    uncle = parent_parent->left;
+                if('R' == uncle->color)
+                {
+                    parent->color = 'B';
+                    parent_parent->color = 'R';
+                    uncle->color = 'B';
+                    p = parent_parent;
+                    parent = parent_parent->parent;
+                }
                 else
                 {
-
+                    if(parent == parent_parent->left)
+                        //if parent is pp`s left child node, then rotate right
+                        p = rotate_right(parent);
+                    else
+                        //if parent is pp`s right child node, then rotate left
+                        p = rotate_left(parent);
+                    parent = p->parent;
                 }
-                node = parent_parent;
-                parent = node->parent;
+            }
+            else
+                break;
+        }
+        if(!p->parent && 'R' == p->color)
+        {//if root is red, then rotate
+            if(node->data < p->data)
+            {
+                root = rotate_right(p->left);
+            }
+            else
+            {
+                root = rotate_left(p->right);
             }
         }
-        else
-        {
-            root = node;
-        }
-
-
     }
     return root;
 }
@@ -142,6 +152,7 @@ NODE* rotate_left(NODE* root)
             parent->left = root;
         else
             parent->right = root;
+        parent->color = 'R';
     }
     NODE* root_left = root->left;
     old_root->right = root_left;
@@ -154,6 +165,7 @@ NODE* rotate_left(NODE* root)
     root->left = old_root;
     root_left = root->left;
     NODE* root_right = root->right;
+    root->color = 'B';
     return root;
 }
 
@@ -168,6 +180,7 @@ NODE* rotate_right(NODE* root)
             parent->left = root;
         else
             parent->right = root;
+        parent->color = 'R';
     }
     NODE* root_right = root->right;
     old_root->left = root_right;
@@ -180,6 +193,7 @@ NODE* rotate_right(NODE* root)
     root->right = old_root;
     root_right = root->right;
     NODE* root_left = root->left;
+    root->color = 'B';
     return root;
 }
 
