@@ -3,7 +3,7 @@
 #include<malloc.h>
 #include <limits.h>
 #include "rbtree.h"
-
+#include "node.h"
 
 NODE* node_init(unsigned int data)
 {
@@ -22,6 +22,9 @@ NODE* tree_init()
     NODE* root = (NODE*)malloc(sizeof(NODE));
     root->data = UINT_MAX;
     root->color = 'B';
+    root->parent = NULL;
+    root->left = NULL;
+    root->right = NULL;
     return root;
 }
 
@@ -36,6 +39,7 @@ void recolor(NODE* root)
 
 NODE* tree_insert(NODE* root, unsigned int data)
 {
+    //node is the new added node
     NODE* node = node_init(data);
     NODE* p = root;
     while(p->data != UINT_MAX)
@@ -58,6 +62,13 @@ NODE* tree_insert(NODE* root, unsigned int data)
         node->right = p;
         p->parent = node;
         p = node;
+        if(parent)
+        {
+            if(node->data<parent->data)
+                parent->left = node;
+            else
+                parent->right = node;
+        }
         while(parent)
         {
             if('R' == p->color && parent->color == p->color)
@@ -92,14 +103,20 @@ NODE* tree_insert(NODE* root, unsigned int data)
         }
         if(!p->parent && 'R' == p->color)
         {//if root is red, then rotate
-            if(node->data < p->data)
+            NODE* left = node->left;
+            NODE* right = node->right;
+            if(UINT_MAX == left->data && UINT_MAX == right->data)
+            //if only one root node, color the root with black directly
             {
-                root = rotate_right(p->left);
+                node->color = 'B';
+                root = node;
             }
             else
-            {
-                root = rotate_left(p->right);
-            }
+                root = node->data < p->data?rotate_right(left):rotate_left(right);
+//            if(node->data < p->data)
+//                root = rotate_right(p->left);
+//            else
+//                root = rotate_left(p->right);
         }
     }
     return root;
@@ -125,9 +142,11 @@ void rbtree_predecesor(NODE* node)
 {
     if(node->data != UINT_MAX)
     {
-        rbtree_predecesor(node->left);
-        printf("%d,",node->data);
         rbtree_predecesor(node->right);
+        printf("%d(",node->data);
+        printf("count:%d,",node->count);
+        printf("color:%c),",node->color);
+        rbtree_predecesor(node->left);
     }
 }
 
@@ -135,9 +154,11 @@ void rbtree_successor(NODE* node)
 {
     if(node->data != UINT_MAX)
     {
-        rbtree_predecesor(node->right);
-        printf("%d,",node->data);
-        rbtree_predecesor(node->left);
+        rbtree_successor(node->left);
+        printf("%d(",node->data);
+        printf("count:%d,",node->count);
+        printf("color:%c),",node->color);
+        rbtree_successor(node->right);
     }
 }
 
@@ -197,11 +218,4 @@ NODE* rotate_right(NODE* root)
     return root;
 }
 
-int main(void)
-{
-    unsigned int i=0;
-    i = ~i;//直接把值取反.就是二进制最大可表示的值
-    printf("unsigned int最大值:%u\n", UINT_MAX );
-    printf("unsigned int最小值:%u\n", i );
-    return 0;
-}
+

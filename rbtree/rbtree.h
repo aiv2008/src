@@ -1,15 +1,7 @@
 #ifndef RBTREE_H_INCLUDED
 #define RBTREE_H_INCLUDED
+#include "node.h"
 
-typedef struct
-{
-    unsigned int data;
-    unsigned char color;
-    unsigned int count;
-    struct NODE* parent;
-    struct NODE* left;
-    struct NODE*right;
-} NODE;
 
 NODE* tree_search(NODE* root, unsigned int data);
 
