@@ -23,6 +23,8 @@ NODE* rotate_right(NODE* node);
 
 NODE* node_init(unsigned int data);
 
+NODE* nil_node_init();
+
 NODE* tree_init();
 
 NODE* tree_balanced(NODE* node);

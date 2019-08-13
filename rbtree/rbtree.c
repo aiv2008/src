@@ -1,9 +1,9 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include<malloc.h>
-#include <limits.h>
 #include "rbtree.h"
 #include "node.h"
+#define NIL -50000000
 
 NODE* node_init(unsigned int data)
 {
@@ -17,10 +17,10 @@ NODE* node_init(unsigned int data)
     return node;
 }
 
-NODE* tree_init()
+NODE* nil_node_init()
 {
     NODE* root = (NODE*)malloc(sizeof(NODE));
-    root->data = UINT_MAX;
+    root->data = NIL;
     root->color = 'B';
     root->parent = NULL;
     root->left = NULL;
@@ -28,10 +28,15 @@ NODE* tree_init()
     return root;
 }
 
+NODE* tree_init()
+{
+    return nil_node_init();
+}
+
 void recolor(NODE* root)
 {
     NODE* p = root;
-    while(p->data != UINT_MAX)
+    while(p->data != NIL)
         p->color = !p->color;
     recolor(p->left);
     recolor(p->right);
@@ -42,37 +47,48 @@ NODE* tree_insert(NODE* root, unsigned int data)
     //node is the new added node
     NODE* node = node_init(data);
     NODE* p = root;
-    while(p->data != UINT_MAX)
+    if(NIL == p->data)
     {
-        if(p->data == node->data)
-        {
-            p->count++;
-            break;
-        }
-        else if(p->data < node->data)
-            p = p->right;
-        else
-            p = p->left;
+        node->left = root;
+        NODE* right_nil_node = nil_node_init();
+        node->right = right_nil_node;
+        root->parent = node;
+        right_nil_node->parent = node;
+        node->color = 'B';
+        root = node;
     }
-    if(p->data == UINT_MAX)
+    else
     {
-        NODE* parent = p->parent;
-        node->parent = parent;
-        node->left = p;
-        node->right = p;
-        p->parent = node;
-        p = node;
-        if(parent)
+        while(p->data != NIL)
         {
-            if(node->data<parent->data)
+            if(p->data == node->data)
+            {
+                p->count++;
+                break;
+            }
+            else if(p->data < node->data)
+                p = p->right;
+            else
+                p = p->left;
+        }
+        if(p->data == NIL)
+        {
+            NODE* parent = p->parent;
+            node->parent = parent;
+            node->left = p;
+            p->parent = node;
+            NODE* right_nil_node = nil_node_init();
+            node->right = right_nil_node;
+            right_nil_node->parent = node;
+            p = node;
+            if(node->data < parent->data)
                 parent->left = node;
             else
                 parent->right = node;
-        }
-        while(parent)
-        {
-            if('R' == p->color && parent->color == p->color)
+            while(parent)
             {
+                if(!('R' == p->color && parent->color == p->color))
+                    break;
                 NODE* parent_parent = parent->parent;
                 NODE* uncle = NULL;
                 if(parent == parent_parent->left)
@@ -98,34 +114,23 @@ NODE* tree_insert(NODE* root, unsigned int data)
                     parent = p->parent;
                 }
             }
-            else
-                break;
-        }
-        if(!p->parent && 'R' == p->color)
-        {//if root is red, then rotate
-            NODE* left = node->left;
-            NODE* right = node->right;
-            if(UINT_MAX == left->data && UINT_MAX == right->data)
-            //if only one root node, color the root with black directly
-            {
-                node->color = 'B';
-                root = node;
-            }
-            else
+            if(!p->parent && 'R' == p->color)
+            {//if root is red, then rotate
+                NODE* left = node->left;
+                NODE* right = node->right;
                 root = node->data < p->data?rotate_right(left):rotate_left(right);
-//            if(node->data < p->data)
-//                root = rotate_right(p->left);
-//            else
-//                root = rotate_left(p->right);
+            }
         }
     }
+
+
     return root;
 }
 
 NODE* rbtree_minimum(NODE* root)
 {
     NODE* p = root;
-    while(p->data != UINT_MAX)
+    while(p->data != NIL)
         p = p->left;
     return p->parent;
 }
@@ -133,14 +138,14 @@ NODE* rbtree_minimum(NODE* root)
 NODE* rbtree_maximum(NODE* root)
 {
     NODE* p = root;
-    while(p->data != UINT_MAX)
+    while(p->data != NIL)
         p = p->right;
     return p->parent;
 }
 
 void rbtree_predecesor(NODE* node)
 {
-    if(node->data != UINT_MAX)
+    if(node->data != NIL)
     {
         rbtree_predecesor(node->right);
         printf("%d(",node->data);
@@ -152,7 +157,7 @@ void rbtree_predecesor(NODE* node)
 
 void rbtree_successor(NODE* node)
 {
-    if(node->data != UINT_MAX)
+    if(node->data != NIL)
     {
         rbtree_successor(node->left);
         printf("%d(",node->data);
