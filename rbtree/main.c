@@ -10,32 +10,24 @@ int main(void)
 //    printf("unsigned int最大值:%u\n", UINT_MAX );
 //    printf("unsigned int最小值:%u\n", i );
 
-//    srand(time(NULL));
-//    size_t size = 10;
-//    int a[size];
+    srand(time(NULL));
+    size_t size = 10;
+    int a[size];
 
-    int a[] = {5,6,2,0,3,5,0,0,4,4,5,6,2,0};
-//    int a[] = {7,3,1};
-    size_t size = sizeof(a)/sizeof(a[0]);
+//    int a[] = {5,6,2,0,3,5,0,0,4,4,5,6,2,0};
+//    int a[] = {5,6,2,0};
+//    size_t size = sizeof(a)/sizeof(a[0]);
 
 
     for(int i=0;i<size;i++)
     {
-//        a[i] = rand()%size;
+        a[i] = rand()%size;
         printf("%d,",a[i]);
-//        root = tree_insert(root, a[i]);
     }
 
     NODE* root = tree_init();
     for(int i=0;i<size;i++)
-    {
-//        a[i] = rand()%size;
-        printf("%d,",a[i]);
         root = tree_insert(root, a[i]);
-    }
-
-
-
     printf("root is :%d\n",root->data);
 
     successor(root);

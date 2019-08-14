@@ -173,9 +173,9 @@ NODE* tree_insert(NODE* root, unsigned int data)
             }
             if(!p->parent && 'R' == p->color)
             {//if root is red, then rotate
-                NODE* left = node->left;
-                NODE* right = node->right;
-                root = node->data < p->data?rotate_right(left):rotate_left(right);
+                NODE* left = p->left;
+                NODE* right = p->right;
+                p = node->data < p->data?rotate_right(left):rotate_left(right);
             }
         }
     }
