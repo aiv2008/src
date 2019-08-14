@@ -5,6 +5,46 @@
 #include "node.h"
 #define NIL -50000000
 
+void print_node(NODE* node)
+{
+    if(NIL != node->data)
+    {
+        printf("\n  ");
+        NODE* p = node->parent;
+        NODE* l = node->left;
+        NODE* r = node->right;
+        if(p)
+        {
+            printf("%d(",p->data);
+            printf("%c)\n",p->color);
+        }
+        else
+            printf("nil\n");
+        printf("   |\n");
+        printf(" ");
+        printf("%d(",node->data);
+        printf("%c)\n",node->color);
+        printf(" /   \\\n");
+        if(NIL != l->data)
+        {
+            printf("%d(",l->data);
+            printf("%c)",l->color);
+        }
+        else
+            printf("nil");
+        printf("   ");
+        if(NIL != r->data)
+        {
+            printf("%d(",r->data);
+            printf("%c)",r->color);
+        }
+        else
+            printf("nil");
+        printf("\n");
+    }
+
+}
+
 NODE* node_init(unsigned int data)
 {
     NODE* node = (NODE*)malloc(sizeof(NODE));
@@ -42,13 +82,28 @@ void recolor(NODE* root)
     recolor(p->right);
 }
 
+NODE* tree_search(NODE* root, unsigned int data)
+{
+    NODE* p = root;
+    while( NIL != p->data)
+    {
+        if(data == p->data)
+            break;
+        else if(p->data < data)
+            p = p->right;
+        else
+            p = p->left;
+    }
+    return p;
+}
+
 NODE* tree_insert(NODE* root, unsigned int data)
 {
     //node is the new added node
-    NODE* node = node_init(data);
     NODE* p = root;
     if(NIL == p->data)
     {
+        NODE* node = node_init(data);
         node->left = root;
         NODE* right_nil_node = nil_node_init();
         node->right = right_nil_node;
@@ -59,20 +114,12 @@ NODE* tree_insert(NODE* root, unsigned int data)
     }
     else
     {
-        while(p->data != NIL)
+        p = tree_search(root, data);
+        if( NIL != p->data )
+            p->count++;
+        else
         {
-            if(p->data == node->data)
-            {
-                p->count++;
-                break;
-            }
-            else if(p->data < node->data)
-                p = p->right;
-            else
-                p = p->left;
-        }
-        if(p->data == NIL)
-        {
+            NODE* node = node_init(data);
             NODE* parent = p->parent;
             node->parent = parent;
             node->left = p;
@@ -105,12 +152,22 @@ NODE* tree_insert(NODE* root, unsigned int data)
                 }
                 else
                 {
+//                    printf("---before rotate begin---\n");
+//                    print_node(node);
+//                    print_node(node->left);
+//                    print_node(node->right);
+//                    printf("---before rotate end---\n");
                     if(parent == parent_parent->left)
                         //if parent is pp`s left child node, then rotate right
                         p = rotate_right(parent);
                     else
                         //if parent is pp`s right child node, then rotate left
                         p = rotate_left(parent);
+//                    printf("---after rotate begin---\n");
+//                    print_node(p);
+//                    print_node(p->left);
+//                    print_node(p->right);
+//                    printf("---after rotate end---\n");
                     parent = p->parent;
                 }
             }
@@ -122,9 +179,7 @@ NODE* tree_insert(NODE* root, unsigned int data)
             }
         }
     }
-
-
-    return root;
+    return p->parent?root:p;
 }
 
 NODE* rbtree_minimum(NODE* root)
@@ -143,27 +198,51 @@ NODE* rbtree_maximum(NODE* root)
     return p->parent;
 }
 
-void rbtree_predecesor(NODE* node)
+void predecesor(NODE* node)
 {
     if(node->data != NIL)
     {
-        rbtree_predecesor(node->right);
+        predecesor(node->right);
         printf("%d(",node->data);
         printf("count:%d,",node->count);
         printf("color:%c),",node->color);
-        rbtree_predecesor(node->left);
+//        print_node(node);
+        predecesor(node->left);
     }
 }
 
-void rbtree_successor(NODE* node)
+void predecesor_for_test(NODE* node)
 {
     if(node->data != NIL)
     {
-        rbtree_successor(node->left);
+        predecesor_for_test(node->right);
+        print_node(node);
+        predecesor_for_test(node->left);
+    }
+}
+
+void successor(NODE* node)
+{
+    if(node->data != NIL)
+    {
+        successor(node->left);
         printf("%d(",node->data);
         printf("count:%d,",node->count);
         printf("color:%c),",node->color);
-        rbtree_successor(node->right);
+        successor(node->right);
+    }
+}
+
+void successor_for_test(NODE* node)
+{
+    if(node->data != NIL)
+    {
+        successor_for_test(node->left);
+//        printf("%d(",node->data);
+//        printf("count:%d,",node->count);
+//        printf("color:%c),",node->color);
+        print_node(node);
+        successor_for_test(node->right);
     }
 }
 
