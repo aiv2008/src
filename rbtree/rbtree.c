@@ -175,7 +175,10 @@ NODE* tree_insert(NODE* root, unsigned int data)
             {//if root is red, then rotate
                 NODE* left = p->left;
                 NODE* right = p->right;
-                p = node->data < p->data?rotate_right(left):rotate_left(right);
+                if(left->color == right->color && 'B' == left->color)
+                    p->color = 'B';
+                else
+                    p = node->data < p->data?rotate_right(left):rotate_left(right);
             }
         }
     }
@@ -257,7 +260,7 @@ NODE* rotate_left(NODE* root)
             parent->left = root;
         else
             parent->right = root;
-        parent->color = 'R';
+//        parent->color = 'R';
     }
     NODE* root_left = root->left;
     old_root->right = root_left;
@@ -268,8 +271,9 @@ NODE* rotate_left(NODE* root)
     NODE* old_root_right = old_root->right;
     old_root->parent = root;
     root->left = old_root;
-    root_left = root->left;
-    NODE* root_right = root->right;
+//    root_left = root->left;
+    old_root->color = 'R';
+//    NODE* root_right = root->right;
     root->color = 'B';
     return root;
 }
@@ -285,7 +289,7 @@ NODE* rotate_right(NODE* root)
             parent->left = root;
         else
             parent->right = root;
-        parent->color = 'R';
+//        parent->color = 'R';
     }
     NODE* root_right = root->right;
     old_root->left = root_right;
@@ -296,8 +300,9 @@ NODE* rotate_right(NODE* root)
     NODE* old_root_right = old_root->right;
     old_root->parent = root;
     root->right = old_root;
-    root_right = root->right;
-    NODE* root_left = root->left;
+    old_root->color = 'R';
+//    root_right = root->right;
+//    NODE* root_left = root->left;
     root->color = 'B';
     return root;
 }
