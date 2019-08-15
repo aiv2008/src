@@ -14,8 +14,8 @@ int main(void)
 //    size_t size = 10;
 //    int a[size];
 
-    int a[] = {1,6,9,6,3,3,8,5,3,2};
-//    int a[] = {1,6,9,6,3};
+//    int a[] = {1,6,9,6,3,3,8,5,3,2};
+    int a[] = {1,6,9,6,3};
     size_t size = sizeof(a)/sizeof(a[0]);
 
 
