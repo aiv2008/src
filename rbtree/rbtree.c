@@ -104,11 +104,13 @@ NODE* tree_insert(NODE* root, unsigned int data)
     if(NIL == p->data)
     {
         NODE* node = node_init(data);
-        node->left = root;
+//        node->left = root;
+//        root->parent = node;
+        node_conn(node, root, 'l');
         NODE* right_nil_node = nil_node_init();
-        node->right = right_nil_node;
-        root->parent = node;
-        right_nil_node->parent = node;
+//        node->right = right_nil_node;
+//        right_nil_node->parent = node;
+        node_conn(node, right_nil_node, 'r');
         node->color = 'B';
         root = node;
     }
@@ -121,17 +123,19 @@ NODE* tree_insert(NODE* root, unsigned int data)
         {
             NODE* node = node_init(data);
             NODE* parent = p->parent;
-            node->parent = parent;
-            node->left = p;
-            p->parent = node;
+//            node->parent = parent;
+//            if(node->data < parent->data)
+//                parent->left = node;
+//            else
+//                parent->right = node;
+            node_conn(parent, node, node->data < parent->data?'l':'r');
+//            node->left = p;
+//            p->parent = node;
+            node_conn(node, p, 'l');
             NODE* right_nil_node = nil_node_init();
-            node->right = right_nil_node;
-            right_nil_node->parent = node;
-
-            if(node->data < parent->data)
-                parent->left = node;
-            else
-                parent->right = node;
+//            node->right = right_nil_node;
+//            right_nil_node->parent = node;
+            node_conn(node, right_nil_node, 'r');
             p = node;
             while(parent)
             {
@@ -153,35 +157,17 @@ NODE* tree_insert(NODE* root, unsigned int data)
                 }
                 else
                 {
-//                    printf("---before rotate begin---\n");
-//                    print_node(node);
-//                    print_node(node->left);
-//                    print_node(node->right);
-//                    printf("---before rotate end---\n");
                     if(parent == parent_parent->left)
                         //if parent is pp`s left child node, then rotate right
                         p = p == parent->left?rotate_right(parent):rotate_right(rotate_left(p));
                     else
                         //if parent is pp`s right child node, then rotate left
                         p = p == parent->left?rotate_left(rotate_right(p)):rotate_left(parent);
-//                    printf("---after rotate begin---\n");
-//                    print_node(p);
-//                    print_node(p->left);
-//                    print_node(p->right);
-//                    printf("---after rotate end---\n");
                     parent = p->parent;
                 }
             }
-            if(!p->parent && 'R' == p->color)
-            {//if root is red, then rotate
+            if(!p->parent && 'R' == p->color)//if root is red, then rotate
                 p->color = 'B';
-//                NODE* left = p->left;
-//                NODE* right = p->right;
-//                if(left->color == right->color && 'B' == left->color)
-//                    p->color = 'B';
-//                else
-//                    p = node->data < p->data?rotate_right(left):rotate_left(right);
-            }
         }
     }
     return p->parent?root:p;
@@ -262,21 +248,21 @@ NODE* rotate_left(NODE* root)
         root->color = 'B';
         old_root->color = 'R';
     }
-    root->parent = parent;
-    if(parent)
-    {
-        if(root->data < parent->data)
-            parent->left = root;
-        else
-            parent->right = root;
-    }
-    old_root->parent = root;
-    old_root->right = left;
-    root->left = old_root;
-    left->parent = old_root;
-//    printf("---begin---");
-//    print_node(root);
-//    printf("---end---");
+//    root->parent = parent;
+//    if(parent)
+//    {
+//        if(root->data < parent->data)
+//            parent->left = root;
+//        else
+//            parent->right = root;
+//    }
+    node_conn(parent, root, parent?(root->data < parent->data?'l':'r') : ' ');
+//    old_root->parent = root;
+//    root->left = old_root;
+    node_conn(root, old_root, 'l');
+//    old_root->right = left;
+//    left->parent = old_root;
+    node_conn(old_root, left, 'r');
     return root;
 }
 
@@ -291,17 +277,30 @@ NODE* rotate_right(NODE* root)
         root->color = 'B';
         old_root->color = 'R';
     }
-    root->parent = parent;
-    if(parent)
-    {
-        if(root->data < parent->data)
-            parent->left = root;
-        else
-            parent->right = root;
-    }
-    old_root->parent = root;
-    old_root->left = right;
-    root->right = old_root;
-    right->parent = old_root;
+//    root->parent = parent;
+//    if(parent)
+//    {
+//        if(root->data < parent->data)
+//            parent->left = root;
+//        else
+//            parent->right = root;
+//    }
+    node_conn(parent, root, parent?(root->data < parent->data?'l':'r') : ' ');
+//    old_root->parent = root;
+//    root->right = old_root;
+    node_conn(root, old_root, 'r');
+//    old_root->left = right;
+//    right->parent = old_root;
+    node_conn(old_root, right, 'l');
     return root;
+}
+
+void node_conn(NODE* parent, NODE* child, unsigned char lof)
+{
+    child->parent = parent;
+    if(parent)
+        if('l' == lof)
+            parent->left = child;
+        else if('r' == lof)
+            parent->right = child;
 }

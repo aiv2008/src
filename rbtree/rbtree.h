@@ -37,4 +37,6 @@ void recolor(NODE* root);
 
 void print_node(NODE* node);
 
+void node_conn(NODE* parent, NODE* child, unsigned char lof);
+
 #endif // RBTREE_H_INCLUDED
