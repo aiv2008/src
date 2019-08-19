@@ -73,14 +73,14 @@ NODE* tree_init()
     return nil_node_init();
 }
 
-void recolor(NODE* root)
-{
-    NODE* p = root;
-    while(p->data != NIL)
-        p->color = !p->color;
-    recolor(p->left);
-    recolor(p->right);
-}
+//void recolor(NODE* root)
+//{
+//    NODE* p = root;
+//    while(p->data != NIL)
+//        p->color = !p->color;
+//    recolor(p->left);
+//    recolor(p->right);
+//}
 
 NODE* tree_search(NODE* root, unsigned int data)
 {
@@ -106,11 +106,11 @@ NODE* tree_insert(NODE* root, unsigned int data)
         NODE* node = node_init(data);
 //        node->left = root;
 //        root->parent = node;
-        node_conn(node, root, 'l');
+        node_rela_save(node, root, 'l');
         NODE* right_nil_node = nil_node_init();
 //        node->right = right_nil_node;
 //        right_nil_node->parent = node;
-        node_conn(node, right_nil_node, 'r');
+        node_rela_save(node, right_nil_node, 'r');
         node->color = 'B';
         root = node;
     }
@@ -128,49 +128,104 @@ NODE* tree_insert(NODE* root, unsigned int data)
 //                parent->left = node;
 //            else
 //                parent->right = node;
-            node_conn(parent, node, node->data < parent->data?'l':'r');
+            node_rela_save(parent, node, node->data < parent->data?'l':'r');
 //            node->left = p;
 //            p->parent = node;
-            node_conn(node, p, 'l');
+            node_rela_save(node, p, 'l');
             NODE* right_nil_node = nil_node_init();
 //            node->right = right_nil_node;
 //            right_nil_node->parent = node;
-            node_conn(node, right_nil_node, 'r');
-            p = node;
-            while(parent)
-            {
-                if(!('R' == p->color && parent->color == p->color))
-                    break;
-                NODE* parent_parent = parent->parent;
-                NODE* uncle = NULL;
-                if(parent == parent_parent->left)
-                    uncle = parent_parent->right;
-                else
-                    uncle = parent_parent->left;
-                if('R' == uncle->color)
-                {
-                    parent->color = 'B';
-                    parent_parent->color = 'R';
-                    uncle->color = 'B';
-                    p = parent_parent;
-                    parent = parent_parent->parent;
-                }
-                else
-                {
-                    if(parent == parent_parent->left)
-                        //if parent is pp`s left child node, then rotate right
-                        p = p == parent->left?rotate_right(parent):rotate_right(rotate_left(p));
-                    else
-                        //if parent is pp`s right child node, then rotate left
-                        p = p == parent->left?rotate_left(rotate_right(p)):rotate_left(parent);
-                    parent = p->parent;
-                }
-            }
+            node_rela_save(node, right_nil_node, 'r');
+//            p = node;
+            p = tree_rb_fixup(node);
+//            while(parent)
+//            {
+//                if(!('R' == p->color && parent->color == p->color))
+//                    break;
+//                NODE* parent_parent = parent->parent;
+//                NODE* uncle = NULL;
+//                if(parent == parent_parent->left)
+//                    uncle = parent_parent->right;
+//                else
+//                    uncle = parent_parent->left;
+//                if('R' == uncle->color)
+//                {
+//                    parent->color = 'B';
+//                    parent_parent->color = 'R';
+//                    uncle->color = 'B';
+//                    p = parent_parent;
+//                    parent = parent_parent->parent;
+//                }
+//                else
+//                {
+//                    if(parent == parent_parent->left)
+//                        //if parent is pp`s left child node, then rotate right
+//                        p = p == parent->left?rotate_right(parent):rotate_right(rotate_left(p));
+//                    else
+//                        //if parent is pp`s right child node, then rotate left
+//                        p = p == parent->left?rotate_left(rotate_right(p)):rotate_left(parent);
+//                    parent = p->parent;
+//                }
+//            }
             if(!p->parent && 'R' == p->color)//if root is red, then rotate
                 p->color = 'B';
         }
     }
     return p->parent?root:p;
+}
+
+NODE* tree_delete(NODE* root, unsigned int data)
+{
+    NODE* node = tree_search(root, data);
+    if( NIL != node->data )
+    {
+        NODE* left = node->left;
+        NODE* right = node->right;
+        NODE* p = NULL;
+        if( NIL != left->data )
+        {
+            NODE* p = rbtree_maximum(left);
+            node->data = p->data;
+            node->count = p->count;
+            node = p;
+        }
+        else if(NIL != right->left)
+        {
+            NODE* p = rbtree_minimum(right);
+            node->data = p->data;
+            node->count = p->count;
+            node = p;
+        }
+        //now , parameter "node" is the node being deleted
+        NODE* parent = node->parent;
+        if( 'R' == node->color )
+        {
+            //delete the node directly
+            node_rela_save(parent, node->left, 'l');
+            release(node->right);
+            release(node);
+        }
+        else
+        {
+            parent->color = 'B';
+            NODE* brother = node == parent->left?parent->right : parent->left;
+            brother = 'R';
+            //delete the node: begin
+            node_rela_save(parent, node->left, 'l');
+            release(node->right);
+            release(node);
+            //delete the node: end
+            NODE* brother_left = brother->left;
+            NODE* brother_right = brother->right;
+            if(NIL != brother_left->data)
+                p = tree_rb_fixup(brother_left);
+            else if( NIL != brother_right->data )
+                p = tree_rb_fixup(brother_right);
+//            else
+
+        }
+    }
+    return root;
 }
 
 NODE* rbtree_minimum(NODE* root)
@@ -256,13 +311,13 @@ NODE* rotate_left(NODE* root)
 //        else
 //            parent->right = root;
 //    }
-    node_conn(parent, root, parent?(root->data < parent->data?'l':'r') : ' ');
+    node_rela_save(parent, root, parent?(root->data < parent->data?'l':'r') : ' ');
 //    old_root->parent = root;
 //    root->left = old_root;
-    node_conn(root, old_root, 'l');
+    node_rela_save(root, old_root, 'l');
 //    old_root->right = left;
 //    left->parent = old_root;
-    node_conn(old_root, left, 'r');
+    node_rela_save(old_root, left, 'r');
     return root;
 }
 
@@ -285,17 +340,17 @@ NODE* rotate_right(NODE* root)
 //        else
 //            parent->right = root;
 //    }
-    node_conn(parent, root, parent?(root->data < parent->data?'l':'r') : ' ');
+    node_rela_save(parent, root, parent?(root->data < parent->data?'l':'r') : ' ');
 //    old_root->parent = root;
 //    root->right = old_root;
-    node_conn(root, old_root, 'r');
+    node_rela_save(root, old_root, 'r');
 //    old_root->left = right;
 //    right->parent = old_root;
-    node_conn(old_root, right, 'l');
+    node_rela_save(old_root, right, 'l');
     return root;
 }
 
-void node_conn(NODE* parent, NODE* child, unsigned char lof)
+void node_rela_save(NODE* parent, NODE* child, unsigned char lof)
 {
     child->parent = parent;
     if(parent)
@@ -303,4 +358,57 @@ void node_conn(NODE* parent, NODE* child, unsigned char lof)
             parent->left = child;
         else if('r' == lof)
             parent->right = child;
+}
+
+NODE* tree_rb_fixup(NODE* node)
+{
+    NODE* p = node;
+    NODE* parent = node->parent;
+    while(parent)
+    {
+        if(!('R' == p->color && parent->color == p->color))
+            break;
+        NODE* parent_parent = parent->parent;
+        NODE* uncle = NULL;
+        if(parent == parent_parent->left)
+            uncle = parent_parent->right;
+        else
+            uncle = parent_parent->left;
+        if('R' == uncle->color)
+        {
+            parent->color = 'B';
+            parent_parent->color = 'R';
+            uncle->color = 'B';
+            p = parent_parent;
+            parent = parent_parent->parent;
+        }
+        else
+        {
+            if(parent == parent_parent->left)
+                //if parent is pp`s left child node, then rotate right
+                p = p == parent->left?rotate_right(parent):rotate_right(rotate_left(p));
+            else
+                //if parent is pp`s right child node, then rotate left
+                p = p == parent->left?rotate_left(rotate_right(p)):rotate_left(parent);
+            parent = p->parent;
+        }
+    }
+    return p;
+}
+
+NODE* release(NODE* node)
+{
+    NODE* parent = node->parent;
+    if(parent)
+    {
+        if(parent->data<=node->data)
+            parent->right = NULL;
+        else
+            parent->left = NULL;
+        node->parent = NULL;
+    }
+    node->left = NULL;
+    node->right = NULL;
+    free(node);
+    return node = NULL;
 }
