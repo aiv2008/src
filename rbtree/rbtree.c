@@ -207,23 +207,39 @@ NODE* tree_delete(NODE* root, unsigned int data)
         }
         else
         {
-            parent->color = 'B';
             NODE* brother = node == parent->left?parent->right : parent->left;
-            brother = 'R';
-            //delete the node: begin
-            node_rela_save(parent, node->left, 'l');
-            release(node->right);
-            release(node);
-            //delete the node: end
-            NODE* brother_left = brother->left;
-            NODE* brother_right = brother->right;
-            if(NIL != brother_left->data)
-                p = tree_rb_fixup(brother_left);
-            else if( NIL != brother_right->data )
-                p = tree_rb_fixup(brother_right);
-//            else
-
+            if('B' == brother->color)
+            {
+                //the situation is that, the parent node is black or red,
+                //and the node and its brother is black
+                parent->color = 'B';
+                brother->color = 'R';
+                //delete the node: begin
+                node_rela_save(parent, node->left, parent->left == node?'l':'r');
+                release(node->right);
+                release(node);
+                //delete the node: end
+                NODE* brother_left = brother->left;
+                NODE* brother_right = brother->right;
+                if(NIL != brother_left->data)
+                    p = tree_rb_fixup(brother_left);
+                else if( NIL != brother_right->data )
+                    p = tree_rb_fixup(brother_right);
+            }
+            else
+            {
+                //the situation is that, the parent node is black,
+                //and the deleted node is black,which its brother is red
+                //delete the node: begin
+                node_rela_save(parent, node->left, parent->left == node?'l':'r');
+                release(node->right);
+                release(node);
+                //delete the node: end
+                parent->color = 'R';
+                p = tree_rb_fixup(node == parent->left?parent->right:parent->left);
+            }
         }
+        return p->parent?root:p;
     }
     return root;
 }
