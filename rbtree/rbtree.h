@@ -43,7 +43,7 @@ NODE* tree_insert(NODE* root, unsigned int data);
 **/
 NODE* tree_delete(NODE* root, unsigned int data);
 
-NODE* tree_rb_delete(NODE* root, unsigned int data);
+//NODE* tree_rb_delete(NODE* root, unsigned int data);
 
 /**
 ** rotate left

@@ -189,7 +189,7 @@ NODE* tree_delete(NODE* root, unsigned int data)
             node->count = p->count;
             node = p;
         }
-        else if(NIL != right->left)
+        else if(NIL != right->data)
         {
             NODE* p = rbtree_minimum(right);
             node->data = p->data;
@@ -202,7 +202,12 @@ NODE* tree_delete(NODE* root, unsigned int data)
         {
             //delete the node directly
             node_rela_save(parent, node->left, 'l');
+//            print_node(node);
             release(node->right);
+//            node->right=NULL;
+//            node->left=NULL;
+//            node->parent = NULL;
+//            node=NULL;
             release(node);
         }
         else
@@ -239,7 +244,7 @@ NODE* tree_delete(NODE* root, unsigned int data)
                 p = tree_rb_fixup(node == parent->left?parent->right:parent->left);
             }
         }
-        return p->parent?root:p;
+        return p?( p->parent?root:p):root;
     }
     return root;
 }
@@ -414,15 +419,15 @@ NODE* tree_rb_fixup(NODE* node)
 
 NODE* release(NODE* node)
 {
-    NODE* parent = node->parent;
-    if(parent)
-    {
-        if(parent->data<=node->data)
-            parent->right = NULL;
-        else
-            parent->left = NULL;
-        node->parent = NULL;
-    }
+//    NODE* parent = node->parent;
+//    if(parent)
+//    {
+//        if(node == parent->right)
+//            parent->right = NULL;
+//        else
+//            parent->left = NULL;
+//    }
+    node->parent = NULL;
     node->left = NULL;
     node->right = NULL;
     free(node);
