@@ -73,15 +73,6 @@ NODE* tree_init()
     return nil_node_init();
 }
 
-//void recolor(NODE* root)
-//{
-//    NODE* p = root;
-//    while(p->data != NIL)
-//        p->color = !p->color;
-//    recolor(p->left);
-//    recolor(p->right);
-//}
-
 NODE* tree_search(NODE* root, unsigned int data)
 {
     NODE* p = root;
@@ -104,12 +95,8 @@ NODE* tree_insert(NODE* root, unsigned int data)
     if(NIL == p->data)
     {
         NODE* node = node_init(data);
-//        node->left = root;
-//        root->parent = node;
         node_rela_save(node, root, 'l');
         NODE* right_nil_node = nil_node_init();
-//        node->right = right_nil_node;
-//        right_nil_node->parent = node;
         node_rela_save(node, right_nil_node, 'r');
         node->color = 'B';
         root = node;
@@ -123,50 +110,11 @@ NODE* tree_insert(NODE* root, unsigned int data)
         {
             NODE* node = node_init(data);
             NODE* parent = p->parent;
-//            node->parent = parent;
-//            if(node->data < parent->data)
-//                parent->left = node;
-//            else
-//                parent->right = node;
             node_rela_save(parent, node, node->data < parent->data?'l':'r');
-//            node->left = p;
-//            p->parent = node;
             node_rela_save(node, p, 'l');
             NODE* right_nil_node = nil_node_init();
-//            node->right = right_nil_node;
-//            right_nil_node->parent = node;
             node_rela_save(node, right_nil_node, 'r');
-//            p = node;
             p = tree_rb_fixup(node);
-//            while(parent)
-//            {
-//                if(!('R' == p->color && parent->color == p->color))
-//                    break;
-//                NODE* parent_parent = parent->parent;
-//                NODE* uncle = NULL;
-//                if(parent == parent_parent->left)
-//                    uncle = parent_parent->right;
-//                else
-//                    uncle = parent_parent->left;
-//                if('R' == uncle->color)
-//                {
-//                    parent->color = 'B';
-//                    parent_parent->color = 'R';
-//                    uncle->color = 'B';
-//                    p = parent_parent;
-//                    parent = parent_parent->parent;
-//                }
-//                else
-//                {
-//                    if(parent == parent_parent->left)
-//                        //if parent is pp`s left child node, then rotate right
-//                        p = p == parent->left?rotate_right(parent):rotate_right(rotate_left(p));
-//                    else
-//                        //if parent is pp`s right child node, then rotate left
-//                        p = p == parent->left?rotate_left(rotate_right(p)):rotate_left(parent);
-//                    parent = p->parent;
-//                }
-//            }
             if(!p->parent && 'R' == p->color)//if root is red, then rotate
                 p->color = 'B';
         }
@@ -179,6 +127,8 @@ NODE* tree_delete(NODE* root, unsigned int data)
     NODE* node = tree_search(root, data);
     if( NIL != node->data )
     {
+        printf("data has been found:\n");
+        print_node(node);
         NODE* left = node->left;
         NODE* right = node->right;
         NODE* p = NULL;
@@ -198,10 +148,19 @@ NODE* tree_delete(NODE* root, unsigned int data)
         }
         //now , parameter "node" is the node being deleted
         NODE* parent = node->parent;
-        if( 'R' == node->color )
+        if( node == root )
+        {
+            //if is red node or the root node,delete directly
+            left = node->left;
+            root = left;
+            left->parent = NULL;
+            release(node->right);
+            release(node);
+        }
+        else if( 'R' == node->color)
         {
             //delete the node directly
-            node_rela_save(parent, node->left, 'l');
+            node_rela_save(parent, node->left, parent->left == node?'l':'r');
 //            print_node(node);
             release(node->right);
 //            node->right=NULL;
@@ -246,6 +205,8 @@ NODE* tree_delete(NODE* root, unsigned int data)
         }
         return p?( p->parent?root:p):root;
     }
+    else
+        printf("data isn`t contained in the tree\n");
     return root;
 }
 
@@ -419,14 +380,6 @@ NODE* tree_rb_fixup(NODE* node)
 
 NODE* release(NODE* node)
 {
-//    NODE* parent = node->parent;
-//    if(parent)
-//    {
-//        if(node == parent->right)
-//            parent->right = NULL;
-//        else
-//            parent->left = NULL;
-//    }
     node->parent = NULL;
     node->left = NULL;
     node->right = NULL;
