@@ -1,6 +1,12 @@
 #ifndef HEAP_H_INCLUDED
 #define HEAP_H_INCLUDED
 
+typedef struct Heap
+{
+    size_t *heap_header;
+    signed heap_size;
+}
+
 void max_heapify(size_t* a, signed int index);
 
 signed int left(signed int index);

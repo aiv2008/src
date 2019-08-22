@@ -3,6 +3,7 @@
 
 int main(void)
 {
-    printf("%d", -~20);
+    unsigned int index = 10;
+    printf("%d", right(index));
     return 0;
 }
