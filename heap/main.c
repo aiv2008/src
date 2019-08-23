@@ -22,6 +22,7 @@ int main(void)
     }
     printf("\n--after build_max_heap end--\n");
 
-
+//    printf("%d\n",left(4));
+//    printf("%d",*(a+left(4)));
     return 0;
 }

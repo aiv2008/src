@@ -77,7 +77,7 @@ void print_node(size_t* header, int index, int size)
         printf("\n");
         printf("   |\n");
         printf(" ");
-        printf("%d",index);
+        printf("%d",*(header + index));
         printf("\n");
         printf(" /   \\\n");
         if(l < size)
