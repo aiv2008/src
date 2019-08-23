@@ -19,4 +19,6 @@ void build_max_heap(Heap* heap);
 
 Heap* heap_init(size_t* a, int size);
 
+void print_node(size_t* header, int index, int size);
+
 #endif // HEAP_H_INCLUDED
