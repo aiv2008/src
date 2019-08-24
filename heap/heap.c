@@ -11,15 +11,20 @@ void max_heapify(Heap* heap, int index)
         int r_index = right(index);
         size_t* heap_header = heap->heap_header;
         int heap_size = heap->heap_size;
+        printf("---before swap---");
         print_node(heap_header, index, heap_size);
+        printf("---/before swap---\n");
         int largest = index;
-        if(l_index <= heap_size && *(heap_header + l_index) > *(heap_header + largest))
+        if(l_index < heap_size && *(heap_header + l_index) > *(heap_header + largest))
             largest = l_index;
-        if(r_index <= heap_size && *(heap_header + r_index) > largest)
+        if(r_index < heap_size && *(heap_header + r_index) > *(heap_header + largest))
             largest = r_index;
         if(largest != index)
         {
             swap_1(heap_header+largest, heap_header+index);
+            printf("---after swap---");
+            print_node(heap_header, index, heap_size);
+            printf("---/after swap---\n");
             max_heapify(heap, largest);
         }
     }
