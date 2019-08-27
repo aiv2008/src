@@ -52,7 +52,7 @@ void build_max_heap(Heap* heap)
 {
     size_t* heap_header = heap->heap_header;
     int heap_size = heap->heap_size;
-    for(int i = parent(heap_size-1);i > 0;i--)
+    for(int i = parent(heap_size-1);i >= 0;i--)
     {
         printf("i===%d\n",i);
         max_heapify(heap, i);
