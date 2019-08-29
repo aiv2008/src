@@ -16,27 +16,28 @@ int main(void)
 //        printf("%d,",a[i]);
 //    }
 //
-////    size_t a[] = {4,1,3,2,16,9,10,14,8,7};
-////    int size = sizeof(a)/sizeof(a[0]);
-////    for(int i=0;i<size;i++)
-////        printf("%d,",a[i]);
-//
+    size_t a[] = {4,1,3,2,16,9,10,14,8,7};
+    int size = sizeof(a)/sizeof(a[0]);
+    for(int i=0;i<size;i++)
+        printf("%d,",a[i]);
+
 ////    printf("\n--before build_max_heap end--\n");
-//    Heap* heap = heap_init(a, size);
+    Heap* heap = heap_init(a, size);
 ////    heap_sort(heap);
 //////    build_max_heap(heap);
 ////    printf("--after build_max_heap begin--\n");
 ////    for(int i=0;i<size;i++)
 ////        printf("%d,",a[i]);
 ////    printf("\n--after build_max_heap end--\n");
-//
-//    printf("\nmax=%d\n",heap_extract_max(heap));
-//    for(int i=0;i<heap->heap_size;i++)
-//        printf("%d,",a[i]);
 
-    int a[] = {2,3,4,5,6,7,8};
-    int* p = a;
-    *(p+1) = 8;
-    printf("%d",*(p+1));
+//    printf("\nmax=%d\n",heap_extract_max(heap));
+
+    printf("\n");
+    heap_increase_key(heap, 6, 20);
+    for(int i=0;i<heap->length;i++)
+        printf("%d,",a[i]);
+
+
+
     return 0;
 }

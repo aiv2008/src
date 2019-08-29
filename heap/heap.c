@@ -3,6 +3,7 @@
 #include "../common/common.h"
 #include "heap.h"
 
+
 void max_heapify(Heap* heap, int index)
 {
     if( index >= 0 && index < heap->heap_size )
@@ -133,8 +134,11 @@ void heap_increase_key(Heap* heap, int index, int key)
     *(header+index) = key;
     int p_index = parent(index);
     size_t parent_key = *(header+p_index);
-    while( parent_key > *(header+index) )
+//    printf("parent_key===%d,",parent_key);
+//    printf("*(header+index)===%d\n",*(header+index));
+    while(index >=0 && index < heap->length && parent_key < *(header+index) )
     {
+        printf("index=%d\n",index);
         swap_1(header+p_index, header+index);
         index = p_index;
         p_index = parent(index);
