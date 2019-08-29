@@ -11,9 +11,6 @@ void max_heapify(Heap* heap, int index)
         int r_index = right(index);
         size_t* heap_header = heap->heap_header;
         int heap_size = heap->heap_size;
-        printf("---before swap---");
-        print_node(heap_header, index, heap_size);
-        printf("---/before swap---\n");
         int largest = index;
         if(l_index < heap_size && *(heap_header + l_index) > *(heap_header + largest))
             largest = l_index;
@@ -22,9 +19,6 @@ void max_heapify(Heap* heap, int index)
         if(largest != index)
         {
             swap_1(heap_header+largest, heap_header+index);
-            printf("---after swap---");
-            print_node(heap_header, index, heap_size);
-            printf("---/after swap---\n");
             max_heapify(heap, largest);
         }
     }
@@ -53,10 +47,7 @@ void build_max_heap(Heap* heap)
     size_t* heap_header = heap->heap_header;
     int heap_size = heap->heap_size;
     for(int i = parent(heap_size-1);i >= 0;i--)
-    {
-        printf("i===%d\n",i);
         max_heapify(heap, i);
-    }
 }
 
 Heap* heap_init(size_t* a, int size)
@@ -64,6 +55,7 @@ Heap* heap_init(size_t* a, int size)
     Heap* heap = (Heap*)malloc(sizeof(Heap));
     heap->heap_header = a;
     heap->heap_size = size;
+    heap->length = size;
     return heap;
 }
 
@@ -95,5 +87,22 @@ void print_node(size_t* header, int index, int size)
         else
             printf("nil");
         printf("\n");
+    }
+}
+
+void heap_sort(Heap* heap)
+{
+    build_max_heap(heap);
+    size_t* header = heap->heap_header;
+    int length = heap->length;
+    for(int i=length-1;i>=1;i--)
+    {
+        printf("heap[0]===%d,",*header);
+        printf("heap[i]===%d,",*(header+i));
+        swap_1(header, header+i);
+        printf("heap[0]===%d,",*header);
+        printf("heap[i]===%d\n",*(header+i));
+        heap->heap_size--;
+        max_heapify(heap, 0);
     }
 }

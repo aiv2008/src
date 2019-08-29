@@ -9,17 +9,14 @@ int main(void)
     int size = sizeof(a)/sizeof(a[0]);
     printf("--before build_max_heap begin--\n");
     for(int i=0;i<size;i++)
-    {
         printf("%d,",a[i]);
-    }
     printf("\n--before build_max_heap end--\n");
     Heap* heap = heap_init(a, size);
-    build_max_heap(heap);
+    heap_sort(heap);
+//    build_max_heap(heap);
     printf("--after build_max_heap begin--\n");
     for(int i=0;i<size;i++)
-    {
         printf("%d,",a[i]);
-    }
     printf("\n--after build_max_heap end--\n");
 
     return 0;
