@@ -10,11 +10,11 @@ typedef struct
 
 void max_heapify(Heap* heap, int index);
 
-signed int left(int index);
+int left(int index);
 
-signed int right(int index);
+int right(int index);
 
-signed int parent(int index);
+int parent(int index);
 
 void build_max_heap(Heap* heap);
 
@@ -32,9 +32,9 @@ void heap_sort(Heap* heap);
 
 void max_heap_insert(Heap* heap);
 
-void heap_extract_max(Heap* heap);
+size_t heap_extract_max(Heap* heap);
 
-void heap_increase_key(Heap* heap);
+void heap_increase_key(Heap* heap, int index, int key);
 
 size_t heap_maximum(Heap* heap);
 

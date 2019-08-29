@@ -24,19 +24,19 @@ void max_heapify(Heap* heap, int index)
     }
 }
 
-signed int left(int index)
+int left(int index)
 {
 //    return index<<1;
     return -~(index<<1);
 }
 
-signed int right(int index)
+int right(int index)
 {
 //    return -~(index<<1);
     return -~(-~(index<<1));
 }
 
-signed int parent(int index)
+int parent(int index)
 {
 //    return index>>1;
     return (index&1) == 0 ? (index - 1) >> 1 : index >> 1;
@@ -97,12 +97,47 @@ void heap_sort(Heap* heap)
     int length = heap->length;
     for(int i=length-1;i>=1;i--)
     {
-        printf("heap[0]===%d,",*header);
-        printf("heap[i]===%d,",*(header+i));
+//        printf("heap[0]===%d,",*header);
+//        printf("heap[i]===%d,",*(header+i));
         swap_1(header, header+i);
-        printf("heap[0]===%d,",*header);
-        printf("heap[i]===%d\n",*(header+i));
+//        printf("heap[0]===%d,",*header);
+//        printf("heap[i]===%d\n",*(header+i));
         heap->heap_size--;
         max_heapify(heap, 0);
+    }
+}
+
+size_t heap_maximum(Heap* heap)
+{
+    build_max_heap(heap);
+    return *heap->heap_header;
+}
+
+size_t heap_extract_max(Heap* heap)
+{
+    build_max_heap(heap);
+    size_t max = *heap->heap_header;
+    swap_1(heap->heap_header, heap->heap_header+heap->length-1);
+    heap->heap_size--;
+    max_heapify(heap, 0);
+    return max;
+}
+
+void heap_increase_key(Heap* heap, int index, int key)
+{
+    build_max_heap(heap);
+    size_t* header = heap->heap_header+index;
+    size_t old_key = *header;
+    if( old_key > key )
+        printf("increase key error: new key must be larger than old");
+    *(header+index) = key;
+    int p_index = parent(index);
+    size_t parent_key = *(header+p_index);
+    while( parent_key > *(header+index) )
+    {
+        swap_1(header+p_index, header+index);
+        index = p_index;
+        p_index = parent(index);
+        parent_key = *(header+p_index);
     }
 }
