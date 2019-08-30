@@ -2,7 +2,7 @@
 #include<stdlib.h>
 #include "../common/common.h"
 #include "heap.h"
-
+#define NIL -50000000
 
 void max_heapify(Heap* heap, int index)
 {
@@ -112,13 +112,13 @@ void heap_sort(Heap* heap)
 
 size_t heap_maximum(Heap* heap)
 {
-    build_max_heap(heap);
+//    build_max_heap(heap);
     return *heap->heap_header;
 }
 
 size_t heap_extract_max(Heap* heap)
 {
-    build_max_heap(heap);
+//    build_max_heap(heap);
     size_t max = *heap->heap_header;
     swap_1(heap->heap_header, heap->heap_header+heap->length-1);
     heap->heap_size--;
@@ -128,7 +128,7 @@ size_t heap_extract_max(Heap* heap)
 
 void heap_increase_key(Heap* heap, int index, int key)
 {
-    build_max_heap(heap);
+//    build_max_heap(heap);
     print_heap(heap);
     size_t* header = heap->heap_header;
     size_t old_key = *header;
@@ -145,7 +145,6 @@ void heap_increase_key(Heap* heap, int index, int key)
     }
 }
 
-
 void print_heap(Heap* heap)
 {
     printf("\n---print heap begin---\n");
@@ -154,4 +153,25 @@ void print_heap(Heap* heap)
     for( int i=0;i<length;i++ )
         printf("%d,",*(header+i));
     printf("\n---print heap end---\n");
+}
+
+Heap* max_heap_init(size_t* a, int size)
+{
+    Heap* heap = heap_init(a, size);
+    build_max_heap(heap);
+    return heap;
+}
+
+void max_heap_insert(Heap* heap, size_t key)
+{
+    heap->length++;
+    size_t* old_header = heap->heap_header;
+//    int new_length = heap->length+1;
+    size_t new_array[heap->length];
+    for(int i=0;i < heap->length;i++,old_header++)
+        new_array[i] = *(old_header);
+    new_array[heap->length-1] = NIL;
+    free(heap->heap_header);
+    heap->heap_header = new_array;
+    heap_increase_key(heap, heap->length-1, key);
 }

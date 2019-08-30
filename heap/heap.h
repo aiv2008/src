@@ -30,14 +30,40 @@ void print_node(size_t* header, int index, int size);
 **/
 void heap_sort(Heap* heap);
 
-void max_heap_insert(Heap* heap);
+/**
+** Priority sorted(from smallest to biggest)
+** operation must be based on the max heap
+**/
+void max_heap_insert(Heap* heap, size_t key);
 
+/**
+**
+** operation must be based on the max heap
+**/
 size_t heap_extract_max(Heap* heap);
 
+/**
+**
+** operation must be based on the max heap
+**/
 void heap_increase_key(Heap* heap, int index, int key);
 
+/**
+**
+** operation must be based on the max heap
+**/
 size_t heap_maximum(Heap* heap);
 
 void print_heap(Heap* heap);
+
+/**
+** initialize the max heap
+**/
+Heap* max_heap_init(size_t* a, int size);
+
+/**
+** initialize the min heap
+**/
+Heap* min_heap_init(size_t* a, int size);
 
 #endif // HEAP_H_INCLUDED
