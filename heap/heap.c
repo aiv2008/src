@@ -47,6 +47,8 @@ void build_max_heap(Heap* heap)
 {
     size_t* heap_header = heap->heap_header;
     int heap_size = heap->heap_size;
+    //子数组A[(⌊n/2⌋+1)...n]中的元素都是树中的叶子,因此每个都可以看做是只含有一个元素的堆.
+    //循环从最后一个子树的根节点开始,即从i = ⌊length[A]/2⌋ 开始
     for(int i = parent(heap_size-1);i >= 0;i--)
         max_heapify(heap, i);
 }
@@ -127,21 +129,29 @@ size_t heap_extract_max(Heap* heap)
 void heap_increase_key(Heap* heap, int index, int key)
 {
     build_max_heap(heap);
-    size_t* header = heap->heap_header+index;
+    print_heap(heap);
+    size_t* header = heap->heap_header;
     size_t old_key = *header;
     if( old_key > key )
         printf("increase key error: new key must be larger than old");
     *(header+index) = key;
     int p_index = parent(index);
-    size_t parent_key = *(header+p_index);
-//    printf("parent_key===%d,",parent_key);
-//    printf("*(header+index)===%d\n",*(header+index));
-    while(index >=0 && index < heap->length && parent_key < *(header+index) )
+    while(index >=0 && index < heap->length && *(header+p_index) < *(header+index) )
     {
-        printf("index=%d\n",index);
+//        print_heap(heap);
         swap_1(header+p_index, header+index);
         index = p_index;
         p_index = parent(index);
-        parent_key = *(header+p_index);
     }
+}
+
+
+void print_heap(Heap* heap)
+{
+    printf("\n---print heap begin---\n");
+    size_t* header = heap->heap_header;
+    int length = heap->length;
+    for( int i=0;i<length;i++ )
+        printf("%d,",*(header+i));
+    printf("\n---print heap end---\n");
 }

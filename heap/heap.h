@@ -38,4 +38,6 @@ void heap_increase_key(Heap* heap, int index, int key);
 
 size_t heap_maximum(Heap* heap);
 
+void print_heap(Heap* heap);
+
 #endif // HEAP_H_INCLUDED
