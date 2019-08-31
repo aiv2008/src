@@ -3,24 +3,24 @@
 
 typedef struct
 {
-    size_t *heap_header;
-    int heap_size;
-    int length;
+    int *heap_header;
+    size_t heap_size;
+    size_t length;
 } Heap;
 
-void max_heapify(Heap* heap, int index);
+void max_heapify(Heap* heap, size_t index);
 
-int left(int index);
+size_t left(size_t index);
 
-int right(int index);
+size_t right(size_t index);
 
-int parent(int index);
+size_t parent(size_t index);
 
 void build_max_heap(Heap* heap);
 
-Heap* heap_init(size_t* a, int size);
+Heap* heap_init(int* a, size_t size);
 
-void print_node(size_t* header, int index, int size);
+void print_node(int* header, size_t index, size_t size);
 
 /**
 ** Priority sorted(from smallest to biggest)
@@ -34,36 +34,36 @@ void heap_sort(Heap* heap);
 ** Priority sorted(from smallest to biggest)
 ** operation must be based on the max heap
 **/
-void max_heap_insert(Heap* heap, size_t key);
+Heap* max_heap_insert(Heap* heap, int key);
 
 /**
 **
 ** operation must be based on the max heap
 **/
-size_t heap_extract_max(Heap* heap);
+int heap_extract_max(Heap* heap);
 
 /**
 **
 ** operation must be based on the max heap
 **/
-void heap_increase_key(Heap* heap, int index, int key);
+void heap_increase_key(Heap* heap, size_t index, int key);
 
 /**
 **
 ** operation must be based on the max heap
 **/
-size_t heap_maximum(Heap* heap);
+int heap_maximum(Heap* heap);
 
 void print_heap(Heap* heap);
 
 /**
 ** initialize the max heap
 **/
-Heap* max_heap_init(size_t* a, int size);
+Heap* max_heap_init(int* a, size_t size);
 
 /**
 ** initialize the min heap
 **/
-Heap* min_heap_init(size_t* a, int size);
+Heap* min_heap_init(int* a, size_t size);
 
 #endif // HEAP_H_INCLUDED

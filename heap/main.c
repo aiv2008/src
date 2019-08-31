@@ -15,29 +15,23 @@ int main(void)
 //        a[i] = rand()%size;
 //        printf("%d,",a[i]);
 //    }
-//
+
+
     size_t a[] = {4,1,3,2,16,9,10,14,8,7};
     int size = sizeof(a)/sizeof(a[0]);
+    printf("---before heap operation begin---\n");
     for(int i=0;i<size;i++)
         printf("%d,",a[i]);
+    printf("---before heap operation end---\n");
+    Heap* heap = max_heap_init(a, size);
+    heap = max_heap_insert(heap, 15);
+    printf("---after heap operation begin---\n");
 
-////    printf("\n--before build_max_heap end--\n");
-    Heap* heap = heap_init(a, size);
-////    heap_sort(heap);
-//////    build_max_heap(heap);
-////    printf("--after build_max_heap begin--\n");
-////    for(int i=0;i<size;i++)
-////        printf("%d,",a[i]);
-////    printf("\n--after build_max_heap end--\n");
-
-//    printf("\nmax=%d\n",heap_extract_max(heap));
-
-    printf("\n");
-    heap_increase_key(heap, 6, 20);
-    for(int i=0;i<heap->length;i++)
-        printf("%d,",a[i]);
-
-
+    printf("header===%d\n",*(heap->heap_header));
+//    for(int i=0;i<heap->length;i++)
+//        printf("%d,",*(heap->heap_header+i));
+    print_heap(heap);
+    printf("---after heap operation end---\n");
 
     return 0;
 }
