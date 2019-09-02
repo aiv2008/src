@@ -34,7 +34,7 @@ void heap_sort(Heap* heap);
 ** Priority sorted(from smallest to biggest)
 ** operation must be based on the max heap
 **/
-Heap* max_heap_insert(Heap* heap, int key);
+void max_heap_insert(Heap* heap, int key);
 
 /**
 **

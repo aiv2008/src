@@ -25,7 +25,7 @@ int main(void)
         printf("%d,",a[i]);
     printf("---before heap operation end---\n");
     Heap* heap = max_heap_init(a, size);
-    heap = max_heap_insert(heap, 15);
+    max_heap_insert(heap, 25);
     print_heap(heap);
 
 

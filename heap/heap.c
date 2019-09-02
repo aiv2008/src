@@ -161,20 +161,19 @@ Heap* max_heap_init(int* a, size_t size)
     return heap;
 }
 
-Heap* max_heap_insert(Heap* heap, int key)
+void max_heap_insert(Heap* heap, int key)
 {
     heap->length++;
     int* old_header = heap->heap_header;
     int* p = old_header;
     int* new_header = (int*)malloc(sizeof(int)*heap->length);
     int* new_p = new_header;
-    int new_array[heap->length];
     for(int i=0;i < heap->length-1;i++,p++,new_p++)
         *new_p = *p;
     *new_p = NIL;
     free(heap->heap_header);
     heap->heap_header = new_header;
     heap_increase_key(heap, heap->length-1, key);
-    return heap;
+//    return heap;
 }
 
