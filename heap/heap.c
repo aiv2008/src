@@ -165,18 +165,16 @@ Heap* max_heap_insert(Heap* heap, int key)
 {
     heap->length++;
     int* old_header = heap->heap_header;
-//    int new_length = heap->length+1;
+    int* p = old_header;
+    int* new_header = (int*)malloc(sizeof(int)*heap->length);
+    int* new_p = new_header;
     int new_array[heap->length];
-    for(int i=0;i < heap->length;i++,old_header++)
-        new_array[i] = *(old_header);
-    new_array[heap->length-1] = NIL;
+    for(int i=0;i < heap->length-1;i++,p++,new_p++)
+        *new_p = *p;
+    *new_p = NIL;
     free(heap->heap_header);
-    heap->heap_header = new_array;
+    heap->heap_header = new_header;
     heap_increase_key(heap, heap->length-1, key);
-    printf("--new_array begin--\n");
-    for(int i=0;i<sizeof(new_array)/sizeof(new_array[0]);i++)
-        printf("%d,",new_array[i]);
-    printf("--new_array end--\n");
-    return heap_init(new_array, sizeof(new_array)/sizeof(new_array[0]));
-//    return heap;
+    return heap;
 }
+
