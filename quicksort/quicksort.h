@@ -3,6 +3,6 @@
 
 #include "../common/list_i.h"
 
-size_t partition_ex(list_i l, size_t start, size_t end);
+size_t partition_ex(plist_i p, size_t start, size_t end);
 
 #endif // QUICKSORT_H_INCLUDED
