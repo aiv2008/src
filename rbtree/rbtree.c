@@ -146,7 +146,7 @@ NODE* tree_delete(NODE* root, unsigned int data)
             node->count = p->count;
             node = p;
         }
-        //now , parameter "node" is the node being deleted
+        //now , parameter "node" is the node deleted
         NODE* parent = node->parent;
         if( node == root )
         {
@@ -161,12 +161,7 @@ NODE* tree_delete(NODE* root, unsigned int data)
         {
             //delete the node directly
             node_rela_save(parent, node->left, parent->left == node?'l':'r');
-//            print_node(node);
             release(node->right);
-//            node->right=NULL;
-//            node->left=NULL;
-//            node->parent = NULL;
-//            node=NULL;
             release(node);
         }
         else
@@ -234,7 +229,6 @@ void predecesor(NODE* node)
         printf("%d(",node->data);
         printf("count:%d,",node->count);
         printf("color:%c),",node->color);
-//        print_node(node);
         predecesor(node->left);
     }
 }
@@ -266,9 +260,6 @@ void successor_for_test(NODE* node)
     if(node->data != NIL)
     {
         successor_for_test(node->left);
-//        printf("%d(",node->data);
-//        printf("count:%d,",node->count);
-//        printf("color:%c),",node->color);
         print_node(node);
         successor_for_test(node->right);
     }
@@ -285,20 +276,8 @@ NODE* rotate_left(NODE* root)
         root->color = 'B';
         old_root->color = 'R';
     }
-//    root->parent = parent;
-//    if(parent)
-//    {
-//        if(root->data < parent->data)
-//            parent->left = root;
-//        else
-//            parent->right = root;
-//    }
     node_rela_save(parent, root, parent?(root->data < parent->data?'l':'r') : ' ');
-//    old_root->parent = root;
-//    root->left = old_root;
     node_rela_save(root, old_root, 'l');
-//    old_root->right = left;
-//    left->parent = old_root;
     node_rela_save(old_root, left, 'r');
     return root;
 }
@@ -314,20 +293,8 @@ NODE* rotate_right(NODE* root)
         root->color = 'B';
         old_root->color = 'R';
     }
-//    root->parent = parent;
-//    if(parent)
-//    {
-//        if(root->data < parent->data)
-//            parent->left = root;
-//        else
-//            parent->right = root;
-//    }
     node_rela_save(parent, root, parent?(root->data < parent->data?'l':'r') : ' ');
-//    old_root->parent = root;
-//    root->right = old_root;
     node_rela_save(root, old_root, 'r');
-//    old_root->left = right;
-//    right->parent = old_root;
     node_rela_save(old_root, right, 'l');
     return root;
 }

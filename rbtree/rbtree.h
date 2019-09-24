@@ -43,8 +43,6 @@ NODE* tree_insert(NODE* root, unsigned int data);
 **/
 NODE* tree_delete(NODE* root, unsigned int data);
 
-//NODE* tree_rb_delete(NODE* root, unsigned int data);
-
 /**
 ** rotate left
 ** param: the right child node of the input node, that will be the root after left rotated
@@ -76,17 +74,13 @@ NODE* nil_node_init();
 **/
 NODE* tree_init();
 
-//NODE* tree_balanced(NODE* node);
-
-//void recolor(NODE* root);
-
 /**
 ** print the node with the tree figure
 **/
 void print_node(NODE* node);
 
 /**
-** connect parent with child(save the relationship between 2 nodes)
+** save the relationship between parent and child node
 **/
 void node_rela_save(NODE* parent, NODE* child, unsigned char lof);
 
