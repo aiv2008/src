@@ -22,10 +22,6 @@ int* top(pp_myStack ppmystack);
 
 void printStack(pp_myStack ppmystack);
 
-bool stackIsNillOrEmpty(pp_myStack ppmystack)
-{
-    return !ppmystack||!(*ppmystack)||!(*ppmystack)->capacity||!(*ppmystack)->size;
-//    return !pptree||!(*pptree)||!(*pptree)->data||!(*pptree)->size;
-}
+bool stackIsNillOrEmpty(pp_myStack ppmystack);
 
 #endif // TWO_STACK_TO_A_QUEUE_H_INCLUDED
