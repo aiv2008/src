@@ -40,9 +40,13 @@ void pop(pp_myStack ppmystack)
         return;
     }
     int* header = top(ppmystack);
+    printf("before top addr=%d\n", header);
+    printf("before top=%d\n", *header);
     (*ppmystack)->header++;
     (*ppmystack)->size--;
     free(header);
+    printf("after top addr=%d\n", (*ppmystack)->header);
+    printf("after top=%d\n", *((*ppmystack)->header));
 }
 
 int* top(pp_myStack ppmystack)
