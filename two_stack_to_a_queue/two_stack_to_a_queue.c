@@ -15,17 +15,20 @@ void push(pp_myStack ppmystack, int data)
         (*ppmystack)->size = 0;
         (*ppmystack)->header = (int*)calloc((*ppmystack)->capacity, sizeof(int));
     }
+//    printf("capacity=%d,",(*ppmystack)->capacity);
+//    printf("size=%d\n",(*ppmystack)->size);
     if((*ppmystack)->size == (*ppmystack)->capacity)
     {//extend the capacity if the size is out of the capacity,
     //and copy the array to another memory
+        printf("stack is extent now!!\n");
         int capacity = (*ppmystack)->capacity;
         (*ppmystack)->capacity = capacity + capacity >>1;
-        int new_array[(*ppmystack)->capacity];
         int* p = (*ppmystack)->header;
-        for(int i=0;i<(*ppmystack)->size;i++,p++)
-            new_array[i] = *p;
-        free((*ppmystack)->header);
-        (*ppmystack)->header = new_array;
+        (*ppmystack)->header = (int *)calloc((*ppmystack)->capacity, sizeof(int));
+        for(int i=0;i<capacity;i++,p++)
+            *((*ppmystack)->header+i) = *p;
+        free(p);
+        p = NULL;
     }
     int* p_next = ((*ppmystack)->header + (*ppmystack)->size);
     *p_next = data;
@@ -36,24 +39,21 @@ void pop(pp_myStack ppmystack)
 {
     if(stackIsNillOrEmpty(ppmystack))
     {
-        printf("stack cannot be null");
+        free((*ppmystack)->header);
+        (*ppmystack)->header = NULL;
+        printf("stack is empty!!!");
         return;
     }
     int* header = top(ppmystack);
-    printf("before top addr=%d\n", header);
-    printf("before top=%d\n", *header);
     (*ppmystack)->header++;
     (*ppmystack)->size--;
-    free(header);
-    printf("after top addr=%d\n", (*ppmystack)->header);
-    printf("after top=%d\n", *((*ppmystack)->header));
 }
 
 int* top(pp_myStack ppmystack)
 {
     if(stackIsNillOrEmpty(ppmystack))
     {
-        printf("stack cannot be null");
+        printf("stack cannot be null111\n");
         return NULL;
     }
     return (*ppmystack)->header;
@@ -61,23 +61,29 @@ int* top(pp_myStack ppmystack)
 
 bool stackIsNillOrEmpty(pp_myStack ppmystack)
 {
+    if(!ppmystack)printf("null1111\n");
+    if(!(*ppmystack))printf("null2222\n");
+//    if(!(*ppmystack)->capacity)printf("null333\n");
     return !ppmystack||!(*ppmystack)||!(*ppmystack)->capacity||!(*ppmystack)->size;
-//    return !pptree||!(*pptree)||!(*pptree)->data||!(*pptree)->size;
 }
 
 void printStack(pp_myStack ppmystack)
 {
     if(stackIsNillOrEmpty(ppmystack))
     {
-        printf("stack cannot be null");
+        printf("stack cannot be null222\n");
         return;
     }
-    for(int i=0;i<(*ppmystack)->size;i++)
+    else
     {
-        printf("memory=%d,",((*ppmystack)->header+i));
-        printf("data=%d\n",*((*ppmystack)->header+i));
+        for(int i=0;i<(*ppmystack)->size;i++)
+        {
+            printf("memory=%d,",((*ppmystack)->header+i));
+            printf("data=%d\n",*((*ppmystack)->header+i));
+        }
+        printf("\n");
     }
-    printf("\n");
+
 }
 
 

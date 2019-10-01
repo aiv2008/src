@@ -5,7 +5,7 @@
 
 int main(void)
 {
-    int a[] = {4,6,8,89,3,2,4,5};
+    int a[] = {};
     int* p = a;
     int size = sizeof(a)/sizeof(a[0]);
     pp_myStack ppmystack = (pp_myStack)calloc(1, sizeof(p_myStack));
@@ -15,12 +15,13 @@ int main(void)
     }
 
     printStack(ppmystack);
-
-    while((*ppmystack)->size)
+//    printf("size=%d\n",(*ppmystack)->size);
+    while(!stackIsNillOrEmpty(ppmystack))
     {
+        printf("aaaaa");
         pop(ppmystack);
     }
-
+//    pop(ppmystack);
 
     return 0;
 }
