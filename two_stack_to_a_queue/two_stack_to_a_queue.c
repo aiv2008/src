@@ -1,9 +1,9 @@
 #include<stdio.h>
 #include<stdlib.h>
 #include"two_stack_to_a_queue.h"
-#define bool char
-#define true 1
-#define false 0
+#define BOOL int
+#define TRUE 1
+#define FALSE 0
 
 void push(pp_myStack ppmystack, int data)
 {
@@ -15,12 +15,10 @@ void push(pp_myStack ppmystack, int data)
         (*ppmystack)->size = 0;
         (*ppmystack)->header = (int*)calloc((*ppmystack)->capacity, sizeof(int));
     }
-//    printf("capacity=%d,",(*ppmystack)->capacity);
-//    printf("size=%d\n",(*ppmystack)->size);
     if((*ppmystack)->size == (*ppmystack)->capacity)
     {//extend the capacity if the size is out of the capacity,
     //and copy the array to another memory
-        printf("stack is extent now!!\n");
+//        printf("stack is extent now!!\n");
         int capacity = (*ppmystack)->capacity;
         (*ppmystack)->capacity = capacity + capacity >>1;
         int* p = (*ppmystack)->header;
@@ -30,6 +28,7 @@ void push(pp_myStack ppmystack, int data)
         free(p);
         p = NULL;
     }
+
     int* p_next = ((*ppmystack)->header + (*ppmystack)->size);
     *p_next = data;
     (*ppmystack)->size++;
@@ -45,7 +44,8 @@ void pop(pp_myStack ppmystack)
         return;
     }
     int* header = top(ppmystack);
-    (*ppmystack)->header++;
+    printf("pop element is %d\n",*header);
+//    (*ppmystack)->header--;
     (*ppmystack)->size--;
 }
 
@@ -53,17 +53,15 @@ int* top(pp_myStack ppmystack)
 {
     if(stackIsNillOrEmpty(ppmystack))
     {
-        printf("stack cannot be null111\n");
+        printf("stack is null111\n");
         return NULL;
     }
-    return (*ppmystack)->header;
+    return NULL;
+//    return (*ppmystack)->header+(*ppmystack)->size-1;
 }
 
-bool stackIsNillOrEmpty(pp_myStack ppmystack)
+BOOL stackIsNillOrEmpty(pp_myStack ppmystack)
 {
-    if(!ppmystack)printf("null1111\n");
-    if(!(*ppmystack))printf("null2222\n");
-//    if(!(*ppmystack)->capacity)printf("null333\n");
     return !ppmystack||!(*ppmystack)||!(*ppmystack)->capacity||!(*ppmystack)->size;
 }
 
@@ -78,8 +76,8 @@ void printStack(pp_myStack ppmystack)
     {
         for(int i=0;i<(*ppmystack)->size;i++)
         {
-            printf("memory=%d,",((*ppmystack)->header+i));
-            printf("data=%d\n",*((*ppmystack)->header+i));
+//            printf("memory=%d,",((*ppmystack)->header+i));
+            printf("data=%d,",*((*ppmystack)->header+i));
         }
         printf("\n");
     }

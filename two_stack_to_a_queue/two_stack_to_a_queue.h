@@ -1,8 +1,8 @@
 #ifndef TWO_STACK_TO_A_QUEUE_H_INCLUDED
 #define TWO_STACK_TO_A_QUEUE_H_INCLUDED
-#define bool char
-#define true 1
-#define false 0
+#define BOOL int
+#define TRUE 1
+#define FALSE 0
 
 typedef struct
 {
@@ -22,6 +22,6 @@ int* top(pp_myStack ppmystack);
 
 void printStack(pp_myStack ppmystack);
 
-bool stackIsNillOrEmpty(pp_myStack ppmystack);
+BOOL stackIsNillOrEmpty(pp_myStack ppmystack);
 
 #endif // TWO_STACK_TO_A_QUEUE_H_INCLUDED
