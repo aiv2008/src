@@ -68,6 +68,16 @@ BOOL stackIsNillOrEmpty(pp_myStack ppmystack)
     return !ppmystack||!(*ppmystack)||!(*ppmystack)->capacity||!(*ppmystack)->size;
 }
 
+BOOL stackIsNill(pp_myStack ppmystack)
+{
+    return !ppmystack||!(*ppmystack);
+}
+
+BOOL stackIsEmpty(pp_myStack ppmystack)
+{
+    return !(*ppmystack)->capacity||!(*ppmystack)->size;
+}
+
 void printStack(pp_myStack ppmystack)
 {
     if(stackIsNillOrEmpty(ppmystack))
