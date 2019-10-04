@@ -1,13 +1,17 @@
 #include<stdio.h>
 #include<stdlib.h>
-#include"two_stack_to_a_queue.h"
+#include"my_stack.h"
 #define BOOL int
 #define TRUE 1
 #define FALSE 0
 
 void push(pp_myStack ppmystack, int data)
 {
-    if(!ppmystack)printf("ppmystack cannot be null");
+    if(!ppmystack)
+    {
+        printf("ppmystack cannot be null\n");
+        return;
+    }
     if(!(*ppmystack))
     {
         *ppmystack = (p_myStack)calloc(1, sizeof(int*) + 2*sizeof(int));
@@ -18,7 +22,6 @@ void push(pp_myStack ppmystack, int data)
     if((*ppmystack)->size == (*ppmystack)->capacity)
     {//extend the capacity if the size is out of the capacity,
     //and copy the array to another memory
-//        printf("stack is extent now!!\n");
         int capacity = (*ppmystack)->capacity;
         (*ppmystack)->capacity = capacity + capacity >>1;
         int* p = (*ppmystack)->header;
@@ -38,9 +41,9 @@ void pop(pp_myStack ppmystack)
 {
     if(stackIsNillOrEmpty(ppmystack))
     {
-        free((*ppmystack)->header);
-        (*ppmystack)->header = NULL;
-        printf("stack is empty!!!");
+//        free((*ppmystack)->header);
+//        (*ppmystack)->header = NULL;
+        printf("stack is empty!!!\n");
         return;
     }
     int* header = top(ppmystack);
@@ -56,8 +59,8 @@ int* top(pp_myStack ppmystack)
         printf("stack is null111\n");
         return NULL;
     }
-    return NULL;
-//    return (*ppmystack)->header+(*ppmystack)->size-1;
+//    return NULL;
+    return (*ppmystack)->header+(*ppmystack)->size-1;
 }
 
 BOOL stackIsNillOrEmpty(pp_myStack ppmystack)
@@ -84,4 +87,17 @@ void printStack(pp_myStack ppmystack)
 
 }
 
+void freeStack(pp_myStack ppmystack)
+{
+    if(ppmystack&&*ppmystack)
+    {
+        free((*ppmystack)->header);
+        (*ppmystack)->header = NULL;
+        free(*ppmystack);
+        *ppmystack = NULL;
+        free(ppmystack);
+        printf("stack has been release!!\n");
+    }
+    return ;
+}
 

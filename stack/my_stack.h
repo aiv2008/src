@@ -24,4 +24,6 @@ void printStack(pp_myStack ppmystack);
 
 BOOL stackIsNillOrEmpty(pp_myStack ppmystack);
 
+void freeStack(pp_myStack ppmystack);
+
 #endif // TWO_STACK_TO_A_QUEUE_H_INCLUDED
