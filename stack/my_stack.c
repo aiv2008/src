@@ -23,13 +23,15 @@ void push(pp_myStack ppmystack, int data)
     {//extend the capacity if the size is out of the capacity,
     //and copy the array to another memory
         int capacity = (*ppmystack)->capacity;
-        (*ppmystack)->capacity = capacity + capacity >>1;
+        (*ppmystack)->capacity = capacity + (capacity >>1);
         int* p = (*ppmystack)->header;
-        (*ppmystack)->header = (int *)calloc((*ppmystack)->capacity, sizeof(int));
+        int* new_header = (int *)calloc((*ppmystack)->capacity, sizeof(int));
         for(int i=0;i<capacity;i++,p++)
-            *((*ppmystack)->header+i) = *p;
+            *(new_header+i) = *p;
         free(p);
         p = NULL;
+        (*ppmystack)->header = new_header;
+        new_header = NULL;
     }
 
     int* p_next = ((*ppmystack)->header + (*ppmystack)->size);
@@ -41,15 +43,13 @@ void pop(pp_myStack ppmystack)
 {
     if(stackIsNillOrEmpty(ppmystack))
     {
-//        free((*ppmystack)->header);
-//        (*ppmystack)->header = NULL;
         printf("stack is empty!!!\n");
         return;
     }
     int* header = top(ppmystack);
     printf("pop element is %d\n",*header);
-//    (*ppmystack)->header--;
     (*ppmystack)->size--;
+    printf("size is %d\n",(*ppmystack)->size);
 }
 
 int* top(pp_myStack ppmystack)
@@ -59,8 +59,9 @@ int* top(pp_myStack ppmystack)
         printf("stack is null111\n");
         return NULL;
     }
-//    return NULL;
-    return (*ppmystack)->header+(*ppmystack)->size-1;
+    int* header = (*ppmystack)->header;
+    int size = (*ppmystack)->size;
+    return header+size-1;
 }
 
 BOOL stackIsNillOrEmpty(pp_myStack ppmystack)
@@ -87,7 +88,7 @@ void printStack(pp_myStack ppmystack)
     }
     else
     {
-        for(int i=0;i<(*ppmystack)->size;i++)
+        for(int i=(*ppmystack)->size-1;i>=0;i--)
         {
 //            printf("memory=%d,",((*ppmystack)->header+i));
             printf("data=%d,",*((*ppmystack)->header+i));

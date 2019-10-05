@@ -45,14 +45,14 @@ int* q_top(pp_myQueue ppmyQueue)
 
 void q_pop(pp_myQueue ppmyQueue)
 {
-    if(queueIsNill(ppmyQueue) || stackIsNill((*ppmyQueue)->stack_a) || stackIsNill((*ppmyQueue)->stack_b))
+    if(queueIsNill(ppmyQueue))
     {
         printf("queue is nil\n");
         return;
     }
-    if(stackIsNill((*ppmyQueue)->stack_b))
+    if(stackIsNillOrEmpty((*ppmyQueue)->stack_b))
     {
-        if(stackIsNill((*ppmyQueue)->stack_a))
+        if(stackIsNillOrEmpty((*ppmyQueue)->stack_a))
         {
             printf("queue is empty\n");
             return;
@@ -60,12 +60,15 @@ void q_pop(pp_myQueue ppmyQueue)
         else
         {
             int size = (*(*ppmyQueue)->stack_a)->size;
+//            printStack((*ppmyQueue)->stack_a);
             for(int i=0;i<size;i++)
             {
                 int* p_top = top((*ppmyQueue)->stack_a);
-                push((*ppmyQueue)->stack_a, *p_top);
+                printf("p_top=%d,",*p_top);
+                push((*ppmyQueue)->stack_b, *p_top);
                 pop((*ppmyQueue)->stack_a);
             }
+            printf("\n");
         }
     }
     pop((*ppmyQueue)->stack_b);
@@ -82,5 +85,33 @@ void freeQueue(pp_myQueue ppmyQueue)
         free(*ppmyQueue);
         *ppmyQueue = NULL;
         free(ppmyQueue);
+    }
+}
+
+void printQueue(pp_myQueue ppmyQueue)
+{
+    if(queueIsNill(ppmyQueue))
+    {
+        printf("queue is null\n");
+        return;
+    }
+    if(stackIsNillOrEmpty((*ppmyQueue)->stack_a))
+    {
+        printf("stack_a is null\n");
+        return;
+    }
+    else
+    {
+        printStack((*ppmyQueue)->stack_a);
+    }
+
+    if(stackIsNillOrEmpty((*ppmyQueue)->stack_b))
+    {
+        printf("stack_b is null\n");
+        return;
+    }
+    else
+    {
+        printStack((*ppmyQueue)->stack_b);
     }
 }

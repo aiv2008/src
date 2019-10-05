@@ -10,13 +10,14 @@
 
 int main(void)
 {
-    srand(time(NULL));
-    size_t size = 10;
-    int a[size];
+//    srand(time(NULL));
+//    size_t size = 10;
+//    int a[size];
 
-//    int a[] = {4,5,6,89,0,0,2,1,3,4,5,6,7,5};
+//    int a[] = {8,8,1,1,6,8,3,2,9,2};
+    int a[] = {8,8,1,1,6,8,3,2,9,11,12,14,25,55,32,89,1};
     int* p = a;
-//    int size = sizeof(a)/sizeof(a[0]);
+    int size = sizeof(a)/sizeof(a[0]);
 
 
 //    pp_myStack ppmystack = (pp_myStack)calloc(1, sizeof(p_myStack));
@@ -40,16 +41,21 @@ int main(void)
     pp_myQueue ppmyQueue = (pp_myQueue)calloc(1, sizeof(p_myQueue));
     for(int i=0;i<size;i++)
     {
-        a[i] = rand()%size;
+//        a[i] = rand()%size;
         printf("%d,",a[i]);
         q_push(ppmyQueue, a[i]);
     }
+
+//    printf("stack_a size is: %d\n",(*(*ppmyQueue)->stack_a)->size);
+
+    printQueue(ppmyQueue);
 
     for(int i=0;i<size;i++)
     {
         q_pop(ppmyQueue);
     }
-    ppmyQueue = NULL;
+//    freeQueue(ppmyQueue);
+//    ppmyQueue = NULL;
 
     return 0;
 }
