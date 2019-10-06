@@ -47,9 +47,10 @@ void pop(pp_myStack ppmystack)
         return;
     }
     int* header = top(ppmystack);
-    printf("pop element is %d\n",*header);
+//    printf("pop element is %d,",*header);
     (*ppmystack)->size--;
-    printf("size is %d\n",(*ppmystack)->size);
+    printf("\n");
+//    printf("size is %d\n",(*ppmystack)->size);
 }
 
 int* top(pp_myStack ppmystack)

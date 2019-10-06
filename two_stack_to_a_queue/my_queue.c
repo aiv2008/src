@@ -64,13 +64,14 @@ void q_pop(pp_myQueue ppmyQueue)
             for(int i=0;i<size;i++)
             {
                 int* p_top = top((*ppmyQueue)->stack_a);
-                printf("p_top=%d,",*p_top);
+//                printf("p_top=%d,",*p_top);
                 push((*ppmyQueue)->stack_b, *p_top);
                 pop((*ppmyQueue)->stack_a);
             }
-            printf("\n");
+//            printf("\n");
         }
     }
+    printf("p_top=%d,",*top((*ppmyQueue)->stack_b));
     pop((*ppmyQueue)->stack_b);
 }
 
