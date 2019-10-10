@@ -13,6 +13,7 @@ typedef struct
     unsigned int data;
 } myBinrayTreeNode;
 
+
 void add(myBinrayTreeNode **pp_root, unsigned int data);
 
 void delete(myBinrayTreeNode **pp_root, unsigned int data);
@@ -20,9 +21,13 @@ void delete(myBinrayTreeNode **pp_root, unsigned int data);
 myBinrayTreeNode* search(myBinrayTreeNode **pp_root, unsigned int data);
 
 /**
-** Êä³ö¾µÏñ
+** Êä³ö¾µÏñ(µÝ¹é)
 **/
 void mirrorRecursively(myBinrayTreeNode *p_root);
+/**
+** Êä³ö¾µÏñ(Ñ­»·)
+**/
+void mirrorLooply(myBinrayTreeNode *p_root);
 
 BOOL binaryTreeIsNullOrEmpty(myBinrayTreeNode **pp_root);
 

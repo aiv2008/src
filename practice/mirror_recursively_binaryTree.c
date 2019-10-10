@@ -89,3 +89,17 @@ void mirrorRecursively(myBinrayTreeNode *p_root)
         if(right)mirrorRecursively(right);
     }
 }
+
+void mirrorLooply(myBinrayTreeNode *p_root)
+{
+    if(p_root)
+    {
+        //用一个list保存父节点的指针, 初始化长度为8
+
+        unsigned int** parent_array = (unsigned int**)calloc(8, sizeof(unsigned int*));
+        unsigned int** p_parent_move = parent_array;
+        myBinrayTreeNode* left = p_root->left;
+        myBinrayTreeNode* right = p_root->right;
+
+    }
+}
