@@ -9,6 +9,7 @@ int main(void)
     myList** ppMyList = (myList**)calloc(1, sizeof(myList*));
     for(int i=0;i<size;i++)
     {
+        printf("%d,",a[i]);
         add(ppMyList, a[i] , sizeof(int));
     }
     return 0;

@@ -13,6 +13,14 @@ typedef struct
     unsigned int data;
 } myBinrayTreeNode;
 
+typedef struct
+{
+    myBinrayTreeNode** header;
+    int size;
+    int capability;
+} myList;
+
+void listAdd(myList **ppMyList, myBinrayTreeNode* pMyBinaryTreeNode);
 
 void add(myBinrayTreeNode **pp_root, unsigned int data);
 

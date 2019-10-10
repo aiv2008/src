@@ -46,9 +46,7 @@ void add(myList** ppMyList, void* p_data, int elemSize)
         new_header = '\0';
         (*ppMyList)->capability = capability;
     }
-//    *((char*)((*ppMyList)->header) + elemSize * (*ppMyList)->size ) = *(char*)p_data;
-//    void* v = (*ppMyList)->header + elemSize * (*ppMyList)->size;
-    ((*ppMyList)->header + elemSize * (*ppMyList)->size) = p_data;
-//    (*ppMyList)->header + elemSize * (*ppMyList)->size = p_data;
+    (*ppMyList)->header + elemSize * (*ppMyList)->size = p_data;
+
     (*ppMyList)->size++;
 }

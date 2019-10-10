@@ -13,11 +13,10 @@ int main(void)
 //    size_t size = 10;
 //    int a[size];
 
-    int a[] = {8,7,6,5,4,3,2,1};
+    int a[] = {4,3,2,1,8,7,6,5};
     int size = sizeof(a)/sizeof(a[0]);
 
     myBinrayTreeNode** pp_root = (myBinrayTreeNode**)calloc(1, sizeof(myBinrayTreeNode*));
-//    myBinrayTreeNode** pp_root = '\0';
 
     for(int i=0;i<size;i++)
     {
@@ -27,18 +26,7 @@ int main(void)
     }
     printf("\n");
 
-    if(pp_root)
-    {
-        printf("---before mirror begin---\n");
-        inOrderIterator(*pp_root);
-        printf("---before mirror end---\n");
-
-        if(*pp_root)mirrorRecursively(*pp_root);
-
-        printf("---after mirror begin---\n");
-        inOrderIterator(*pp_root);
-        printf("---after mirror end---\n");
-    }
-
+    mirrorLooply( *pp_root);
+    preOrderIterator( *pp_root);
     return 0;
 }

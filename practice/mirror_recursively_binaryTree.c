@@ -2,6 +2,37 @@
 #include<stdlib.h>
 #include"mirror_recursively_binaryTree.h"
 
+void listAdd(myList **ppMyList, myBinrayTreeNode* pMyBinaryTreeNode)
+{
+    if(!ppMyList)
+    {
+        printf("pointer of list is null\n");
+        return;
+    }
+    if(!*ppMyList)
+    {
+        *ppMyList = (myList*)calloc(1, sizeof(myBinrayTreeNode**) + 2*sizeof(int));
+        (*ppMyList)->capability = 8;
+        (*ppMyList)->header = (myBinrayTreeNode**)calloc((*ppMyList)->capability, sizeof(myBinrayTreeNode*));
+    }
+    if((*ppMyList)->size == (*ppMyList)->capability)
+    {
+        int capability = (*ppMyList)->capability;
+        capability += (capability>>1);
+        myBinrayTreeNode** new_header = (unsigned int**)calloc(capability, sizeof(myBinrayTreeNode*));
+        for(int i=0;i<(*ppMyList)->capability;i++)
+        {
+            *(new_header + i) = *((*ppMyList)->header + i);
+        }
+        free((*ppMyList)->header);
+        (*ppMyList)->header = new_header;
+        new_header = '\0';
+        (*ppMyList)->capability = capability;
+    }
+    *((*ppMyList)->header +  (*ppMyList)->size) = pMyBinaryTreeNode;
+    (*ppMyList)->size++;
+}
+
 void add(myBinrayTreeNode **pp_root, unsigned int data)
 {
     if(!pp_root)
@@ -90,16 +121,25 @@ void mirrorRecursively(myBinrayTreeNode *p_root)
     }
 }
 
+
+
 void mirrorLooply(myBinrayTreeNode *p_root)
 {
-    if(p_root)
+    if(p_root && (p_root->left || p_root->right))
     {
         //用一个list保存父节点的指针, 初始化长度为8
-
-        unsigned int** parent_array = (unsigned int**)calloc(8, sizeof(unsigned int*));
-        unsigned int** p_parent_move = parent_array;
-        myBinrayTreeNode* left = p_root->left;
-        myBinrayTreeNode* right = p_root->right;
+        myList **ppMyList = (myList **)calloc(1, sizeof(myList *));
+        listAdd(ppMyList, p_root);
+        for(int i=0; i<(*ppMyList)->size; i++)
+        {
+            myBinrayTreeNode* node = *((*ppMyList)->header + i);
+            myBinrayTreeNode* left = node->left ;
+            myBinrayTreeNode* right = node->right;
+            if(left && (left->left||left->right))listAdd(ppMyList, left);
+            if(right && (right->left||right->right))listAdd(ppMyList, right);
+            node->right = left;
+            node->left = right;
+        }
 
     }
 }
