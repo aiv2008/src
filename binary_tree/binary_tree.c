@@ -1,176 +1,73 @@
 #include<stdio.h>
-#include<malloc.h>
 #include<stdlib.h>
 #include"binary_tree.h"
 
-#define ZERO 0
-#define ONE 1
-
-#define bool char
-#define true 1
-#define false 0
-
-NODE* minimum_node(NODE* root)
+void binaryTreeAdd(myBinrayTreeNode **pp_root, int data)
 {
-    NODE* p = root;
-    if(!root)
-        return NULL;
-    while( p->left )
-        p = p->left;
-    return p;
-}
-
-NODE* maximum_node(NODE* root)
-{
-    NODE* p = root;
-    if(!root)
-        return NULL;
-    while( p->right )
-        p = p->right;
-    return p;
-}
-
-int tree_search(NODE* node, unsigned int data)
-{
-    signed int count = 0;
-    NODE* p = node;
-    while(p)
+    if(!pp_root)
     {
-        if( p->data == data )
-        {
-            count = p->count;
-            break;
-        }
-        else if(p->data < data)
-            p = p->right;
-        else
-            p = p->left;
+        printf("binary tree pointer is null\n");
+        return;
     }
-    return count;
-}
-
-NODE* tree_search_return_node(NODE* node, unsigned int data)
-{
-    signed int count = 0;
-    NODE* p = node;
-    while(p)
+    if(!*pp_root)
     {
-        if( p->data == data )
-        {
-            count = p->count;
-            break;
-        }
-        else if(p->data < data)
-            p = p->right;
-        else
-            p = p->left;
+        *pp_root = (myBinrayTreeNode*)calloc(1, 3*sizeof(myBinrayTreeNode*) + sizeof(int));
+        (*pp_root)->left = '\0';
+        (*pp_root)->right = '\0';
+        (*pp_root)->parent = '\0';
+        (*pp_root)->data = data;
     }
-    return p;
-}
-
-NODE* node_init(unsigned int data)
-{
-    NODE* node = (NODE*)malloc(sizeof(NODE));
-    node->data = data;
-    node->depth = ZERO;
-    node->parent = NULL;
-    node->left = NULL;
-    node->right = NULL;
-    node->count = ZERO;
-    return node;
-}
-
-NODE* tree_init(unsigned int* data,size_t size)
-{
-    if(!data || 0 == size)
-        return NULL;
-    int* p = data;
-    NODE* root = NULL;
-    for(int i=0;i<size;i++,p++)
-    {
-        if(i==0)
-        {
-            root = node_init(*p);
-            root->count = ONE;
-        }
-        else
-            root = tree_add(root,*p);
-    }
-    return root;
-}
-
-NODE* tree_add(NODE* root, unsigned int data)
-{
-    NODE* p = root;
-    NODE* this_node = NULL;
-    bool is_exists = false;//check if it is a exist node
-    while(p)
-    {
-        this_node = p;
-        if(data == p->data)
-        {
-            p->count++;
-            is_exists = true;
-            break;
-        }
-        else if( p->data < data )
-            p = p->right;
-        else
-            p = p->left;
-    }
-
-    if(is_exists)
-        return p;
     else
     {
-        NODE* new_node = node_init(data);
-        if( this_node->data < data )
-            this_node->right = new_node;
+        myBinrayTreeNode* p_move = *pp_root;
+        myBinrayTreeNode* p_parentMove = '\0';
+        while(p_move)
+        {
+            p_parentMove = p_move;
+            if(data <= p_move->data)
+                p_move = p_move->left;
+            else
+                p_move = p_move->right;
+        }
+        p_move = (myBinrayTreeNode*)calloc(1, 3*sizeof(myBinrayTreeNode*) + sizeof(int));
+        p_move->left = '\0';
+        p_move->right = '\0';
+        p_move->parent = '\0';
+        p_move->data = data;
+        p_move->parent = p_parentMove;
+        if(p_move->data <= p_parentMove->data)
+            p_parentMove->left = p_move;
         else
-            this_node->left = new_node;
-        new_node->parent = this_node;
-        return new_node;
+            p_parentMove->right = p_move;
     }
 }
 
-void tree_forward_all(NODE* node)
+void binaryTreePreOrderIterator(myBinrayTreeNode *p_root)
 {
-    if(node)
+    if(p_root)
     {
-        tree_forward_all(node->left);
-        printf("%d",node->data);
-        printf("(%d)",node->count);
-        printf(",");
-        tree_forward_all(node->right);
+        printf("%d,", p_root->data);
+        preOrderIterator(p_root->left);
+        preOrderIterator(p_root->right);
     }
 }
 
-void tree_backward_all(NODE* node)
+void binaryTreeInOrderIterator(myBinrayTreeNode *p_root)
 {
-    if(node)
+    if(p_root)
     {
-        tree_backward_all(node->right);
-        printf("%d",node->data);
-        printf("(%d)",node->count);
-        printf(",");
-        tree_backward_all(node->left);
+        inOrderIterator(p_root->left);
+        printf("%d,", p_root->data);
+        inOrderIterator(p_root->right);
     }
 }
 
-NODE* release(NODE* node)
+void binaryTreePostOrderIterator(myBinrayTreeNode *p_root)
 {
-    NODE* parent = node->parent;
-    if(parent)
+    if(p_root)
     {
-        if(parent->data<=node->data)
-            parent->right = NULL;
-        else
-            parent->left = NULL;
-        node->parent = NULL;
+        postOrderIterator(p_root->left);
+        postOrderIterator(p_root->right);
+        printf("%d,", p_root->data);
     }
-    node->left = NULL;
-    node->right = NULL;
-    free(node);
-    return node = NULL;
 }
-

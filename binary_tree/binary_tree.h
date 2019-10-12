@@ -1,59 +1,25 @@
 #ifndef BINARY_TREE_H_INCLUDED
 #define BINARY_TREE_H_INCLUDED
 
-/**
-** define the node struct
-**/
-
 typedef struct
 {
-    unsigned int data;//the satellite data of the tree
-    signed int depth;//the node depth which is used to calculate the balanced factor of the tree
-    struct NODE* left;//the left child node of this node
-    struct NODE* right;//the right child node of this node
-    struct NODE* parent;//the parent node of this node
-//    signed balanced_factor;//the distance between the left child node and right child node
-    unsigned int count;//the count of the node that has appeared
-} NODE;
+    struct myBinrayTreeNode *left;
+    struct myBinrayTreeNode *right;
+    struct myBinrayTreeNode *parent;
+    unsigned int data;
+} myBinrayTreeNode;
 
+void binaryTreeAdd(myBinrayTreeNode **pp_root, int data);
 /**
-** search the node data of the tree that equals to the input data
-** return the count of the matched data
+** 先序遍历(root->left->right)
 **/
-int tree_search(NODE* root, unsigned int data);
-
-
-NODE* tree_search_return_node(NODE* root, unsigned int data);
-
+void binaryTreePreOrderIterator(myBinrayTreeNode *p_root);
 /**
-** initialize the node of the tree
+** 中序遍历(left->root->right)
 **/
-NODE* node_init(unsigned int data);
-
-NODE* tree_init(unsigned int* data, size_t size);
-
+void binaryTreeInOrderIterator(myBinrayTreeNode *p_root);
 /**
-** add the data to the tree
-** return to the new node
+** 后序遍历(left->right->root)
 **/
-NODE* tree_add(NODE* root, unsigned int data);
-
-/**
-** fetch the minimum node data of the tree
-**/
-NODE* minimum_node(NODE* root);
-
-/**
-** fetch the maximum node data of the tree
-**/
-NODE* maximum_node(NODE* root);
-
-void tree_forward_all(NODE* node);
-
-void tree_backward_all(NODE* node);
-
-/**
-** release the node
-**/
-NODE* release(NODE* node);
+void binaryTreePostOrderIterator(myBinrayTreeNode *p_root)
 #endif // BINARY_TREE_H_INCLUDED
