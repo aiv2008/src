@@ -9,7 +9,7 @@ typedef struct
     unsigned int data;
 } myBinrayTreeNode;
 
-void binaryTreeAdd(myBinrayTreeNode **pp_root, int data);
+void binaryTreeAdd(myBinrayTreeNode **pp_root, unsigned int data);
 /**
 ** 先序遍历(root->left->right)
 **/
@@ -21,5 +21,5 @@ void binaryTreeInOrderIterator(myBinrayTreeNode *p_root);
 /**
 ** 后序遍历(left->right->root)
 **/
-void binaryTreePostOrderIterator(myBinrayTreeNode *p_root)
+void binaryTreePostOrderIterator(myBinrayTreeNode *p_root);
 #endif // BINARY_TREE_H_INCLUDED

@@ -2,7 +2,7 @@
 #include<stdlib.h>
 #include"binary_tree.h"
 
-void binaryTreeAdd(myBinrayTreeNode **pp_root, int data)
+void binaryTreeAdd(myBinrayTreeNode **pp_root, unsigned int data)
 {
     if(!pp_root)
     {
@@ -47,8 +47,8 @@ void binaryTreePreOrderIterator(myBinrayTreeNode *p_root)
     if(p_root)
     {
         printf("%d,", p_root->data);
-        preOrderIterator(p_root->left);
-        preOrderIterator(p_root->right);
+        binaryTreePreOrderIterator(p_root->left);
+        binaryTreePreOrderIterator(p_root->right);
     }
 }
 
@@ -56,9 +56,9 @@ void binaryTreeInOrderIterator(myBinrayTreeNode *p_root)
 {
     if(p_root)
     {
-        inOrderIterator(p_root->left);
+        binaryTreeInOrderIterator(p_root->left);
         printf("%d,", p_root->data);
-        inOrderIterator(p_root->right);
+        binaryTreeInOrderIterator(p_root->right);
     }
 }
 
@@ -66,8 +66,9 @@ void binaryTreePostOrderIterator(myBinrayTreeNode *p_root)
 {
     if(p_root)
     {
-        postOrderIterator(p_root->left);
-        postOrderIterator(p_root->right);
+        binaryTreePostOrderIterator(p_root->left);
+        binaryTreePostOrderIterator(p_root->right);
         printf("%d,", p_root->data);
     }
 }
+

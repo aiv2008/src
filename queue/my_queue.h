@@ -9,9 +9,10 @@ typedef struct
     int capability;
 } myQueue;
 
+
 void queuePush(myQueue** ppMyqueue, void* data, int elemLen);
 
-int* top(myQueue* pMyqueue);
+void* queueTop(myQueue* pMyqueue);
 
 void queuePop(myQueue* pMyqueue, int elemLen);
 

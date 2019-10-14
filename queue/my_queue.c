@@ -2,6 +2,7 @@
 #include<stdlib.h>
 #include<time.h>
 #include"my_queue.h"
+#include"../binary_tree/binary_tree.h"
 
 void queuePush(myQueue** ppMyqueue, void* data, int elemLen)
 {
@@ -12,13 +13,10 @@ void queuePush(myQueue** ppMyqueue, void* data, int elemLen)
     }
     if(!*ppMyqueue)
     {
-//        *ppMyqueue = (myQueue*)calloc(1, sizeof(int*)+ 2 * sizeof(int));
         *ppMyqueue = (myQueue*)calloc(1, sizeof(void*) + 2 * sizeof(int));
         (*ppMyqueue)->capability = 8;
-//        (*ppMyqueue)->top = (int*)calloc((*ppMyqueue)->capability, sizeof(int));
         (*ppMyqueue)->top = (void*)calloc((*ppMyqueue)->capability, elemLen);
     }
-//    char* queueTop = (char*)((*ppMyqueue)->top);
     if((*ppMyqueue)->size == (*ppMyqueue)->capability)
     {
         int capability = (*ppMyqueue)->capability;
@@ -27,27 +25,28 @@ void queuePush(myQueue** ppMyqueue, void* data, int elemLen)
         char* top = (char*)calloc(capability, elemLen);
         for(int i=0;i<(*ppMyqueue)->size;i++)
         {
-//            *(top + i) = *((*ppMyqueue)->top + i);
-            *(top + elemLen * i) = *((char*)((*ppMyqueue)->top) + elemLen * i);
+            memcpy(top + elemLen * i, (char*)((*ppMyqueue)->top) + elemLen * i, elemLen*i);
         }
         free((*ppMyqueue)->top);
         (*ppMyqueue)->capability = capability;
         (*ppMyqueue)->top = top;
         top = '\0';
     }
-    *((char*)((*ppMyqueue)->top) + elemLen * (*ppMyqueue)->size) = *(char*)data;
-//    *((*ppMyqueue)->top + (*ppMyqueue)->size) = data;
-    printf("push elem===%d\n", *((char*)((*ppMyqueue)->top) + elemLen * (*ppMyqueue)->size));
+    void* newTop = (char*)((*ppMyqueue)->top) +  elemLen * (*ppMyqueue)->size;
+    memcpy(newTop, data, elemLen);
     (*ppMyqueue)->size++;
+//    printf("queuePush: top=%x\n",(*ppMyqueue)->top);
+//    printf("queuePush: top=%x\n",(*ppMyqueue)->top);
 }
 
-int* top(myQueue* pMyqueue)
+void* queueTop(myQueue* pMyqueue)
 {
     if(!pMyqueue)
     {
         printf("function top: queue is null\n");
         return '\0';
     }
+//    return (char*)(pMyqueue->top) + elemLen - sizeof(char*);
     return pMyqueue->top;
 }
 
@@ -58,8 +57,8 @@ void queuePop(myQueue* pMyqueue, int elemLen)
         printf("function queuePop: queue is null\n");
         return;
     }
-    printf("pop: size==%d\n", pMyqueue->size);
-    printf("pop element is: %d,", *((char*)pMyqueue->top));
+//    printf("pop: size==%d\n", pMyqueue->size);
+//    printf("pop element is: %d,", *((char*)(pMyqueue->top) + elemLen - sizeof(char*)));
 //    pMyqueue->top++;
     pMyqueue->top += elemLen;
     pMyqueue->size--;
@@ -79,31 +78,3 @@ void freeQueue(myQueue** ppMyqueue)
     printf("function freeQueue: queue is null\n");
 }
 
-int main(void)
-{
-    srand(time(0));
-    int size = 9;
-    int a[size];
-
-    for(int i=0;i<size;i++)
-    {
-        a[i] = rand()%size;
-        printf("%d,", a[i]);
-    }
-    printf("\n");
-    myQueue** ppMyqueue = (myQueue**)calloc(1, sizeof(myQueue*));
-//myQueue** ppMyqueue = '\0';
-    for(int i=0;i<size;i++)
-    {
-        queuePush(ppMyqueue, &a[i], sizeof(int));
-    }
-    printf("push finished\n");
-
-    while(ppMyqueue && (*ppMyqueue) && (*ppMyqueue)->size)
-    {
-        queuePop(*ppMyqueue, sizeof(int));
-    }
-//    freeQueue(ppMyqueue);
-//    ppMyqueue = '\0';
-    return 0;
-}
