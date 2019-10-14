@@ -22,4 +22,6 @@ void binaryTreeInOrderIterator(myBinrayTreeNode *p_root);
 ** ºóÐò±éÀú(left->right->root)
 **/
 void binaryTreePostOrderIterator(myBinrayTreeNode *p_root);
+
+void freeBinaryTree(myBinrayTreeNode **ppRoot);
 #endif // BINARY_TREE_H_INCLUDED

@@ -72,3 +72,16 @@ void binaryTreePostOrderIterator(myBinrayTreeNode *p_root)
     }
 }
 
+void freeBinaryTree(myBinrayTreeNode **ppRoot)
+{
+    if(*ppRoot)
+    {
+        free((*ppRoot)->parent);
+        free((*ppRoot)->left);
+        free((*ppRoot)->right);
+        (*ppRoot)->parent = '\0';
+        (*ppRoot)->left = '\0';
+        (*ppRoot)->right = '\0';
+    }
+}
+

@@ -21,22 +21,18 @@ void queuePush(myQueue** ppMyqueue, void* data, int elemLen)
     {
         int capability = (*ppMyqueue)->capability;
         capability += (capability >> 1);
-//        int* top = (int*)calloc(capability, sizeof(int));
-        char* top = (char*)calloc(capability, elemLen);
+        void* top = calloc(capability, elemLen);
         for(int i=0;i<(*ppMyqueue)->size;i++)
-        {
-            memcpy(top + elemLen * i, (char*)((*ppMyqueue)->top) + elemLen * i, elemLen*i);
-        }
+            memcpy(top + elemLen * i, (*ppMyqueue)->top + elemLen * i, elemLen);
         free((*ppMyqueue)->top);
         (*ppMyqueue)->capability = capability;
         (*ppMyqueue)->top = top;
         top = '\0';
     }
-    void* newTop = (char*)((*ppMyqueue)->top) +  elemLen * (*ppMyqueue)->size;
+    void* newTop = (*ppMyqueue)->top +  elemLen * (*ppMyqueue)->size;
     memcpy(newTop, data, elemLen);
     (*ppMyqueue)->size++;
-//    printf("queuePush: top=%x\n",(*ppMyqueue)->top);
-//    printf("queuePush: top=%x\n",(*ppMyqueue)->top);
+    printf("queuePush: size==%d\n", (*ppMyqueue)->size);
 }
 
 void* queueTop(myQueue* pMyqueue)
@@ -57,9 +53,6 @@ void queuePop(myQueue* pMyqueue, int elemLen)
         printf("function queuePop: queue is null\n");
         return;
     }
-//    printf("pop: size==%d\n", pMyqueue->size);
-//    printf("pop element is: %d,", *((char*)(pMyqueue->top) + elemLen - sizeof(char*)));
-//    pMyqueue->top++;
     pMyqueue->top += elemLen;
     pMyqueue->size--;
     printf("pop successfully\n");
