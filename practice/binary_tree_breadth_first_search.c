@@ -18,16 +18,15 @@ void binaryTreeBreadthFirstTree(myBinrayTreeNode* pRoot)
     queuePush(ppMyQueue, pRoot, binaryTreeSize);
     while((*ppMyQueue)->size)
     {
-        myBinrayTreeNode* top = (myBinrayTreeNode*)queueTop(*ppMyQueue);
+        myBinrayTreeNode* top =  (myBinrayTreeNode*)queuePop(*ppMyQueue, binaryTreeSize);
+//        myBinrayTreeNode* top = (myBinrayTreeNode*)queueTop(*ppMyQueue);
         printf("top=%d\n",top->data);
         myBinrayTreeNode* left = top->left;
         myBinrayTreeNode* right = top->right;
-        printf("size11=%d\n",(*ppMyQueue)->size);
         if(left)queuePush(ppMyQueue, left, binaryTreeSize);
         if(right)queuePush(ppMyQueue, right, binaryTreeSize);
-        printf("size22=%d\n",(*ppMyQueue)->size);
-        queuePop(*ppMyQueue, binaryTreeSize);
-
+//        queuePop(*ppMyQueue, binaryTreeSize);
+//        printf("size33=%d\n",(*ppMyQueue)->size);
     }
     free((*ppMyQueue)->top);
     (*ppMyQueue)->top = '\0';
@@ -37,33 +36,20 @@ void binaryTreeBreadthFirstTree(myBinrayTreeNode* pRoot)
     ppMyQueue = '\0';
 }
 
-int main(void)
-{
-    srand(time(0));
-    int size = 23;
-    int a[size];
-
-    myQueue** ppMyqueue = (myQueue**)calloc(1, sizeof(myQueue*));
-    for(int i=0;i<size;i++)
-    {
-        a[i] = rand()%size;
-        printf("%d,", a[i]);
-        queuePush(ppMyqueue, &a[i], sizeof(int));
-    }
-    printf("\n");
-    while((*ppMyqueue)->size)
-    {
-        int* top = (int*)queueTop(*ppMyqueue);
-        printf("top=%d\n",*top);
-        queuePop(*ppMyqueue, sizeof(int));
-    }
-
+//int main(void)
+//{
+//    srand(time(0));
+//    int size = 20;
+//    int a[size];
 //    myBinrayTreeNode** ppRoot = (myBinrayTreeNode**)calloc(1, sizeof(myBinrayTreeNode*));
 ////    myBinrayTreeNode** ppRoot = '\0';
 //    for(int i=0;i<size;i++)
 //    {
+//        a[i] = rand()%size;
+//        printf("%d,", a[i]);
 //        binaryTreeAdd(ppRoot, a[i]);
 //    }
+//    printf("\n");
 //    binaryTreeBreadthFirstTree(ppRoot?*ppRoot:'\0');
 //    if(ppRoot)
 //    {
@@ -71,7 +57,7 @@ int main(void)
 //        free(ppRoot);
 //        ppRoot = '\0';
 //    }
-
-
-    return 0;
-}
+//
+//
+//    return 0;
+//}

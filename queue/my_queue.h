@@ -14,7 +14,7 @@ void queuePush(myQueue** ppMyqueue, void* data, int elemLen);
 
 void* queueTop(myQueue* pMyqueue);
 
-void queuePop(myQueue* pMyqueue, int elemLen);
+void* queuePop(myQueue* pMyqueue, int elemLen);
 
 void freeQueue(myQueue** ppMyqueue);
 #endif // MY_QUEUE_H_INCLUDED
