@@ -11,7 +11,7 @@ void binaryTreeAdd(myBinrayTreeNode **pp_root, unsigned int data)
     }
     if(!*pp_root)
     {
-        *pp_root = (myBinrayTreeNode*)calloc(1, 3*sizeof(myBinrayTreeNode*) + sizeof(int));
+        *pp_root = (myBinrayTreeNode*)calloc(1, sizeof(myBinrayTreeNode));
         (*pp_root)->left = '\0';
         (*pp_root)->right = '\0';
         (*pp_root)->parent = '\0';
@@ -29,7 +29,7 @@ void binaryTreeAdd(myBinrayTreeNode **pp_root, unsigned int data)
             else
                 p_move = p_move->right;
         }
-        p_move = (myBinrayTreeNode*)calloc(1, 3*sizeof(myBinrayTreeNode*) + sizeof(int));
+        p_move = (myBinrayTreeNode*)calloc(1, sizeof(myBinrayTreeNode));
         p_move->left = '\0';
         p_move->right = '\0';
         p_move->parent = '\0';

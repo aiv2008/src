@@ -14,7 +14,8 @@ void queuePush(myQueue** ppMyqueue, void* data, int elemLen)
     }
     if(!*ppMyqueue)
     {
-        *ppMyqueue = (myQueue*)calloc(1, sizeof(void*) + 2 * sizeof(int));
+//        *ppMyqueue = (myQueue*)calloc(1, sizeof(void*) + 2 * sizeof(int));
+        *ppMyqueue = (myQueue*)calloc(1, sizeof(myQueue));
         (*ppMyqueue)->capability = 8;
         (*ppMyqueue)->top = (void*)calloc((*ppMyqueue)->capability, elemLen);
     }
@@ -22,6 +23,7 @@ void queuePush(myQueue** ppMyqueue, void* data, int elemLen)
     (*ppMyqueue)->size++;
     if((*ppMyqueue)->size > (*ppMyqueue)->capability)
     {
+        printf("extend the memory space\n");
         int capability = (*ppMyqueue)->capability;
         capability += (capability >> 1);
         void* top = calloc(capability, elemLen);
@@ -70,62 +72,79 @@ void freeQueue(myQueue** ppMyqueue)
 {
     if(ppMyqueue)
     {
-        free((*ppMyqueue)->top);
-        (*ppMyqueue)->top = '\0';
-        free(*ppMyqueue);
-        printf("queue free successfully\n");
-        return;
+        if(*ppMyqueue)
+        {
+            if((*ppMyqueue)->top)
+            {
+                free((*ppMyqueue)->top);
+                (*ppMyqueue)->top = '\0';
+            }
+            free(*ppMyqueue);
+            *ppMyqueue = '\0';
+//            printf("queue free successfully\n");
+        }
     }
     printf("function freeQueue: queue is null\n");
 }
 
 int main(void)
 {
-    srand(time(0));
-    int size = 20;
-    int a[size];
 
-    myQueue** ppMyqueue = (myQueue**)calloc(1, sizeof(myQueue*));
-    for(int i=0;i<size;i++)
+    srand(time(0));
+    int size = 0;
+    while(size>=0)
     {
-        a[i] = rand()%size;
-        printf("push==%d\n", a[i]);
-        queuePush(ppMyqueue, &a[i], sizeof(int));
-    }
-//    printf("size===%d\n",(*ppMyqueue)->size);
-    printf("\n");
-    int* top = '\0';
-    int* top2 = '\0';
-    while((*ppMyqueue)->size)
-    {
-        int ram = rand()%size;
-        printf("push==%d,", ram);
-        queuePush(ppMyqueue, &ram, sizeof(int));
-        if(!(*ppMyqueue)->size)
+        printf("please input the size:\n");
+        scanf("%d", &size);
+        if(size == 0)
         {
-            printf("queue is empty111");
-            break;
+            printf("cannot be 0\n");
+            continue;
         }
-        top = (int*)queuePop(*ppMyqueue, sizeof(int));
-        printf("pop1: %d\n", *top);
-        if(!(*ppMyqueue)->size)
+        int a[size];
+        myQueue** ppMyqueue = (myQueue**)calloc(1, sizeof(myQueue*));
+        for(int i=0;i<size;i++)
         {
-            printf("queue is empty222");
-            break;
+            a[i] = rand()%size;
+            printf("push==%d\n", a[i]);
+            queuePush(ppMyqueue, &a[i], sizeof(int));
         }
-        top2 = queuePop(*ppMyqueue, sizeof(int));
-        printf("pop2: %d\n", *top2);
-    }
-    if(ppMyqueue)
-    {
-        if(*ppMyqueue)
+    //    printf("size===%d\n",(*ppMyqueue)->size);
+        printf("\n");
+        int* top = '\0';
+        int* top2 = '\0';
+        while((*ppMyqueue)->size)
         {
-            freeQueue(*ppMyqueue);
-            *ppMyqueue = '\0';
+            int ram = rand()%size;
+            printf("push==%d\n", ram);
+            queuePush(ppMyqueue, &ram, sizeof(int));
+            if(!(*ppMyqueue)->size)
+            {
+                printf("queue is empty111");
+                break;
+            }
+            top = (int*)queuePop(*ppMyqueue, sizeof(int));
+            printf("pop1: %d\n", *top);
+            if(!(*ppMyqueue)->size)
+            {
+                printf("queue is empty222");
+                break;
+            }
+            top2 = queuePop(*ppMyqueue, sizeof(int));
+            printf("pop2: %d\n", *top2);
         }
-        free(ppMyqueue);
-        ppMyqueue = '\0';
+        if(ppMyqueue)
+        {
+            if(*ppMyqueue)
+            {
+                freeQueue(*ppMyqueue);
+                *ppMyqueue = '\0';
+            }
+            free(ppMyqueue);
+            ppMyqueue = '\0';
+        }
     }
+
 
     return 0;
 }
