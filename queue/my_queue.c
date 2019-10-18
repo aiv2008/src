@@ -87,6 +87,7 @@ void freeQueue(myQueue** ppMyqueue)
     printf("function freeQueue: queue is null\n");
 }
 
+/**
 int main(void)
 {
 
@@ -148,5 +149,5 @@ int main(void)
 
     return 0;
 }
-
+**/
 

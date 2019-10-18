@@ -25,6 +25,8 @@ void queuePush(myQueue** ppMyqueue, void* data, int elemLen)
         *ppMyqueue = (myQueue*)calloc(1, sizeof(myQueue));
     if(!(*ppMyqueue)->bottom)
     {
+	printf("enter p1\n");
+	printf("elemLen=%d\n",elemLen);
         (*ppMyqueue)->bottom = (myQueueElem*)calloc(1, sizeof(myQueueElem));
         myQueueElem* bottom = (*ppMyqueue)->bottom;
         bottom->data = calloc(1, sizeof(elemLen));
@@ -33,13 +35,44 @@ void queuePush(myQueue** ppMyqueue, void* data, int elemLen)
     }
     else
     {
-        myQueueElem* elem = (myQueueElem*)calloc(1, sizeof(myQueueElem));
-        elem->data = calloc(1, sizeof(elemLen));
+printf("enter p2\n");
+	//new bottom
+myQueueElem* elem;
+printf("00000\n");
+printf("elemLen22=%d\n",elemLen);
+        if((elem = (myQueueElem*)calloc(1, sizeof(myQueueElem)))=='\0')
+	{
+		printf("malloc memory unsuccessful\n");
+		exit(1);
+	}
+	else
+	{
+		printf("calloc successfully\n");
+	}
+printf("aaa\n");
+        if((elem->data = calloc(1, sizeof(elemLen)))=='\0')
+	{
+		printf("malloc memory unsuccessful\n");
+		exit(1);
+	}
+	else
+	{
+		printf("calloc successfully\n");
+	}
+printf("bbb\n");
         memcpy(elem->data, data, elemLen);
+printf("ccc\n");
+	//old bottom, new bottom-1
         myQueueElem* tmp = (*ppMyqueue)->bottom;
-        (*ppMyqueue)->bottom = elem;
+printf("ddd\n");
+        (*ppMyqueue)->bottom = elem;	
+printf("eee\n");
         tmp->pNext = elem;
+printf("fff\n");
+	elem = '\0';
+	tmp = '\0';;
     }
+	return ;
 }
 
 myQueueElem* queueTop(myQueue* pMyqueue)
@@ -77,6 +110,7 @@ void queuePop(myQueue* pMyqueue)
         free(top);
         top = '\0';
     }
+	return;
 }
 
 void freeQueue(myQueue** ppMyqueue)
@@ -86,8 +120,9 @@ void freeQueue(myQueue** ppMyqueue)
         free(*ppMyqueue);
         *ppMyqueue = '\0';
     }
+return ;
 }
-
+/**
 int main(void)
 {
     srand(time(0));
@@ -95,7 +130,8 @@ int main(void)
     int a[size];
     myQueue** ppMyqueue = (myQueue**)calloc(1, sizeof(myQueue*));
     myQueueElem* bottom = '\0';
-    for(int i=0;i<size;i++)
+    int i;
+    for(i=0;i<size;i++)
     {
         a[i] = rand()%size;
         printf("%d,", a[i]);
@@ -129,3 +165,4 @@ int main(void)
     freeQueue(ppMyqueue);
     ppMyqueue = '\0';
 }
+**/

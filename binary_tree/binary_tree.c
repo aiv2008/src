@@ -40,6 +40,7 @@ void binaryTreeAdd(myBinrayTreeNode **pp_root, unsigned int data)
         else
             p_parentMove->right = p_move;
     }
+return ;
 }
 
 void binaryTreePreOrderIterator(myBinrayTreeNode *p_root)
@@ -50,6 +51,7 @@ void binaryTreePreOrderIterator(myBinrayTreeNode *p_root)
         binaryTreePreOrderIterator(p_root->left);
         binaryTreePreOrderIterator(p_root->right);
     }
+return ;
 }
 
 void binaryTreeInOrderIterator(myBinrayTreeNode *p_root)
@@ -60,6 +62,7 @@ void binaryTreeInOrderIterator(myBinrayTreeNode *p_root)
         printf("%d,", p_root->data);
         binaryTreeInOrderIterator(p_root->right);
     }
+return ;
 }
 
 void binaryTreePostOrderIterator(myBinrayTreeNode *p_root)
@@ -70,6 +73,7 @@ void binaryTreePostOrderIterator(myBinrayTreeNode *p_root)
         binaryTreePostOrderIterator(p_root->right);
         printf("%d,", p_root->data);
     }
+return ;
 }
 
 void freeBinaryTree(myBinrayTreeNode **ppRoot)
@@ -83,5 +87,6 @@ void freeBinaryTree(myBinrayTreeNode **ppRoot)
         (*ppRoot)->left = '\0';
         (*ppRoot)->right = '\0';
     }
+return ;
 }
 
