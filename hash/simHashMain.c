@@ -15,17 +15,18 @@ int main(void)
     int max = 122;
     int min = 48;
 
-    pp_simHash ppsimHash = (pp_simHash)calloc(1, sizeof(p_simHash));
+    simHash** ppsimHash = (simHash**)calloc(1, sizeof(simHash*));
 //    pp_simHash ppsimHash = '\0';
 
-    for(int i=0;i<size;i++)
+	int i;
+    for(i=0;i<size;i++)
     {
         a[i] = (char)(rand()%(max - min) + min);
         printf("%c,", a[i]);
-        push(ppsimHash, a[i], get(ppsimHash, a[i])+1);
+        simHashPush(ppsimHash, a[i], simHashGet(ppsimHash, a[i])+1);
     }
     printf("\n");
-    for(int i=0; !hashIsNullOrEmpty(ppsimHash) && i<(*ppsimHash)->size;i++)
+    for(i=0; !simHashIsNullOrEmpty(ppsimHash) && i<(*ppsimHash)->size;i++)
     {
         if(*((*ppsimHash)->hash_array+i))
             printf("%c=%d,",(char)i , *((*ppsimHash)->hash_array+i));

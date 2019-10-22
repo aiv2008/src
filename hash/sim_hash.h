@@ -9,16 +9,16 @@ typedef struct
 {
     int* hash_array;
     int size;
-} simHash, *p_simHash, **pp_simHash;
+} simHash;
 
-void push(pp_simHash ppsimHash, char key, int value);
+void simHashPush(simHash** ppsimHash, char key, int value);
 
-int get(pp_simHash ppsimHash, char key);
+int simHashGet(simHash** ppsimHash, char key);
 
-int getSize(pp_simHash ppsimHash);
+int simHashGetSize(simHash** ppsimHash);
 
-BOOL hashIsNull(pp_simHash ppsimHash);
+BOOL simHashIsNull(simHash** ppsimHash);
 
-BOOL hashIsNullOrEmpty(pp_simHash ppsimHash);
+BOOL simHashIsNullOrEmpty(simHash** ppsimHash);
 
 #endif // SIM_HASH_H_INCLUDED

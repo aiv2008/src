@@ -3,6 +3,8 @@
 
 #include "../common/list_i.h"
 
-size_t partition_ex(plist_i p, size_t start, size_t end);
+int myPartition(int* array, int start, int end);
+
+void myQuicksort(int* array, int start, int end);
 
 #endif // QUICKSORT_H_INCLUDED
