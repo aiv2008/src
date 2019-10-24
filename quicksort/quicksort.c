@@ -18,7 +18,12 @@ int myPartition(int* array, int start, int end)
 	}
 	int i = start - 1;
 	int j = start;
-	
+/**
+	int k;
+	printf("\n---before swap---\n");
+	for(k=0;k<=end;k++)printf("%d,", *(array+k));
+	printf("\n");
+**/
 	if(j < end)
 	{
 		while(j < end)
@@ -34,12 +39,22 @@ int myPartition(int* array, int start, int end)
 			j++;
 		}
 		if(i+1 != end)
-		{
+		{			
 			swap_1(array+i+1, array+end);	
+/**
+			printf("\n---after swap111---\n");
+			for(k=0;k<=end;k++)printf("%d,", *(array+k));
+			printf("\n");	
+**/
 			return i+1;
 		}
 		else
 		{
+/**
+			printf("\n---after swap222---\n");
+			for(k=0;k<=end;k++)printf("%d,", *(array+k));
+			printf("\n");
+**/
 			return end;
 		}	
 		
@@ -77,7 +92,7 @@ int myRandomizedPartition(int* array, int start, int end)
 		printf("quicksort myRandomizedPartition: index must begin with 1\n");
 		return -1;
 	}
-	
+	//printf("start=%d,end=%d\n", start, end);
 	if(start > end)
 	{
 		printf("quicksort myRandomizedPartition: start must smaller than end\n");
@@ -100,7 +115,7 @@ void myRandomizedQuicksort(int* array, int start, int end)
 	if(start < end)
 	{
 		int partitionIndex = myRandomizedPartition(array, start, end);
-		printf("partition=%d\n", *(array + partitionIndex));
+		//printf("partition=%d\n", *(array + partitionIndex));
 		if(partitionIndex < 0)
 		{
 		    printf("quicksort myRandomizedQuicksort: partitionIndex must larger than 0\n");
