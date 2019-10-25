@@ -20,15 +20,15 @@ void randomizedSelect(int* array, int start, int end, int iMin)
 		printf("partitionIndex=%d\n", partitionIndex);
 		for(k=0;k<=end;k++)printf("%d,", *(array+k));
 		printf("\n");
-		//k is the count of the elem between the interval start to partitionIndex
+		//k is the index of the elem between the interval start to partitionIndex
 		int k = partitionIndex - start + 1;
-		if(iMin < k)
+		if(iMin + 1 < k)
 		{
 			printf("enter111\n");
 			printf("start=%d, end=%d, iMin=%d\n", start, partitionIndex-1, iMin);
 			randomizedSelect(array, start, partitionIndex - 1, iMin);
 		}		
-		else if(iMin > k)
+		else if(iMin + 1 > k)
 		{
 			printf("enter222\n");
 			printf("start=%d, end=%d, iMin=%d\n", partitionIndex + 1, end, iMin - k);

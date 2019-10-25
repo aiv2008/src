@@ -100,7 +100,7 @@ int myRandomizedPartition(int* array, int start, int end)
 	}
 	srand(time(0));
 	int randIndex = start + rand()%(end - start + 1);
-	//printf("randIndex=%d\n", randIndex);
+	printf("myRandomizedPartition: randIndex=%d\n", randIndex);
 	if(randIndex != end)swap_1(array+randIndex, array+end);
 	return myPartition(array, start, end);
 }
