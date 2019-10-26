@@ -13,7 +13,11 @@ void randomizedSelect(int* array, int start, int end, int iMin)
 	int k;
 	for(k=0;k<=end;k++)printf("%d,", *(array+k));
 	printf("\n");
-	if(start <= iMin && iMin <= end)
+	printf("start=%d, end=%d, iMin=%d\n", start, end, iMin);
+	printf("iMin > 0 ? %d\n", iMin > 0);
+	printf("iMin <= end - start + 1 ? %d\n", iMin <= end - start + 1);
+	//if(start <= iMin && iMin <= end)
+    if(iMin > 0 && iMin <= end - start + 1)
 	{
 		int partitionIndex = myRandomizedPartition(array, start, end);
 		printf("\n---after partition---\n");
@@ -21,23 +25,27 @@ void randomizedSelect(int* array, int start, int end, int iMin)
 		for(k=0;k<=end;k++)printf("%d,", *(array+k));
 		printf("\n");
 		//k is the index of the elem between the interval start to partitionIndex
-		int k = partitionIndex - start + 1;
-		if(iMin + 1 < k)
+//		int k = partitionIndex - start + 1;
+		int coef = partitionIndex - start + 1;
+		if(iMin < coef)
 		{
 			printf("enter111\n");
-			printf("start=%d, end=%d, iMin=%d\n", start, partitionIndex-1, iMin);
+//			printf("start=%d, end=%d, iMin=%d\n", start, partitionIndex-1, iMin);
 			randomizedSelect(array, start, partitionIndex - 1, iMin);
-		}		
-		else if(iMin + 1 > k)
+		}
+		else if(iMin > coef)
 		{
 			printf("enter222\n");
-			printf("start=%d, end=%d, iMin=%d\n", partitionIndex + 1, end, iMin - k);
-			randomizedSelect(array, partitionIndex + 1, end, iMin - k);
+//			printf("start=%d, end=%d, iMin=%d\n", partitionIndex + 1, end, iMin - coef);
+			randomizedSelect(array, partitionIndex + 1, end, iMin - coef );
 		}
 		else
-			printf("enter333\n");
+            printf("iMin=%d\n", *(array+iMin-1));
 	}
 	else
-		printf("iMin must in the right interval\n");		
-	
+    {
+        printf("overflow\n");
+    }
+
+
 }

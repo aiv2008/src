@@ -27,24 +27,24 @@ int myPartition(int* array, int start, int end)
 	if(j < end)
 	{
 		while(j < end)
-		{			
+		{
 			if(*(array+j) <= *(array+end))
 			{
 				i++;
 				if(i != j)
 				{
 					swap_1(array+j, array+i);
-				}		
-			}				
+				}
+			}
 			j++;
 		}
 		if(i+1 != end)
-		{			
-			swap_1(array+i+1, array+end);	
+		{
+			swap_1(array+i+1, array+end);
 /**
 			printf("\n---after swap111---\n");
 			for(k=0;k<=end;k++)printf("%d,", *(array+k));
-			printf("\n");	
+			printf("\n");
 **/
 			return i+1;
 		}
@@ -56,8 +56,8 @@ int myPartition(int* array, int start, int end)
 			printf("\n");
 **/
 			return end;
-		}	
-		
+		}
+
 	}
 	return -1;
 }
@@ -70,7 +70,7 @@ void myQuicksort(int* array, int start, int end)
 		return ;
 	}
 	if(start < end)
-	{	    
+	{
 		//printf("start=%d, end=%d\n", start, end);
 		int partitionIndex = myPartition(array, start, end);
 		//printf("partitionIndex=%d\n", partitionIndex);
@@ -99,7 +99,8 @@ int myRandomizedPartition(int* array, int start, int end)
 		return -1;
 	}
 	srand(time(0));
-	int randIndex = start + rand()%(end - start + 1);
+//	int randIndex = start + rand()%(end - start + 1
+    int randIndex = start + rand()%(end - start);
 	printf("myRandomizedPartition: randIndex=%d\n", randIndex);
 	if(randIndex != end)swap_1(array+randIndex, array+end);
 	return myPartition(array, start, end);
