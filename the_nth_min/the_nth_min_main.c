@@ -7,11 +7,10 @@
 int main(void)
 {
 	int i;
-	int iMin = 3;
-/**
+	int iMin = 13;
 	srand(time(0));
-	int size = 10;
-	int a[100];
+	int size = 100;
+	int a[size];
 	simHash** ppsimHash = (simHash**)calloc(1, sizeof(simHash*));
 	for(i=0;i<size;i++)
 	{
@@ -21,28 +20,19 @@ int main(void)
 		simHashPush(ppsimHash, a[i], 1);
 		printf("%d,",a[i]);
 	}
-**/
 
 
-	//int a[] = {0,2,8,7,5,1,3,4,6,9};
-	int a[] = {0,2,1,7,5};
+/**
+	int a[] = {0,2,8,7,5,1,3,4,6,9};
+	//int a[] = {0,2,1,7,5};
 	int size = sizeof(a)/sizeof(a[0]);
+**/
 	printf("\n");
 	randomizedSelect(a, 0, size-1, iMin);
 	for(i=0;i<size;i++)
 	{
 		printf("%d,",a[i]);
 	}
-	printf("\n");
-
-
-//    int start = 2;
-//    int end = 2;
-//    iMin = 1;
-//    if(iMin > 0 && iMin <= end - start + 1)
-//    {
-//        printf("right\n");
-//    }
-//    else
-//        printf("wrong\n");
+	if(iMin <= size)
+	       printf("iMin=%d\n",*(a+iMin-1));	
 }
