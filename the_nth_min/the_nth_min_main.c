@@ -28,11 +28,15 @@ int main(void)
 	int size = sizeof(a)/sizeof(a[0]);
 **/
 	printf("\n");
-	randomizedSelect(a, 0, size-1, iMin);
+	int r = randomizedSelect(a, 0, size-1, iMin);
+	printf("iMin=%d\n", r);
 	for(i=0;i<size;i++)
 	{
 		printf("%d,",a[i]);
 	}
+	printf("\n");
+/**
 	if(iMin <= size)
 	       printf("iMin=%d\n",*(a+iMin-1));	
+**/
 }
