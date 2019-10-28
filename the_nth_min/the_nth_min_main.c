@@ -7,9 +7,9 @@
 int main(void)
 {
 	int i;
-	int iMin = 13;
+	int iMin = 6;
 	srand(time(0));
-	int size = 100;
+	int size = 10;
 	int a[size];
 	simHash** ppsimHash = (simHash**)calloc(1, sizeof(simHash*));
 	for(i=0;i<size;i++)
@@ -29,14 +29,11 @@ int main(void)
 **/
 	printf("\n");
 	int r = randomizedSelect(a, 0, size-1, iMin);
+	//theTopNthMin(a, 0, size-1, iMin);
 	printf("iMin=%d\n", r);
 	for(i=0;i<size;i++)
 	{
 		printf("%d,",a[i]);
 	}
 	printf("\n");
-/**
-	if(iMin <= size)
-	       printf("iMin=%d\n",*(a+iMin-1));	
-**/
 }
