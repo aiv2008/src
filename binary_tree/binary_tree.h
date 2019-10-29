@@ -24,4 +24,8 @@ void binaryTreeInOrderIterator(myBinrayTreeNode *p_root);
 void binaryTreePostOrderIterator(myBinrayTreeNode *p_root);
 
 void freeBinaryTree(myBinrayTreeNode **ppRoot);
+
+myBinrayTreeNode* binaryTreeMaximum( myBinrayTreeNode* pRoot);
+
+myBinrayTreeNode* binaryTreeMinimum(myBinrayTreeNode* pRoot);
 #endif // BINARY_TREE_H_INCLUDED

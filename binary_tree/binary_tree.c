@@ -90,3 +90,12 @@ void freeBinaryTree(myBinrayTreeNode **ppRoot)
 return ;
 }
 
+myBinrayTreeNode* binaryTreeMaximum( myBinrayTreeNode* pRoot)
+{
+
+}
+
+myBinrayTreeNode* binaryTreeMinimum(myBinrayTreeNode* pRoot)
+{
+
+}
