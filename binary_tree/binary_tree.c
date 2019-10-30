@@ -92,10 +92,29 @@ return ;
 
 myBinrayTreeNode* binaryTreeMaximum( myBinrayTreeNode* pRoot)
 {
-
+	if(pRoot)
+	{
+		myBinrayTreeNode* pMove = pRoot;
+		while(pMove->right)
+		{
+			pMove = pMove->right;
+		}		
+		return pMove;
+	}
+	return NULL;
 }
 
 myBinrayTreeNode* binaryTreeMinimum(myBinrayTreeNode* pRoot)
 {
-
+	if(pRoot)
+	{
+		myBinrayTreeNode* pMove = pRoot;
+		while(pMove->left)
+		{
+			pMove = pMove->left;
+		}		
+		return pMove;
+		
+	}
+	return NULL;
 }
