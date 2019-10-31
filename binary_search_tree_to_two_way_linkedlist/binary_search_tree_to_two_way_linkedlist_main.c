@@ -16,7 +16,7 @@ int main(void)
 	int size = sizeof(a)/sizeof(a[0]);
 	for(i=0;i<size;i++)
 	{
-		a[i] = rand()%size;
+		//a[i] = rand()%size;
 		printf("%d,", a[i]);
 	}
 	printf("\n");
@@ -26,8 +26,22 @@ int main(void)
 		binaryTreeAdd(ppRoot, a[i]);
 	}
 	
-	binarySearchTreeToTwoWayLinkedList(*ppRoot);
+	//binarySearchTreeToTwoWayLinkedList(*ppRoot);
 	//printTwoWayLinkedList(*ppRoot);
 
+	myBinrayTreeNode* pNode = convert(*ppRoot);
+	printf("node=%d\n", pNode->data);
+	
+	myBinrayTreeNode* pMove = pNode;
+	while(pMove)
+	{
+		myBinrayTreeNode* pLeft = pMove->left;
+		if(pLeft)printf("%d", pLeft->data);
+		else printf("NULL");		
+		printf("<-->");
+		printf("%d",pMove->data);
+		printf("\n");
+		pMove = pMove->right;
+	}	
 	return 0;
 }

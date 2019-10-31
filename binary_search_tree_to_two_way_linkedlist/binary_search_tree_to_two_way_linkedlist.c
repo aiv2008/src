@@ -4,73 +4,48 @@
 #include "../queue/my_queue_linkedlist.h"
 #include "../binary_tree/binary_tree.h"
 
-void binarySearchTreeToTwoWayLinkedList(myBinrayTreeNode* root)
-{
-	if(!root)
-	{
-		printf("tree root cannot be null\n");
-		return;
-	}
-	myQueue** ppMyQueue = (myQueue**)calloc(1, sizeof(myQueue*));
-	myQueueElem* top = NULL;
-	myQueueElem* bottom = NULL;
-	do
-	{
-		myBinrayTreeNode* left = root->left;
-		myBinrayTreeNode* right = root->right;
-		queuePush(ppMyQueue, root, sizeof(myBinrayTreeNode*));
-		if(left)
-		{
-			queuePush(ppMyQueue, left , sizeof(myBinrayTreeNode*));
-			myBinrayTreeNode* pMax = binaryTreeMaximum(left);
-			root->left = pMax;
-			if(pMax)pMax->right = root;
-		}
-		if(right)
-		{
-			queuePush(ppMyQueue, right , sizeof(myBinrayTreeNode*));
-			myBinrayTreeNode* pMin = binaryTreeMinimum(right);
-			root->right = pMin;
-			if(pMin)pMin->left = root;
-		}
-		queuePop(ppMyQueue);
-		top = queueTop(ppMyQueue);
-		bottom = queueBottom(ppMyQueue);
-	}
-	while(top != bottom);
 
-}
-void printTwoWayLinkedList(myBinrayTreeNode* root)
+myBinrayTreeNode* convert(myBinrayTreeNode* pRoot)
 {
-	
-	if(!root)
-	{
-		printf("tree root cannot be null\n");
-		return;
-	}
-	myQueue** ppMyQueue = (myQueue**)calloc(1, sizeof(myQueue*));
-	myQueueElem* top = NULL;
-	myQueueElem* bottom = NULL;
-	do
-	{
-		myBinrayTreeNode* left = root->left;
-		myBinrayTreeNode* right = root->right;
-		queuePush(ppMyQueue, root, sizeof(myBinrayTreeNode*));
-		printf("root=%d,", root->data);
-		if(left)
-		{
-			printf("left=%d,", left->data);
-			queuePush(ppMyQueue, left , sizeof(myBinrayTreeNode*));
-		}
-		if(right)
-		{
-			printf("right=%d,", right->data);
-			queuePush(ppMyQueue, right , sizeof(myBinrayTreeNode*));
-		}
-		printf("\n");
-		queuePop(ppMyQueue);
-		top = queueTop(ppMyQueue);
-		bottom = queueBottom(ppMyQueue);
-	}
-	while(top != bottom);
+	myBinrayTreeNode* pLastNode = NULL;
+	convertNode(pRoot, &pLastNode);
+
+	myBinrayTreeNode* pHeadNode = pLastNode;
+	while(pHeadNode && pHeadNode->left)
+		pHeadNode = pHeadNode->left;
+	return pHeadNode;
 }
+
+
+void convertNode(myBinrayTreeNode* pNode, myBinrayTreeNode** ppLastNode)
+{
+	if(!pNode)return;
+	myBinrayTreeNode* pCurrent = pNode;
+	//get the minumum node
+	if(pCurrent->left)
+		convertNode(pCurrent->left, ppLastNode);
+	//form the two-way linkedlist
+	pCurrent->left = *ppLastNode;
+	if(*ppLastNode)
+		(*ppLastNode)->right = pCurrent;
+	*ppLastNode = pCurrent;
+
+	if(pCurrent->right)
+		convertNode(pCurrent->right, ppLastNode);
+}
+
+
+
+
+
+void bstTo2WayLinkedlist(myBinrayTreeNode* pRoot, myBinrayTreeNode** pLast)
+{
+	if(!pRoot)return;
+	myBinrayTreeNode* pMove = pRoot;
+	myBinrayTreeNode* pLeft = pRoot->left;
+	if(pLeft)
+		bstTo2WayLinkedlist(pLeft, pLast);
+	
+}
+
+

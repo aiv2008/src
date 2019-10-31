@@ -3,8 +3,10 @@
 #include "../binary_tree/binary_tree.h"
 
 
-void binarySearchTreeToTwoWayLinkedList(myBinrayTreeNode* node);
+myBinrayTreeNode* convert(myBinrayTreeNode* pRoot);
 
-void printTwoWayLinkedList(myBinrayTreeNode* pRoot);
+void convertNode(myBinrayTreeNode* pNode, myBinrayTreeNode** ppLastNode);
+
+void bstTo2WayLinkedlist(myBinrayTreeNode* pRoot, myBinrayTreeNode** pLast);
 
 #endif //BINARY_SEARCH_TREE_TO_TWO_WAY_LINKEDLIST
