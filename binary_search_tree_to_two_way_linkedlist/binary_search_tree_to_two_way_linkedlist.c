@@ -39,7 +39,7 @@ void myBstTo2WayLinkedlist(myBinrayTreeNode* pRoot)
 	if(!pRoot)return;
 	myBinrayTreeNode* pMove = NULL;
 	myConvert(pRoot, &pMove);
-	while(pMove)
+	while(pMove && pMove->left)
 		pMove = pMove->left;
 	while(pMove)
 	{
