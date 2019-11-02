@@ -12,7 +12,8 @@ int main(void)
 	int size = 10;
 	int a[100];
 	**/
-	int a[] = {2,7,6,5,1,4,5,6,0,7};
+	//int a[] = {2,7,6,5,1,4,5,6,0,7};
+	int a[] = {4,2,6,1,3,5,7};
 	int size = sizeof(a)/sizeof(a[0]);
 	for(i=0;i<size;i++)
 	{
@@ -25,13 +26,13 @@ int main(void)
 	{
 		binaryTreeAdd(ppRoot, a[i]);
 	}
-	
-	//binarySearchTreeToTwoWayLinkedList(*ppRoot);
-	//printTwoWayLinkedList(*ppRoot);
 
-	myBinrayTreeNode* pNode = convert(*ppRoot);
-	printf("node=%d\n", pNode->data);
+	//myBinrayTreeNode* pNode = convert(*ppRoot);
+	//printf("node=%d\n", pNode->data);
+
+	myBstTo2WayLinkedlist(*ppRoot);
 	
+	/**
 	myBinrayTreeNode* pMove = pNode;
 	while(pMove)
 	{
@@ -43,5 +44,7 @@ int main(void)
 		printf("\n");
 		pMove = pMove->right;
 	}	
+	**/
+
 	return 0;
 }

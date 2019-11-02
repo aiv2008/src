@@ -7,6 +7,8 @@ myBinrayTreeNode* convert(myBinrayTreeNode* pRoot);
 
 void convertNode(myBinrayTreeNode* pNode, myBinrayTreeNode** ppLastNode);
 
-void bstTo2WayLinkedlist(myBinrayTreeNode* pRoot, myBinrayTreeNode** pLast);
+void myBstTo2WayLinkedlist(myBinrayTreeNode* pRoot);
+
+void myConvert(myBinrayTreeNode* pRoot, myBinrayTreeNode** pMoveLast);
 
 #endif //BINARY_SEARCH_TREE_TO_TWO_WAY_LINKEDLIST

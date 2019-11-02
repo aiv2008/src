@@ -34,18 +34,37 @@ void convertNode(myBinrayTreeNode* pNode, myBinrayTreeNode** ppLastNode)
 		convertNode(pCurrent->right, ppLastNode);
 }
 
+void myBstTo2WayLinkedlist(myBinrayTreeNode* pRoot)
+{	
+	if(!pRoot)return;
+	myBinrayTreeNode* pMove = NULL;
+	myConvert(pRoot, &pMove);
+	while(pMove)
+		pMove = pMove->left;
+	while(pMove)
+	{
+		printf("%d", pMove->left? ((myBinrayTreeNode*)(pMove->left))->data : -1);
+		printf("<-->");
+		printf("%d", pMove->data);
+		printf("\n");
+		pMove = pMove->right;
+	}		
+}
 
-
-
-
-void bstTo2WayLinkedlist(myBinrayTreeNode* pRoot, myBinrayTreeNode** pLast)
+void myConvert(myBinrayTreeNode* pRoot, myBinrayTreeNode** pMoveLast)
 {
 	if(!pRoot)return;
-	myBinrayTreeNode* pMove = pRoot;
-	myBinrayTreeNode* pLeft = pRoot->left;
+	myBinrayTreeNode* pCurr = pRoot;
+	myBinrayTreeNode* pLeft = pCurr->left;
+	myBinrayTreeNode* pRight = pCurr->right;
 	if(pLeft)
-		bstTo2WayLinkedlist(pLeft, pLast);
-	
+		myConvert(pLeft, pMoveLast);
+	pCurr->left = *pMoveLast;
+	if(*pMoveLast)
+		(*pMoveLast)->right = pCurr;
+	(*pMoveLast) = pCurr;
+	if(pRight)
+		myConvert(pRight, pMoveLast);
 }
 
 
