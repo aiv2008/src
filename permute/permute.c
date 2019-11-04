@@ -1,18 +1,33 @@
 #include<stdio.h>
 #include<stdlib.h>
-#include"permute.h"
 
-int** permute(int* nums, int numsSize, int* returnSize, int** returnColumnSizes)
+
+void permutation(char* pStr, char* pBegin)
 {
-	if(!nums)return NULL;
-
+	if(*pBegin == '\0')
+			printf("%s\n", pStr);
+	else
+	{
+		for(char* pCh = pBegin; *pCh != '\0'; ++pCh)
+		{
+			printf("---befor---\n");
+			printf("*pCh=%c,*pBegin=%c\n", *pCh, *pBegin);
+			char temp = *pCh;
+			*pCh = *pBegin;
+			*pBegin = temp;
+			printf("*pCh=%c,*pBegin=%c\n", *pCh, *pBegin);
+			permutation(pStr, pBegin + 1);
+			printf("---after---\n");
+			printf("*pCh=%c,*pBegin=%c\n", *pCh, *pBegin);
+			temp = *pCh;
+			*pCh = *pBegin;
+			*pBegin = temp;
+			printf("*pCh=%c,*pBegin=%c\n", *pCh, *pBegin);
+		}
+	}		
 }
 
-void permution(int* nums, int numsSize,int beginIndex, int** result)
-{
-	if(NULL == nums)return;
-					
-}
+
 
 int calN(int n)
 {
@@ -28,7 +43,7 @@ int calN(int n)
 
 int main(void)
 {
-	int n=20;
-	printf("%d\n", calN(n));
+	char pCh[] = "ABC";
+	permutation(pCh, pCh);
 	return 0;
 }
