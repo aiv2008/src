@@ -6,42 +6,35 @@ int** permute(int* nums, int numsSize, int* returnSize, int** returnColumnSizes)
 	if(!nums || !numsSize)return NULL;
 	int size = calN(numsSize);
 	int** result = (int**)calloc(size, sizeof(int*));
-	int** ppMove = (int**)calloc(size, sizeof(int*));
-	permutation(nums, nums, numsSize, result, size, &ppMove);
+	//int** ppMove = (int**)calloc(size, sizeof(int*));
+	permutation(nums, nums, numsSize, result, size, &result);
 	returnSize = &size;
 	return result;	
 }
 
 void permutation(int* pStr, int* pBegin, int size, int** result,int resultSize, int*** pppMove)
 {
-	printf("ggg\n");
 	if(*pppMove - result > resultSize)return;
-	printf("hhh\n");
 	if(pBegin - pStr == size)
 	{
-		printf("aaa\n");
 		if(!*pppMove)printf("*pppMove is null\n");
 		**pppMove  = (int*)calloc(size, sizeof(int));
-		printf("bbb\n");
 		int i;
 		int* pMove = **pppMove;
 		int* p = pStr;
-		printf("ccc\n");
 		for(i=0;i<size;i++)	
 		{
 			*(pMove+i) = *(p+i);
 			printf("%d,",*(pMove+i));
 		}
 		printf("\n");
-		printf("ddd\n");
 		(*pppMove)++;
-		printf("fff\n");
 	}
 	else
 	{
 		int* pMove ;
 		int i;
-		for(pMove = pBegin; pMove - pBegin < size; ++pMove)
+		for(pMove = pBegin; pMove - pStr < size; pMove++)
 		{
 			printf("---before---\n");
 			printf("*pMove=%d,*pBegin=%d\n", *pMove, *pBegin);

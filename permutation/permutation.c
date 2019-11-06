@@ -12,18 +12,18 @@ void permutation(char* pStr, char* pBegin)
 		for(pCh = pBegin; *pCh != '\0'; ++pCh)
 		{
 			printf("---befor---\n");
-			printf("*pCh=%s,*pBegin=%a\n", pCh, pBegin);
+			printf("*pCh=%c,*pBegin=%c\n", *pCh, *pBegin);
 			char temp = *pCh;
 			*pCh = *pBegin;
 			*pBegin = temp;
-			printf("*pCh=%s,*pBegin=%s\n", pCh, pBegin);
+			printf("*pCh=%c,*pBegin=%c\n", *pCh, *pBegin);
 			permutation(pStr, pBegin + 1);
 			printf("---after---\n");
-			printf("*pCh=%s,*pBegin=%s\n", pCh, pBegin);
+			printf("*pCh=%c,*pBegin=%c\n", *pCh, *pBegin);
 			temp = *pCh;
 			*pCh = *pBegin;
 			*pBegin = temp;
-			printf("*pCh=%s,*pBegin=%s\n", pCh, pBegin);
+			printf("*pCh=%c,*pBegin=%c\n", *pCh, *pBegin);
 		}
 	}		
 }
