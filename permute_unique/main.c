@@ -1,15 +1,15 @@
 #include<stdio.h>
 #include<stdlib.h>
-#include"permute.h"
+#include"permute_unique.h"
 
 int main(void)
 {
 
-	int nums[] = {1,2,3};
+	int nums[] = {1,1,2};
 	int numsSize = sizeof(nums)/sizeof(nums[0]);
 	int size = 0;
 	int* columnSizes = NULL;
-	int** result = permute(nums, numsSize, &size, &columnSizes);
+	int** result = permuteUnique(nums, numsSize, &size, &columnSizes);
 	printf("%d\n", size);
 	int i;
 	for(i=0;i<size;i++)
