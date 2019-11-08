@@ -67,16 +67,16 @@ int** permuteUnique(int* nums, int numsSize, int* returnSize, int** returnColumn
 	int* columnSizes = (int*)calloc(size, sizeof(int));
 	int* columnSizesMove = columnSizes;
 	simHash* pSimHash = NULL;
-	permutation(nums, nums, numsSize, &resultMove, &columnSizesMove,&pSimHash );
-	for(i=0;i<size;i++)
-		printf("%d,", *(columnSizes+i));
+	permutation(nums, nums, numsSize, &resultMove, &columnSizesMove );
+	//for(i=0;i<size;i++)
+	//	printf("%d,", *(columnSizes+i));
 	printf("\n");
 	*returnSize = size;
 	*returnColumnSizes = columnSizes;
 	return result;	
 }
 
-void permutation(int* pStr, int* pBegin, int size, int*** pppMove, int** columnSizesMove, simHash** ppSimHash)
+void permutation(int* pStr, int* pBegin, int size, int*** pppMove, int** columnSizesMove)
 {
 	//if(*pppMove - result > resultSize)return;
 	if(pBegin - pStr == size)
@@ -103,20 +103,18 @@ void permutation(int* pStr, int* pBegin, int size, int*** pppMove, int** columnS
 		int* pMove ;
 		for(pMove = pBegin; pMove - pStr < size; ++pMove)
 		{
-			if(simHashGet(ppSimHash, *pMove) > 0)continue;
 			//printf("---before---\n");
 			//printf("*pMove=%d,*pBegin=%d\n", *pMove, *pBegin);
 			int temp = *pMove;
 			*pMove = *pBegin;
 			*pBegin = temp;
 			//printf("*pMove=%d,*pBegin=%d\n", *pMove, *pBegin);
-			permutation(pStr, pBegin+1, size, pppMove, columnSizesMove,ppSimHash);
+			permutation(pStr, pBegin+1, size, pppMove, columnSizesMove);
 			//printf("---after---\n");
 			//printf("*pMove=%d,*pBegin=%d\n", *pMove, *pBegin);
 			temp = *pMove;
 			*pMove = *pBegin;
 			*pBegin = temp;
-			simHashPush(ppSimHash, *pMove, 1);
 			//printf("*pMove=%d,*pBegin=%d\n", *pMove, *pBegin);
 		}
 	}				
