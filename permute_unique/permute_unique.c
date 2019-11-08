@@ -47,14 +47,27 @@ int** permuteUnique(int* nums, int numsSize, int* returnSize, int** returnColumn
 {
 	if(!nums || !numsSize)return NULL;
 	int size = calN(numsSize);
+	simHash* pHash = NULL;
+	int i;
+	for(i=0;i<numsSize;i++)
+	{
+	//	printf("%d,", *(nums+i));
+		simHashPush(&pHash, *(nums+i), simHashGet(&pHash, *(nums+i))+1);
+	}
+	for(i=0;i<pHash->size;i++)
+	{
+		int count = simHashGet(&pHash, i);
+	//	printf("count=%d,", count);
+		if(count>0)
+			size = size/calN(count);
+	}
+	printf("size=%d\n", size);
 	int** result = (int**)calloc(size, sizeof(int*));
 	int** resultMove = result;
 	int* columnSizes = (int*)calloc(size, sizeof(int));
 	int* columnSizesMove = columnSizes;
 	simHash* pSimHash = NULL;
 	permutation(nums, nums, numsSize, &resultMove, &columnSizesMove,&pSimHash );
-	//printf("size=%d\n", size);
-	int i;
 	for(i=0;i<size;i++)
 		printf("%d,", *(columnSizes+i));
 	printf("\n");
