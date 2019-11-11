@@ -3,4 +3,7 @@
 
 void assemble(int* nums, int numsSize);
 
+void assembleRecursion(int* pBegin, int* pEnd, int m, int n,int totalM);
+
+void swap(int* a, int* b);
 #endif
