@@ -5,12 +5,16 @@
 int main(void)
 {
 
-	int nums[] = {1,2,1,2}
+	int nums[] = {-1,2,-1,2,1,-1,2,1};
 	int numsSize = sizeof(nums)/sizeof(nums[0]);
+/**
 	int size = 0;
 	int* columnSizes = NULL;
 	int** result = permuteUnique(nums, numsSize, &size, &columnSizes);
-	printf("%d\n", size);
+**/
+	printf("%d\n", logSearch(nums, 0, numsSize-1, -1));
+
+/**
 	int i;
 	for(i=0;i<size;i++)
 	{
@@ -19,6 +23,6 @@ int main(void)
 			printf("%d,", *(*(result+i)+j));
 		printf("\n");
 	}
-
+**/
 	return 0;
 }
