@@ -2,7 +2,6 @@
 #include <stdlib.h>
 #include<malloc.h>
 #include "rbtree.h"
-#include "node.h"
 #define NIL -50000000
 
 void print_node(NODE* node)
@@ -47,11 +46,8 @@ void print_node(NODE* node)
 
 NODE* node_init(unsigned int data)
 {
-    NODE* node = (NODE*)malloc(sizeof(NODE));
+    NODE* node = (NODE*)calloc(1,sizeof(NODE));
     node->data = data;
-    node->parent = NULL;
-    node->left = NULL;
-    node->right = NULL;
     node->count = 1;
     node->color = 'R';
     return node;
@@ -59,18 +55,10 @@ NODE* node_init(unsigned int data)
 
 NODE* nil_node_init()
 {
-    NODE* root = (NODE*)malloc(sizeof(NODE));
+    NODE* root = (NODE*)calloc(1,sizeof(NODE));
     root->data = NIL;
     root->color = 'B';
-    root->parent = NULL;
-    root->left = NULL;
-    root->right = NULL;
     return root;
-}
-
-NODE* tree_init()
-{
-    return nil_node_init();
 }
 
 NODE* tree_search(NODE* root, unsigned int data)
@@ -88,22 +76,25 @@ NODE* tree_search(NODE* root, unsigned int data)
     return p;
 }
 
-NODE* tree_insert(NODE* root, unsigned int data)
+NODE* tree_insert(NODE** ppRoot, unsigned int data)
 {
+	if(!ppRoot)return NULL;
+	if(!*ppRoot)
+		*ppRoot = nil_node_init();
     //node is the new added node
-    NODE* p = root;
+    NODE* p = *ppRoot;
     if(NIL == p->data)
     {
         NODE* node = node_init(data);
-        node_rela_save(node, root, 'l');
+        node_rela_save(node, *ppRoot, 'l');
         NODE* right_nil_node = nil_node_init();
         node_rela_save(node, right_nil_node, 'r');
         node->color = 'B';
-        root = node;
+        *ppRoot = node;
     }
     else
     {
-        p = tree_search(root, data);
+        p = tree_search(*ppRoot, data);
         if( NIL != p->data )
             p->count++;
         else
@@ -119,7 +110,7 @@ NODE* tree_insert(NODE* root, unsigned int data)
                 p->color = 'B';
         }
     }
-    return p->parent?root:p;
+    return p->parent?*ppRoot:p;
 }
 
 NODE* tree_delete(NODE* root, unsigned int data)
