@@ -10,25 +10,22 @@ int logSearch(int* nums, int beginIndex, int endIndex, int data)
 	return logSearch(nums, beginIndex, index-1, data) || logSearch(nums, index+1, endIndex, data);
 }
 
+
+
+
 int** permuteUnique(int* nums, int numsSize, int* returnSize, int** returnColumnSizes)
 {
-/**
 	if(!nums || !numsSize)return NULL;
 	int size = calN(numsSize);
 	simHash* pHash = NULL;
 	int i;
+
+
+
 	for(i=0;i<numsSize;i++)
 	{
-		simHashPush(&pHash, *(nums+i), simHashGet(&pHash, *(nums+i))+1);
+		
 	}
-	for(i=0;i<pHash->size;i++)
-	{
-		int count = simHashGet(&pHash, i);
-		if(count>0)
-			size = size/calN(count);
-	}
-	free(pHash);
-	pHash = NULL;
 	int** result = (int**)calloc(size, sizeof(int*));
 	int** resultMove = result;
 	int* columnSizes = (int*)calloc(size, sizeof(int));
@@ -37,7 +34,6 @@ int** permuteUnique(int* nums, int numsSize, int* returnSize, int** returnColumn
 	*returnSize = size;
 	*returnColumnSizes = columnSizes;
 	return result;	
-**/
 }
 
 void permutation(int* pStr, int* pBegin, int size, int*** pppMove, int** columnSizesMove)
