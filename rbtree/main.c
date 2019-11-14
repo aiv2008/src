@@ -12,7 +12,7 @@ int main(void)
 //    printf("unsigned int×îÐ¡Öµ:%u\n", i );
 
     srand(time(NULL));
-    size_t size = 100000;
+    size_t size = 10;
     int a[size];
     size_t rand_size = size;
 
@@ -26,9 +26,9 @@ int main(void)
 //        printf("%d,",a[i]);
     }
 
-    NODE* root = tree_init();
+    NODE* root = NULL;
     for(int i=0;i<size;i++)
-        root = tree_insert(root, a[i]);
+        root = tree_insert(&root, a[i]);
     printf("\nroot is :%d\n",root->data);
 
 //    successor(root);

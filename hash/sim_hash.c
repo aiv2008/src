@@ -3,7 +3,7 @@
 #include"sim_hash.h"
 
 
-void simHashPush(simHash** ppsimHash, int key, int value)
+void simHashPush(simHash** ppsimHash, char key, int value)
 {
     if(!ppsimHash)
     {
@@ -16,10 +16,10 @@ void simHashPush(simHash** ppsimHash, int key, int value)
         (*ppsimHash)->size = 256;
         (*ppsimHash)->hash_array = (int*)calloc((*ppsimHash)->size, sizeof(int));
     }
-    *((*ppsimHash)->hash_array + key ) = value;
+    *((*ppsimHash)->hash_array + (int)key ) = value;
 }
 
-int simHashGet(simHash** ppsimHash, int key)
+int simHashGet(simHash** ppsimHash, char key)
 {
     if(simHashIsNullOrEmpty(ppsimHash)) return 0;
     return *((*ppsimHash)->hash_array + (int)key );

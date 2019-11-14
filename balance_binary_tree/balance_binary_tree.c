@@ -43,17 +43,21 @@ NODE* tree_balanced(NODE* node)
         NODE* left = p->left;
         NODE* right = p->right;
         p->depth =(!left&&!right)?0:( max(left?left->depth:0,right?right->depth:0)+1);
+//        p->balanced_factor = (left?left->depth:-1)-(right?right->depth:-1);
         balanced_factor = (left?left->depth:-1)-(right?right->depth:-1);
+//        if( BALANCED_UPPER_BOUND == p->balanced_factor || BALANCED_LOWER_BOUND == p->balanced_factor)break;
         if( BALANCED_UPPER_BOUND == balanced_factor || BALANCED_LOWER_BOUND == balanced_factor)break;
             p = p->parent;
     }
     if(p)
     {
+//        if(BALANCED_UPPER_BOUND == p->balanced_factor)
         if(BALANCED_UPPER_BOUND == balanced_factor)
         {
             NODE* left = p->left;
             NODE* left_left = left->left;
             NODE* left_right = left->right;
+//            if( BALANCED_UPPER_BOUND_MID == left->balanced_factor )
             signed left_balanced_factor = (left_left?left_left->depth:-1)-(left_right?left_right->depth:-1);
             if( BALANCED_UPPER_BOUND_MID == left_balanced_factor )
                 p = rotate_right(left);
@@ -63,6 +67,7 @@ NODE* tree_balanced(NODE* node)
                 p = rotate_right(p);
             }
         }
+//        else if(BALANCED_LOWER_BOUND == p->balanced_factor)
         else if(BALANCED_LOWER_BOUND == balanced_factor)
         {
             NODE* right = p->right;
@@ -88,8 +93,44 @@ NODE* balanced_tree_add(NODE* root, unsigned int data)
     NODE* p = NULL;
     if(ZERO == new_node->count)//means the node is a new added node
     {
+
+//        new_node->balanced_factor = ZERO;
         new_node->count++;
         p = new_node->parent;
+//        while(p)
+//        {
+//            NODE* left = p->left;
+//            NODE* right = p->right;
+//            p->depth =(!left&&!right)?0:( max(left?left->depth:0,right?right->depth:0)+1);
+//            p->balanced_factor = (left?left->depth:-1)-(right?right->depth:-1);
+//            if( BALANCED_UPPER_BOUND == p->balanced_factor || BALANCED_LOWER_BOUND == p->balanced_factor)break;
+//            p = p->parent;
+//        }
+//        if(p)
+//        {
+//            if(BALANCED_UPPER_BOUND == p->balanced_factor)
+//            {
+//                NODE* left = p->left;
+//                if( BALANCED_UPPER_BOUND_MID == left->balanced_factor )
+//                    p = rotate_right(left);
+//                else
+//                {
+//                    p = rotate_left(left->right);
+//                    p = rotate_right(p);
+//                }
+//            }
+//            else if(BALANCED_LOWER_BOUND == p->balanced_factor)
+//            {
+//                NODE* right = p->right;
+//                if( BALANCED_UPPER_BOUND_MID == right->balanced_factor )
+//                {
+//                    p = rotate_right(right->left);
+//                    p = rotate_left(p);
+//                }
+//                else
+//                    p = rotate_left(right);
+//            }
+//        }
         p = tree_balanced(p);
     }
     else

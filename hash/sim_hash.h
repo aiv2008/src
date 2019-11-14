@@ -1,7 +1,7 @@
 #ifndef SIM_HASH_H_INCLUDED
 #define SIM_HASH_H_INCLUDED
 
-#define BOOL int
+#define BOOL char
 #define TRUE 1
 #define FALSE 0
 
@@ -11,9 +11,9 @@ typedef struct
     int size;
 } simHash;
 
-void simHashPush(simHash** ppsimHash, int key, int value);
+void simHashPush(simHash** ppsimHash, char key, int value);
 
-int simHashGet(simHash** ppsimHash, int key);
+int simHashGet(simHash** ppsimHash, char key);
 
 int simHashGetSize(simHash** ppsimHash);
 
