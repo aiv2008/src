@@ -2,22 +2,6 @@
 #include<stdlib.h>
 #include<time.h>
 #include<math.h>
-<<<<<<< HEAD
-
-int allDomainHash(int key, int n, int** ppA, int** ppB,int max, int** ppPrime)
-{
-	while(1)
-	{
-		
-	}		
-}
-
-int main(void)
-{
-	int n = 17;
-	printf("%d\n", (int)sqrt(1.0*n));
-	return 0;	
-=======
 #include"all_domain_hash.h"
 
 /**
@@ -62,11 +46,39 @@ void adHashPush(adHash** ppAdHash, int key, int value)
 }
 **/
 
+void getMaxMin(int* nums, int numsSize, int* max, int* min)
+{
+	if(!nums||!numsSize)return;
+	int i;
+	if(numsSize%2 == 0)
+	{
+		*max = *nums <= *(nums+1) ? *(nums+1) : *nums;
+		*min = *max == *nums ? *(nums+1) : *nums;
+		i = 2;
+	}
+	else
+	{
+		*max = *nums;
+		*min = *nums;
+		i = 1;
+	}
+	for(;i<numsSize;i+=2)
+	{		
+		int maxLocal = *nums <= *(nums+i+1) ? *(nums+i+1) : *(nums+i);
+		int minLocal = maxLocal == *(nums+i) ? *(nums+i+1) : *(nums+i);
+		*max = *max < maxLocal ? maxLocal : *max;
+		*min = *min > minLocal ? minLocal : *min;
+	}	
+}
+
 int main(void)
 {
-	int n = -1;
-	printf("%d\n"(unsigned int)n);
+	int a[] = {1};
+	int size = sizeof(a)/sizeof(a[0]);
+	int max = 0;
+	int min = 0;
+	getMaxMin(a, size, &max, &min);
+	printf("max=%d, min=%d\n", max, min);
 	return 0;
 
->>>>>>> c41eff4eadc04a2c65be13926a9025a73be780b7
 }

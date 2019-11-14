@@ -1,78 +1,185 @@
 #include<stdio.h>
 #include<stdlib.h>
 
-#define BOOL int
-#define TRUE 1
-#define FALSE 0
-
 typedef struct
 {
-    int* hash_array;
-    int size;
-} simHash;
+	int data;
+	struct NODE* parent;
+	struct NODE* left;
+	struct NODE* right;
+	char color;
+	int count;
+}NODE;
 
-void simHashPush(simHash** ppsimHash, int key, int value)
+NODE* node_init(unsigned int data)
 {
-    if(!ppsimHash)
+    NODE* node = (NODE*)calloc(1,sizeof(NODE));
+    node->data = data;
+    node->count = 1;
+    node->color = 'R';
+    return node;
+}
+
+NODE* nil_node_init()
+{
+    NODE* root = (NODE*)calloc(1,sizeof(NODE));
+    root->data = NIL;
+    root->color = 'B';
+    return root;
+}
+
+NODE* tree_search(NODE* root, unsigned int data)
+{
+	if(root == NULL)return NULL;
+    NODE* p = root;
+    while( NIL != p->data)
     {
-        printf("hash pointer is null\n");
-        return;
+        if(data == p->data)
+            break;
+        else if(p->data < data)
+            p = p->right;
+        else
+            p = p->left;
     }
-    if(!*ppsimHash)
+    return p;
+}
+
+NODE* tree_insert(NODE** ppRoot, unsigned int data)
+{
+	if(!ppRoot)return NULL;
+	if(!*ppRoot)
+		*ppRoot = nil_node_init();
+    //node is the new added node
+    NODE* p = *ppRoot;
+    if(NIL == p->data)
     {
-        *ppsimHash = (simHash*)calloc(1, sizeof(simHash));
-        (*ppsimHash)->size = 256;
-        (*ppsimHash)->hash_array = (int*)calloc((*ppsimHash)->size, sizeof(int));
+        NODE* node = node_init(data);
+        node_rela_save(node, *ppRoot, 'l');
+        NODE* right_nil_node = nil_node_init();
+        node_rela_save(node, right_nil_node, 'r');
+        node->color = 'B';
+        *ppRoot = node;
     }
-    *((*ppsimHash)->hash_array + key ) = value;
+    else
+    {
+        p = tree_search(*ppRoot, data);
+        if( NIL != p->data )
+            p->count++;
+        else
+        {
+            NODE* node = node_init(data);
+            NODE* parent = p->parent;
+            node_rela_save(parent, node, node->data < parent->data?'l':'r');
+            node_rela_save(node, p, 'l');
+            NODE* right_nil_node = nil_node_init();
+            node_rela_save(node, right_nil_node, 'r');
+            p = tree_rb_fixup(node);
+            if(!p->parent && 'R' == p->color)//if root is red, then rotate
+                p->color = 'B';
+        }
+    }
+    return p->parent?*ppRoot:p;
 }
 
-int simHashGet(simHash** ppsimHash, int key)
+NODE* rotate_left(NODE* root)
 {
-    if(simHashIsNullOrEmpty(ppsimHash)) return 0;
-    return *((*ppsimHash)->hash_array + key );
+    NODE* old_root = root->parent;
+    NODE* parent = old_root->parent;
+    NODE* left = root->left;
+    NODE* right = root->right;
+    if( NIL != left->data || NIL != right->data)
+    {
+        root->color = 'B';
+        old_root->color = 'R';
+    }
+    node_rela_save(parent, root, parent?(root->data < parent->data?'l':'r') : ' ');
+    node_rela_save(root, old_root, 'l');
+    node_rela_save(old_root, left, 'r');
+    return root;
 }
 
-BOOL simHashIsNull(simHash** ppsimHash)
+NODE* rotate_right(NODE* root)
 {
-    return !ppsimHash || !*ppsimHash ;
+    NODE* old_root = root->parent;
+    NODE* parent = old_root->parent;
+    NODE* left = root->left;
+    NODE* right = root->right;
+    if( NIL != left->data || NIL != right->data)
+    {
+        root->color = 'B';
+        old_root->color = 'R';
+    }
+    node_rela_save(parent, root, parent?(root->data < parent->data?'l':'r') : ' ');
+    node_rela_save(root, old_root, 'r');
+    node_rela_save(old_root, right, 'l');
+    return root;
 }
 
-BOOL simHashIsNullOrEmpty(simHash** ppsimHash)
+void node_rela_save(NODE* parent, NODE* child, unsigned char lof)
 {
-    return !ppsimHash || !*ppsimHash || !(*ppsimHash)->size;
+    child->parent = parent;
+    if(parent)
+        if('l' == lof)
+            parent->left = child;
+        else if('r' == lof)
+            parent->right = child;
 }
 
-
+NODE* tree_rb_fixup(NODE* node)
+{
+    NODE* p = node;
+    NODE* parent = node->parent;
+    while(parent)
+    {
+        if(!('R' == p->color && parent->color == p->color))
+            break;
+        NODE* parent_parent = parent->parent;
+        NODE* uncle = NULL;
+        if(parent == parent_parent->left)
+            uncle = parent_parent->right;
+        else
+            uncle = parent_parent->left;
+        if('R' == uncle->color)
+        {
+            parent->color = 'B';
+            parent_parent->color = 'R';
+            uncle->color = 'B';
+            p = parent_parent;
+            parent = parent_parent->parent;
+        }
+        else
+        {
+            if(parent == parent_parent->left)
+                //if parent is pp`s left child node, then rotate right
+                p = p == parent->left?rotate_right(parent):rotate_right(rotate_left(p));
+            else
+                //if parent is pp`s right child node, then rotate left
+                p = p == parent->left?rotate_left(rotate_right(p)):rotate_left(parent);
+            parent = p->parent;
+        }
+    }
+    return p;
+}
 
 
 int** permuteUnique(int* nums, int numsSize, int* returnSize, int** returnColumnSizes)
 {
 	if(!nums || !numsSize)return NULL;
 	int size = calN(numsSize);
-	simHash* pHash = NULL;
+
+	NODE* pRoot = NULL;
+
 	int i;
 
-
-
-	for(i=0;i<numsSize;i++)
+	for(i=0;i<size;i++)
 	{
-<<<<<<< HEAD
-		
-	}
-=======
-	//	printf("%d,", *(nums+i));
-		simHashPush(&pHash, *(nums+i), simHashGet(&pHash, *(nums+i))+1);
-	}
-	for(i=0;i<pHash->size;i++)
-	{
+		NODE* node = tree_search(pRoot, i);
+		if(node == NULL)
 		int count = simHashGet(&pHash, i);
-	//	printf("count=%d,", count);
 		if(count>0)
 			size = size/calN(count);
 	}
 	printf("size=%d\n", size);
->>>>>>> c41eff4eadc04a2c65be13926a9025a73be780b7
 	int** result = (int**)calloc(size, sizeof(int*));
 	int** resultMove = result;
 	int* columnSizes = (int*)calloc(size, sizeof(int));

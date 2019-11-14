@@ -1,9 +1,6 @@
 #ifndef ALL_DOMAIN_HASH_H_INCLUDED
 #define ALL_DOMAIN_HASH_H_INCLUDED
 
-<<<<<<< HEAD
-void allDomainHash(int key, int n, int** ppA, int** ppB, int** ppPrime);
-=======
 typedef struct
 {
 	int a;
@@ -19,7 +16,8 @@ typedef struct
 	int size;
 } adHash;
 
-int adHash(adHashFunc** ppAdHashFunc, int key, int m);
->>>>>>> c41eff4eadc04a2c65be13926a9025a73be780b7
+int adPush(adHashFunc** ppAdHashFunc, int key, int m);
+
+void getMaxMin(int* nums, int numsSize, int* max, int* min);
 
 #endif
