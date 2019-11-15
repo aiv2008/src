@@ -63,6 +63,7 @@ NODE* nil_node_init()
 
 NODE* tree_search(NODE* root, unsigned int data)
 {
+	if(!root)return NULL;
     NODE* p = root;
     while( NIL != p->data)
     {

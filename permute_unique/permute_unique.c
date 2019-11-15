@@ -1,6 +1,6 @@
 #include<stdio.h>
 #include<stdlib.h>
-
+#define NIL -50000000
 typedef struct
 {
 	int data;
@@ -28,11 +28,79 @@ NODE* nil_node_init()
     return root;
 }
 
+NODE* rotate_left(NODE* root)
+{
+    NODE* old_root = root->parent;
+    NODE* parent = old_root->parent;
+    NODE* left = root->left;
+    NODE* right = root->right;
+    if( NIL != left->data || NIL != right->data)
+    {
+        root->color = 'B';
+        old_root->color = 'R';
+    }
+    node_rela_save(parent, root, parent?(root->data < parent->data?'l':'r') : ' ');
+    node_rela_save(root, old_root, 'l');
+    node_rela_save(old_root, left, 'r');
+    return root;
+}
+NODE* rotate_right(NODE* root)
+{
+    NODE* old_root = root->parent;
+    NODE* parent = old_root->parent;
+    NODE* left = root->left;
+    NODE* right = root->right;
+    if( NIL != left->data || NIL != right->data)
+    {
+        root->color = 'B';
+        old_root->color = 'R';
+    }
+    node_rela_save(parent, root, parent?(root->data < parent->data?'l':'r') : ' ');
+    node_rela_save(root, old_root, 'r');
+    node_rela_save(old_root, right, 'l');
+    return root;
+}
+NODE* tree_rb_fixup(NODE* node)
+{
+    NODE* p = node;
+    NODE* parent = node->parent;
+    while(parent)
+    {
+        if(!('R' == p->color && parent->color == p->color))
+            break;
+        NODE* parent_parent = parent->parent;
+        NODE* uncle = NULL;
+        if(parent == parent_parent->left)
+            uncle = parent_parent->right;
+        else
+            uncle = parent_parent->left;
+        if('R' == uncle->color)
+        {
+            parent->color = 'B';
+            parent_parent->color = 'R';
+            uncle->color = 'B';
+            p = parent_parent;
+            parent = parent_parent->parent;
+        }
+        else
+        {
+            if(parent == parent_parent->left)
+                //if parent is pp`s left child node, then rotate right
+                p = p == parent->left?rotate_right(parent):rotate_right(rotate_left(p));
+            else
+                //if parent is pp`s right child node, then rotate left
+                p = p == parent->left?rotate_left(rotate_right(p)):rotate_left(parent);
+            parent = p->parent;
+        }
+    }
+    return p;
+}
+
 NODE* tree_search(NODE* root, unsigned int data)
 {
-	if(root == NULL)return NULL;
+	if(!root)return NULL;
     NODE* p = root;
-    while( NIL != p->data)
+   	while( NIL != p->data)
     {
         if(data == p->data)
             break;
@@ -81,40 +149,6 @@ NODE* tree_insert(NODE** ppRoot, unsigned int data)
     return p->parent?*ppRoot:p;
 }
 
-NODE* rotate_left(NODE* root)
-{
-    NODE* old_root = root->parent;
-    NODE* parent = old_root->parent;
-    NODE* left = root->left;
-    NODE* right = root->right;
-    if( NIL != left->data || NIL != right->data)
-    {
-        root->color = 'B';
-        old_root->color = 'R';
-    }
-    node_rela_save(parent, root, parent?(root->data < parent->data?'l':'r') : ' ');
-    node_rela_save(root, old_root, 'l');
-    node_rela_save(old_root, left, 'r');
-    return root;
-}
-
-NODE* rotate_right(NODE* root)
-{
-    NODE* old_root = root->parent;
-    NODE* parent = old_root->parent;
-    NODE* left = root->left;
-    NODE* right = root->right;
-    if( NIL != left->data || NIL != right->data)
-    {
-        root->color = 'B';
-        old_root->color = 'R';
-    }
-    node_rela_save(parent, root, parent?(root->data < parent->data?'l':'r') : ' ');
-    node_rela_save(root, old_root, 'r');
-    node_rela_save(old_root, right, 'l');
-    return root;
-}
-
 void node_rela_save(NODE* parent, NODE* child, unsigned char lof)
 {
     child->parent = parent;
@@ -125,66 +159,34 @@ void node_rela_save(NODE* parent, NODE* child, unsigned char lof)
             parent->right = child;
 }
 
-NODE* tree_rb_fixup(NODE* node)
+void calUniqueSize(NODE* pRoot, int* pSize)
 {
-    NODE* p = node;
-    NODE* parent = node->parent;
-    while(parent)
-    {
-        if(!('R' == p->color && parent->color == p->color))
-            break;
-        NODE* parent_parent = parent->parent;
-        NODE* uncle = NULL;
-        if(parent == parent_parent->left)
-            uncle = parent_parent->right;
-        else
-            uncle = parent_parent->left;
-        if('R' == uncle->color)
-        {
-            parent->color = 'B';
-            parent_parent->color = 'R';
-            uncle->color = 'B';
-            p = parent_parent;
-            parent = parent_parent->parent;
-        }
-        else
-        {
-            if(parent == parent_parent->left)
-                //if parent is pp`s left child node, then rotate right
-                p = p == parent->left?rotate_right(parent):rotate_right(rotate_left(p));
-            else
-                //if parent is pp`s right child node, then rotate left
-                p = p == parent->left?rotate_left(rotate_right(p)):rotate_left(parent);
-            parent = p->parent;
-        }
-    }
-    return p;
+	if(!pSize || !*pSize)return;
+	if(NIL != pRoot->data)
+	{
+		int cn = calN(pRoot->count);
+		*pSize = (*pSize) / cn;
+		calUniqueSize(pRoot->left, pSize);
+		calUniqueSize(pRoot->right, pSize);
+	}	
 }
-
 
 int** permuteUnique(int* nums, int numsSize, int* returnSize, int** returnColumnSizes)
 {
 	if(!nums || !numsSize)return NULL;
 	int size = calN(numsSize);
-
 	NODE* pRoot = NULL;
-
 	int i;
-
-	for(i=0;i<size;i++)
-	{
-		NODE* node = tree_search(pRoot, i);
-		if(node == NULL)
-		int count = simHashGet(&pHash, i);
-		if(count>0)
-			size = size/calN(count);
-	}
+	for(i=0;i<numsSize;i++)
+		pRoot = tree_insert(&pRoot, *(nums+i));
+	calUniqueSize(pRoot, &size);
+	free(pRoot);
+	pRoot = NULL;
 	printf("size=%d\n", size);
 	int** result = (int**)calloc(size, sizeof(int*));
 	int** resultMove = result;
 	int* columnSizes = (int*)calloc(size, sizeof(int));
 	int* columnSizesMove = columnSizes;
-	simHash* pSimHash = NULL;
 	permutation(nums, nums, numsSize, &resultMove, &columnSizesMove );
 	//for(i=0;i<size;i++)
 	//	printf("%d,", *(columnSizes+i));
@@ -219,22 +221,30 @@ void permutation(int* pStr, int* pBegin, int size, int*** pppMove, int** columnS
 	else
 	{
 		int* pMove ;
+		NODE* pRoot = NULL;
 		for(pMove = pBegin; pMove - pStr < size; ++pMove)
 		{
-			//printf("---before---\n");
-			//printf("*pMove=%d,*pBegin=%d\n", *pMove, *pBegin);
-			int temp = *pMove;
-			*pMove = *pBegin;
-			*pBegin = temp;
-			//printf("*pMove=%d,*pBegin=%d\n", *pMove, *pBegin);
-			permutation(pStr, pBegin+1, size, pppMove, columnSizesMove);
-			//printf("---after---\n");
-			//printf("*pMove=%d,*pBegin=%d\n", *pMove, *pBegin);
-			temp = *pMove;
-			*pMove = *pBegin;
-			*pBegin = temp;
-			//printf("*pMove=%d,*pBegin=%d\n", *pMove, *pBegin);
+			NODE* node = tree_search(pRoot, *pMove);
+			if(!node || node->data == NIL)
+			{
+					pRoot = tree_insert(&pRoot, *pMove);
+					//printf("---before---\n");
+					//printf("*pMove=%d,*pBegin=%d\n", *pMove, *pBegin);
+					int temp = *pMove;
+					*pMove = *pBegin;
+					*pBegin = temp;
+					//printf("*pMove=%d,*pBegin=%d\n", *pMove, *pBegin);
+					permutation(pStr, pBegin+1, size, pppMove, columnSizesMove);
+					//printf("---after---\n");
+					//printf("*pMove=%d,*pBegin=%d\n", *pMove, *pBegin);
+					temp = *pMove;
+					*pMove = *pBegin;
+					*pBegin = temp;
+					//printf("*pMove=%d,*pBegin=%d\n", *pMove, *pBegin);
+			}
 		}
+		free(pRoot);
+		pRoot = NULL;
 	}				
 }
 
