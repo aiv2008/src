@@ -5,7 +5,7 @@
 int main(void)
 {
 
-	int nums[] = {2,2,1,1};
+	int nums[] = {1,2,2};
 	int numsSize = sizeof(nums)/sizeof(nums[0]);
 	int size = 0;
 	int* columnSizes = NULL;

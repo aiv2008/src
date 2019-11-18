@@ -2,93 +2,106 @@
 #include<stdlib.h>
 #include<time.h>
 
-void swap(int* a, int* b)
+#define HASH_SIZE 17
+
+typedef struct
 {
-	int temp = *a;
-	*a = *b;
-	*b = temp;
+	int val;
+	struct linkedList *pNext;
+} linkedList;
+
+typedef struct
+{
+	struct linkedList **key;
+	struct linkedList **val;
+	int size;
+} linkedListMap;
+
+int h(int key)
+{
+	return (key+256) % HASH_SIZE;
 }
 
-int myPartition(int* array, int start, int end)
+void push(linkedListMap **ppLinkedListMap,  int key, int val)
 {
-	if(array == '\0')
+	if(!ppLinkedListMap)return;
+	if(!*ppLinkedListMap)
 	{
-		printf("array cannot be null\n");
-		return -1;
+		*ppLinkedListMap = (linkedListMap*)calloc(1, sizeof(linkedListMap));
+		(*ppLinkedListMap)->size = HASH_SIZE;	
+		(*ppLinkedListMap)->key = (linkedList**)calloc(HASH_SIZE, sizeof(linkedList*));
+		(*ppLinkedListMap)->val = (linkedList**)calloc(HASH_SIZE, sizeof(linkedList*));
 	}
-	if(start < 0)
+	int hashCode = h(key);
+	linkedList* pKeyIndex = *((*ppLinkedListMap)->key + hashCode);
+	linkedList* pValIndex = *((*ppLinkedListMap)->val + hashCode);
+	if(!pKeyIndex)
 	{
-		printf("index must begin with 1\n");
-		return -1;
+		pKeyIndex = (linkedList*)calloc(1, sizeof(linkedList));
+		pValIndex = (linkedList*)calloc(1, sizeof(linkedList));
+		pKeyIndex->val = key;
+		pValIndex->val = val;
+		*((*ppLinkedListMap)->key + hashCode) = pKeyIndex;
+		*((*ppLinkedListMap)->val + hashCode) = pValIndex;
 	}
-	int i = start - 1;
-	int j = start;
-	if(j < end)
+	else
 	{
-		while(j < end)
+		linkedList* pKeyMove = pKeyIndex;
+		linkedList* pValMove = pValIndex;
+		while(pKeyMove->pNext)
 		{
-			if(*(array+j) <= *(array+end))
-			{
-				i++;
-				if(i != j)
-				{
-					swap(array+j, array+i);
-				}
-			}
-			j++;
+			pKeyMove = pKeyMove->pNext;
+			pValMove = pValMove->pNext;
 		}
-		if(i+1 != end)
-		{
-			swap(array+i+1, array+end);
-			return i+1;
-		}
-		else
-		{
-			return end;
-		}
-
-	}
-	return -1;
+		linkedList *pKeyNode = (linkedList*)calloc(1, sizeof(linkedList));	
+		linkedList *pValNode = (linkedList*)calloc(1, sizeof(linkedList));
+		pKeyNode->val = key;
+		pValNode->val = val;
+		pKeyMove->pNext = pKeyNode;
+		pValMove->pNext = pValNode;
+		pKeyMove = NULL;
+		pValMove = NULL;
+		pKeyNode = NULL;
+		pValNode = NULL;
+	}	
 }
 
-int myRandomizedPartition(int* array, int start, int end)
+int get(linkedListMap *pLinkedListMap, int key)
 {
-	if(start < 0)
+	if(!pLinkedListMap)
 	{
-		printf("quicksort myRandomizedPartition: index must begin with 1\n");
+		printf("map is null\n");
 		return -1;
 	}
-	if(start > end)
+	int hashCode = h(key);
+	//printf("hashCode=%d\n", hashCode);
+	if(!pLinkedListMap->key)
 	{
-		printf("quicksort myRandomizedPartition: start must smaller than end\n");
+		printf("plinkedlistkey is null\n");
+		return;
+	}
+	linkedList **ppKeyIndex = pLinkedListMap->key + hashCode;
+	if(!ppKeyIndex)
+	{
+		printf("key is null\n");
 		return -1;
 	}
-	srand(time(0));
-    	int randIndex = start + rand()%(end - start);
-	if(randIndex != end)swap(array+randIndex, array+end);
-	return myPartition(array, start, end);
-}
-
-void myRandomizedQuicksort(int* array, int start, int end)
-{
-	if(array == '\0')
+	
+	linkedList *pKeyMove = (*ppKeyIndex);	
+	linkedList *pValMove = *(pLinkedListMap->val + hashCode);
+	int val = -1;
+	while(pKeyMove)
 	{
-		printf("quicksort myRandomizedQuicksort: array cannot be null\n");
-		return ;
-	}
-	if(start < end)
-	{
-		int partitionIndex = myRandomizedPartition(array, start, end);
-		if(partitionIndex < 0)
+		if(pKeyMove->val == key)
 		{
-		    printf("quicksort myRandomizedQuicksort: partitionIndex must larger than 0\n");
-		    return ;
+			val = pValMove->val;		
+			break;
 		}
-		myRandomizedQuicksort(array, start, partitionIndex-1);
-		myRandomizedQuicksort(array, partitionIndex+1, end);
+		pKeyMove = pKeyMove->pNext;
+		pValMove = pValMove->pNext;
 	}
+	return val;
 }
-
 
 int** permuteUnique(int* nums, int numsSize, int* returnSize, int** returnColumnSizes)
 {
@@ -143,9 +156,7 @@ void permutation(int* pStr, int* pBegin, int size, int*** pppMove, int** columnS
 		int* p = pStr;
 		for(i=0;i<size;i++)	
 		{
-			//*(pMove+i) = *(p+i);
 			*(**pppMove+i) = *(p+i);
-			//printf("%d,",*(pMove+i));
 			printf("%d,", *(**pppMove+i));
 		}
 		**columnSizesMove = size;
@@ -156,26 +167,24 @@ void permutation(int* pStr, int* pBegin, int size, int*** pppMove, int** columnS
 	else
 	{
 		int* pMove ;
-		int i=0;
-		for(pMove = pBegin; pMove - pStr < size; ++pMove, i++)
+		linkedListMap *pLinkedListMap = NULL;
+		for(pMove = pBegin; pMove - pStr < size; ++pMove)
 		{
-			if(i == 0  || *pMove != *pBegin)
+			if(get(pLinkedListMap, *pMove) == -1)
 			{
-					//printf("---before---\n");
-					//printf("*pMove=%d,*pBegin=%d\n", *pMove, *pBegin);
-					int temp = *pMove;
-					*pMove = *pBegin;
-					*pBegin = temp;
-					//printf("*pMove=%d,*pBegin=%d\n", *pMove, *pBegin);
-					permutation(pStr, pBegin+1, size, pppMove, columnSizesMove);
-					//printf("---after---\n");
-					//printf("*pMove=%d,*pBegin=%d\n", *pMove, *pBegin);
-					temp = *pMove;
-					*pMove = *pBegin;
-					*pBegin = temp;
-					//printf("*pMove=%d,*pBegin=%d\n", *pMove, *pBegin);
+				push(&pLinkedListMap, *pMove, *pMove);
+				printf("enter\n");
+				int temp = *pMove;
+				*pMove = *pBegin;
+				*pBegin = temp;
+				permutation(pStr, pBegin+1, size, pppMove, columnSizesMove);
+				temp = *pMove;
+				*pMove = *pBegin;
+				*pBegin = temp;
 			}
 		}
+		free(pLinkedListMap);
+		pLinkedListMap = NULL;
 	}				
 }
 
