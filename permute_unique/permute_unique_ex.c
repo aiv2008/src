@@ -7,15 +7,44 @@
 typedef struct
 {
 	int val;
-	struct linkedList *pNext;
+	struct linkedListNode *pNext;
+} linkedListNode;
+
+typedef struct
+{
+	linkedListNode *pHeader;
+	int size;
 } linkedList;
 
 typedef struct
 {
-	struct linkedList **key;
-	struct linkedList **val;
+	struct linkedListNode **key;
+	struct linkedListNode **val;
 	int size;
 } linkedListMap;
+
+void add(linkedList **ppLinkedList, int val)
+{
+	if(!ppLinkedList)return;
+	if(!*ppLinkedList)
+		*ppLinkedList = (linkedList*)calloc(1, sizeof(linkedList));	
+	linkedListNode *pCur = NULL;
+	if(!(*ppLinkedList)->pHeader)
+	{
+		(*ppLinkedList)->pHeader = (linkedListNode*)calloc(1, sizeof(linkedListNode));
+		pCur = (*ppLinkedList)->pHeader;
+	}
+	else
+	{
+		linkedListNode *pMove = (*ppLinkedList)->pHeader;
+		while(pMove->pNext)
+			pMove = pMove->pNext;
+		pCur = (linkedListNode*)calloc(1, sizeof(linkedListNode));
+		pMove->pNext = pCur;
+	}	
+	pCur->val = val;
+	(*ppLinkedList)->size = (*ppLinkedList)->size + 1;
+}
 
 int h(int key)
 {
@@ -29,16 +58,16 @@ void push(linkedListMap **ppLinkedListMap,  int key, int val)
 	{
 		*ppLinkedListMap = (linkedListMap*)calloc(1, sizeof(linkedListMap));
 		(*ppLinkedListMap)->size = HASH_SIZE;	
-		(*ppLinkedListMap)->key = (linkedList**)calloc(HASH_SIZE, sizeof(linkedList*));
-		(*ppLinkedListMap)->val = (linkedList**)calloc(HASH_SIZE, sizeof(linkedList*));
+		(*ppLinkedListMap)->key = (linkedListNode**)calloc(HASH_SIZE, sizeof(linkedListNode*));
+		(*ppLinkedListMap)->val = (linkedListNode**)calloc(HASH_SIZE, sizeof(linkedListNode*));
 	}
 	int hashCode = h(key);
-	linkedList* pKeyIndex = *((*ppLinkedListMap)->key + hashCode);
-	linkedList* pValIndex = *((*ppLinkedListMap)->val + hashCode);
+	linkedListNode* pKeyIndex = *((*ppLinkedListMap)->key + hashCode);
+	linkedListNode* pValIndex = *((*ppLinkedListMap)->val + hashCode);
 	if(!pKeyIndex)
 	{
-		pKeyIndex = (linkedList*)calloc(1, sizeof(linkedList));
-		pValIndex = (linkedList*)calloc(1, sizeof(linkedList));
+		pKeyIndex = (linkedListNode*)calloc(1, sizeof(linkedListNode));
+		pValIndex = (linkedListNode*)calloc(1, sizeof(linkedListNode));
 		pKeyIndex->val = key;
 		pValIndex->val = val;
 		*((*ppLinkedListMap)->key + hashCode) = pKeyIndex;
@@ -46,15 +75,15 @@ void push(linkedListMap **ppLinkedListMap,  int key, int val)
 	}
 	else
 	{
-		linkedList* pKeyMove = pKeyIndex;
-		linkedList* pValMove = pValIndex;
+		linkedListNode* pKeyMove = pKeyIndex;
+		linkedListNode* pValMove = pValIndex;
 		while(pKeyMove->pNext)
 		{
 			pKeyMove = pKeyMove->pNext;
 			pValMove = pValMove->pNext;
 		}
-		linkedList *pKeyNode = (linkedList*)calloc(1, sizeof(linkedList));	
-		linkedList *pValNode = (linkedList*)calloc(1, sizeof(linkedList));
+		linkedListNode *pKeyNode = (linkedListNode*)calloc(1, sizeof(linkedListNode));	
+		linkedListNode *pValNode = (linkedListNode*)calloc(1, sizeof(linkedListNode));
 		pKeyNode->val = key;
 		pValNode->val = val;
 		pKeyMove->pNext = pKeyNode;
@@ -70,25 +99,24 @@ int get(linkedListMap *pLinkedListMap, int key)
 {
 	if(!pLinkedListMap)
 	{
-		printf("map is null\n");
+		//printf("map is null\n");
 		return -1;
 	}
 	int hashCode = h(key);
-	//printf("hashCode=%d\n", hashCode);
 	if(!pLinkedListMap->key)
 	{
-		printf("plinkedlistkey is null\n");
+		//printf("plinkedlistkey is null\n");
 		return;
 	}
-	linkedList **ppKeyIndex = pLinkedListMap->key + hashCode;
+	linkedListNode **ppKeyIndex = pLinkedListMap->key + hashCode;
 	if(!ppKeyIndex)
 	{
 		printf("key is null\n");
 		return -1;
 	}
 	
-	linkedList *pKeyMove = (*ppKeyIndex);	
-	linkedList *pValMove = *(pLinkedListMap->val + hashCode);
+	linkedListNode *pKeyMove = (*ppKeyIndex);	
+	linkedListNode *pValMove = *(pLinkedListMap->val + hashCode);
 	int val = -1;
 	while(pKeyMove)
 	{
@@ -106,30 +134,47 @@ int get(linkedListMap *pLinkedListMap, int key)
 int** permuteUnique(int* nums, int numsSize, int* returnSize, int** returnColumnSizes)
 {
 	if(!nums || !numsSize)return NULL;
-	myRandomizedQuicksort(nums, 0, numsSize-1);
 	int size = calN(numsSize);
+	linkedListMap *pLinkedListMap = NULL;
+	//linkedList *pLinkedList = NULL;
+	linkedListNode *pHeader = NULL;
+	linkedListNode *pMove = pHeader;
 	int i;
-	int tmp = -10000;
-	int count = 1;
 	for(i=0;i<numsSize;i++)
 	{
-		if(i==0)
+		int count = get(pLinkedListMap, nums[i]);
+		printf("nums=%d, count=%d\n",nums[i], count);
+		if(count==-1)
 		{
-			tmp = *(nums+i);
-		}
-		else
-		{
-			if(tmp == *(nums+i))
-				count++;
+			push(&pLinkedListMap, nums[i], 1);
+			if(!pHeader)
+			{
+				pHeader = (linkedListNode*)calloc(1, sizeof(linkedListNode));
+				pHeader->val=nums[i];
+				pMove = pHeader;
+			}
 			else
 			{
-				size = size / calN(count);
-				tmp = *(nums+i);
-				count = 1;
-			}	
+				pMove->pNext = (linkedListNode*)calloc(1, sizeof(linkedListNode));
+				((linkedListNode*)(pMove->pNext))->val = nums[i];
+				//pMove->pNext = pMove;
+				pMove = pMove->pNext;			
+			}
+	//		add(&pLinkedList, nums[i]);
+		}
+		else
+		{	
+		//	int count = get(pLinkedListMap, nums[i]);
+		//	printf("nums=%d,count=%d\n",nums[i], count);
+			push(&pLinkedListMap, nums[i], count+1);
 		}
 	}
-	if(count)size = size / calN(count);
+	pMove = pHeader;
+	while(pMove)
+	{
+		size = size / calN(get(pLinkedListMap, pMove->val));
+		pMove = pMove->pNext;
+	}
 	printf("size=%d\n", size);
 	int** result = (int**)calloc(size, sizeof(int*));
 	int** resultMove = result;
