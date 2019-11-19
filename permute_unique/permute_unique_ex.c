@@ -77,21 +77,31 @@ void push(linkedListMap **ppLinkedListMap,  int key, int val)
 	{
 		linkedListNode* pKeyMove = pKeyIndex;
 		linkedListNode* pValMove = pValIndex;
+		int count = 0;
 		while(pKeyMove->pNext)
 		{
+			if(pKeyMove->val == key)
+			{
+				pValMove->val = val;	
+				count++;
+				break;
+			}
 			pKeyMove = pKeyMove->pNext;
 			pValMove = pValMove->pNext;
 		}
-		linkedListNode *pKeyNode = (linkedListNode*)calloc(1, sizeof(linkedListNode));	
-		linkedListNode *pValNode = (linkedListNode*)calloc(1, sizeof(linkedListNode));
-		pKeyNode->val = key;
-		pValNode->val = val;
-		pKeyMove->pNext = pKeyNode;
-		pValMove->pNext = pValNode;
+		if(!count)
+		{
+			linkedListNode *pKeyNode = (linkedListNode*)calloc(1, sizeof(linkedListNode));	
+			linkedListNode *pValNode = (linkedListNode*)calloc(1, sizeof(linkedListNode));
+			pKeyNode->val = key;
+			pValNode->val = val;
+			pKeyMove->pNext = pKeyNode;
+			pValMove->pNext = pValNode;
+			pKeyNode = NULL;
+			pValNode = NULL;
+		}
 		pKeyMove = NULL;
 		pValMove = NULL;
-		pKeyNode = NULL;
-		pValNode = NULL;
 	}	
 }
 
@@ -143,7 +153,7 @@ int** permuteUnique(int* nums, int numsSize, int* returnSize, int** returnColumn
 	for(i=0;i<numsSize;i++)
 	{
 		int count = get(pLinkedListMap, nums[i]);
-		printf("nums=%d, count=%d\n",nums[i], count);
+//		printf("nums=%d, count=%d\n",nums[i], count);
 		if(count==-1)
 		{
 			push(&pLinkedListMap, nums[i], 1);
@@ -172,7 +182,9 @@ int** permuteUnique(int* nums, int numsSize, int* returnSize, int** returnColumn
 	pMove = pHeader;
 	while(pMove)
 	{
-		size = size / calN(get(pLinkedListMap, pMove->val));
+		int count = get(pLinkedListMap, pMove->val);
+		printf("val=%d,count=%d\n", pMove->val, count);
+		size = size / calN(count);
 		pMove = pMove->pNext;
 	}
 	printf("size=%d\n", size);

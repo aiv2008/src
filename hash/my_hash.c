@@ -34,21 +34,44 @@ void pushDivLinkedList(linkedListMap **ppLinkedListMap,  int key, int val)
 	{
 		linkedList* pKeyMove = pKeyIndex;
 		linkedList* pValMove = pValIndex;
+		int count=0;
+		printf("111key=%d, val=%d\n", key, val);
+//		if(!pKeyMove)printf("pKeyMove is null\n");
+		if(pKeyMove->val == key)
+		{
+			pValMove->val = val;
+			pKeyMove = NULL;
+			pValMove = NULL;
+			return;
+		}
 		while(pKeyMove->pNext)
 		{
+			printf("bbb\n");
+			printf("333key=%d, val=%d\n", pKeyMove->val, pValMove->val);
+			if(pKeyMove->val == key)
+			{
+				printf("aaaa\n");
+				printf("222key=%d, val=%d\n", pKeyMove->val, pValMove->val);
+				pValMove->val = val;
+				count++;
+				break;
+			}
 			pKeyMove = pKeyMove->pNext;
 			pValMove = pValMove->pNext;
 		}
-		linkedList *pKeyNode = (linkedList*)calloc(1, sizeof(linkedList));	
-		linkedList *pValNode = (linkedList*)calloc(1, sizeof(linkedList));
-		pKeyNode->val = key;
-		pValNode->val = val;
-		pKeyMove->pNext = pKeyNode;
-		pValMove->pNext = pValNode;
+		if(!count)
+		{
+			linkedList *pKeyNode = (linkedList*)calloc(1, sizeof(linkedList));	
+			linkedList *pValNode = (linkedList*)calloc(1, sizeof(linkedList));
+			pKeyNode->val = key;
+			pValNode->val = val;
+			pKeyMove->pNext = pKeyNode;
+			pValMove->pNext = pValNode;
+			pKeyNode = NULL;
+			pValNode = NULL;
+		}
 		pKeyMove = NULL;
 		pValMove = NULL;
-		pKeyNode = NULL;
-		pValNode = NULL;
 	}	
 }
 
