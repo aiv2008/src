@@ -35,10 +35,10 @@ void pushDivLinkedList(linkedListMap **ppLinkedListMap,  int key, int val)
 		linkedList* pKeyMove = pKeyIndex;
 		linkedList* pValMove = pValIndex;
 		int count=0;
-		printf("111key=%d, val=%d\n", key, val);
-//		if(!pKeyMove)printf("pKeyMove is null\n");
+		//printf("111key=%d, val=%d\n", key, val);
 		if(pKeyMove->val == key)
 		{
+			printf("111key=%d, val=%d\n", key, val);
 			pValMove->val = val;
 			pKeyMove = NULL;
 			pValMove = NULL;
@@ -46,8 +46,6 @@ void pushDivLinkedList(linkedListMap **ppLinkedListMap,  int key, int val)
 		}
 		while(pKeyMove->pNext)
 		{
-			printf("bbb\n");
-			printf("333key=%d, val=%d\n", pKeyMove->val, pValMove->val);
 			if(pKeyMove->val == key)
 			{
 				printf("aaaa\n");
@@ -61,6 +59,7 @@ void pushDivLinkedList(linkedListMap **ppLinkedListMap,  int key, int val)
 		}
 		if(!count)
 		{
+			printf("333key=%d, val=%d\n", key, val);
 			linkedList *pKeyNode = (linkedList*)calloc(1, sizeof(linkedList));	
 			linkedList *pValNode = (linkedList*)calloc(1, sizeof(linkedList));
 			pKeyNode->val = key;
@@ -78,12 +77,8 @@ void pushDivLinkedList(linkedListMap **ppLinkedListMap,  int key, int val)
 int getDivLinkedList(linkedListMap *pLinkedListMap, int key)
 {
 	if(!pLinkedListMap)
-	{
-		printf("map is null\n");
 		return -1;
-	}
 	int hashCode = hashDiv(key);
-	//printf("hashCode=%d\n", hashCode);
 	if(!pLinkedListMap->key)
 	{
 		printf("plinkedlistkey is null\n");
