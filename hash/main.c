@@ -4,8 +4,8 @@
 
 int main(void)
 {
-	//int a[] = {1,1,2,17,18,17,19,20,18};
-	int a[] = {1,1,18,18};
+	int a[] = {1,1,2,17,18,17,19,20,18};
+	//int a[] = {1,1,18,18};
 	int size = sizeof(a)/sizeof(a[0]);
 	int i;
 	linkedListMap *pLinkedListMap = NULL;

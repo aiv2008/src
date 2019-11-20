@@ -10,11 +10,6 @@ typedef struct
 	struct linkedListNode *pNext;
 } linkedListNode;
 
-typedef struct
-{
-	linkedListNode *pHeader;
-	int size;
-} linkedList;
 
 typedef struct
 {
@@ -23,28 +18,6 @@ typedef struct
 	int size;
 } linkedListMap;
 
-void add(linkedList **ppLinkedList, int val)
-{
-	if(!ppLinkedList)return;
-	if(!*ppLinkedList)
-		*ppLinkedList = (linkedList*)calloc(1, sizeof(linkedList));	
-	linkedListNode *pCur = NULL;
-	if(!(*ppLinkedList)->pHeader)
-	{
-		(*ppLinkedList)->pHeader = (linkedListNode*)calloc(1, sizeof(linkedListNode));
-		pCur = (*ppLinkedList)->pHeader;
-	}
-	else
-	{
-		linkedListNode *pMove = (*ppLinkedList)->pHeader;
-		while(pMove->pNext)
-			pMove = pMove->pNext;
-		pCur = (linkedListNode*)calloc(1, sizeof(linkedListNode));
-		pMove->pNext = pCur;
-	}	
-	pCur->val = val;
-	(*ppLinkedList)->size = (*ppLinkedList)->size + 1;
-}
 
 int h(int key)
 {
@@ -78,7 +51,9 @@ void push(linkedListMap **ppLinkedListMap,  int key, int val)
 		linkedListNode* pKeyMove = pKeyIndex;
 		linkedListNode* pValMove = pValIndex;
 		int count = 0;
-		while(pKeyMove->pNext)
+		linkedListNode *pKeyCur = NULL;
+		linkedListNode *pValCur = NULL;
+		while(pKeyMove)
 		{
 			if(pKeyMove->val == key)
 			{
@@ -86,6 +61,8 @@ void push(linkedListMap **ppLinkedListMap,  int key, int val)
 				count++;
 				break;
 			}
+			pKeyCur = pKeyMove;
+			pValCur = pKeyMove;
 			pKeyMove = pKeyMove->pNext;
 			pValMove = pValMove->pNext;
 		}
@@ -102,6 +79,8 @@ void push(linkedListMap **ppLinkedListMap,  int key, int val)
 		}
 		pKeyMove = NULL;
 		pValMove = NULL;
+		pKeyCur = NULL;
+		pValCur = NULL;
 	}	
 }
 
@@ -183,7 +162,7 @@ int** permuteUnique(int* nums, int numsSize, int* returnSize, int** returnColumn
 	while(pMove)
 	{
 		int count = get(pLinkedListMap, pMove->val);
-		printf("val=%d,count=%d\n", pMove->val, count);
+	//	printf("val=%d,count=%d\n", pMove->val, count);
 		size = size / calN(count);
 		pMove = pMove->pNext;
 	}
@@ -193,9 +172,6 @@ int** permuteUnique(int* nums, int numsSize, int* returnSize, int** returnColumn
 	int* columnSizes = (int*)calloc(size, sizeof(int));
 	int* columnSizesMove = columnSizes;
 	permutation(nums, nums, numsSize, &resultMove, &columnSizesMove );
-	//for(i=0;i<size;i++)
-	//	printf("%d,", *(columnSizes+i));
-	printf("\n");
 	*returnSize = size;
 	*returnColumnSizes = columnSizes;
 	return result;	
@@ -214,10 +190,10 @@ void permutation(int* pStr, int* pBegin, int size, int*** pppMove, int** columnS
 		for(i=0;i<size;i++)	
 		{
 			*(**pppMove+i) = *(p+i);
-			printf("%d,", *(**pppMove+i));
+	//		printf("%d,", *(**pppMove+i));
 		}
 		**columnSizesMove = size;
-		printf("\n");
+	//	printf("\n");
 		(*pppMove)++;
 		(*columnSizesMove)++;
 	}
@@ -229,8 +205,8 @@ void permutation(int* pStr, int* pBegin, int size, int*** pppMove, int** columnS
 		{
 			if(get(pLinkedListMap, *pMove) == -1)
 			{
-				push(&pLinkedListMap, *pMove, *pMove);
-				printf("enter\n");
+				push(&pLinkedListMap, *pMove, 1);
+	//			printf("enter\n");
 				int temp = *pMove;
 				*pMove = *pBegin;
 				*pBegin = temp;

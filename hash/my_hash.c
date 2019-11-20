@@ -35,42 +35,36 @@ void pushDivLinkedList(linkedListMap **ppLinkedListMap,  int key, int val)
 		linkedList* pKeyMove = pKeyIndex;
 		linkedList* pValMove = pValIndex;
 		int count=0;
-		//printf("111key=%d, val=%d\n", key, val);
-		if(pKeyMove->val == key)
-		{
-			printf("111key=%d, val=%d\n", key, val);
-			pValMove->val = val;
-			pKeyMove = NULL;
-			pValMove = NULL;
-			return;
-		}
-		while(pKeyMove->pNext)
+		linkedList *pKeyCur = NULL;
+		linkedList *pValCur = NULL;
+		while(pKeyMove)
 		{
 			if(pKeyMove->val == key)
 			{
-				printf("aaaa\n");
-				printf("222key=%d, val=%d\n", pKeyMove->val, pValMove->val);
 				pValMove->val = val;
 				count++;
 				break;
 			}
+			pKeyCur = pKeyMove;
+			pValCur = pValMove;
 			pKeyMove = pKeyMove->pNext;
 			pValMove = pValMove->pNext;
 		}
 		if(!count)
 		{
-			printf("333key=%d, val=%d\n", key, val);
 			linkedList *pKeyNode = (linkedList*)calloc(1, sizeof(linkedList));	
 			linkedList *pValNode = (linkedList*)calloc(1, sizeof(linkedList));
 			pKeyNode->val = key;
 			pValNode->val = val;
-			pKeyMove->pNext = pKeyNode;
-			pValMove->pNext = pValNode;
+			pKeyCur->pNext = pKeyNode;
+			pValCur->pNext = pValNode;
 			pKeyNode = NULL;
 			pValNode = NULL;
 		}
 		pKeyMove = NULL;
 		pValMove = NULL;
+		pKeyCur = NULL;
+		pValCur = NULL;
 	}	
 }
 
